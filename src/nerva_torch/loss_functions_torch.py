@@ -44,9 +44,11 @@ def softmax_cross_entropy_loss_torch(Y, T):
     return loss(Y, T).item()
 
 
-def negative_log_likelihood_loss_torch(Y, T):
+def negative_likelihood_loss_torch(Y, T):
     """
-    Computes the negative log likelihood loss between Y and T.
+    Computes the negative likelihood loss between Y and T. Note that PyTorch does
+    not apply the log function, since it assumes Y is the output of a log softmax
+    layer. For this reason we omit "log" in the name.
 
     Parameters:
     Y (torch.Tensor): The predicted values.
