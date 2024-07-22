@@ -34,11 +34,11 @@ generalized to more complex neural network architectures.
 
 ## Installation
 
-The code is available as the PyPI package [nerva-jax](https://pypi.org/project/nerva-jax/).
+The code is available as the PyPI package [nerva-torch](https://pypi.org/project/nerva-torch/).
 It can be installed using
 
 ```
-pip install nerva-jax
+pip install nerva-torch
 ```
 
 ## Licensing

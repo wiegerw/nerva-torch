@@ -9,9 +9,9 @@ from unittest import TestCase
 
 import torch
 
-from nerva_torch.loss_functions import Mean_squared_error_loss, Cross_entropy_loss, Softmax_cross_entropy_loss, Logistic_cross_entropy_loss, Negative_log_likelihood_loss
-from nerva_torch.loss_functions_torch import mean_squared_error_loss_torch, cross_entropy_loss_torch, softmax_cross_entropy_loss_torch, logistic_cross_entropy_loss_torch, negative_log_likelihood_loss_torch
-from test_utilities import random_float_matrix, make_target
+from nerva_torch.loss_functions import Squared_error_loss, Cross_entropy_loss, Softmax_cross_entropy_loss, Logistic_cross_entropy_loss, Negative_log_likelihood_loss
+from nerva_torch.loss_functions_torch import squared_error_loss_torch, cross_entropy_loss_torch, softmax_cross_entropy_loss_torch, logistic_cross_entropy_loss_torch, negative_log_likelihood_loss_torch
+from utilities import random_float_matrix, make_target
 
 
 class TestLossFunction(TestCase):
@@ -26,8 +26,8 @@ class TestLossFunction(TestCase):
             Y = torch.Tensor(Y)
             T = torch.Tensor(T)
 
-            loss_ms1 = mean_squared_error_loss_torch(Y, T)
-            loss_ms2 = Mean_squared_error_loss(Y, T)
+            loss_ms1 = squared_error_loss_torch(Y, T)
+            loss_ms2 = Squared_error_loss(Y, T)
             self.assertAlmostEqual(loss_ms1, loss_ms2, delta=1e-5)
 
             loss_ce1 = cross_entropy_loss_torch(Y, T)

@@ -9,10 +9,33 @@ import torch
 from nerva_torch.utilities import load_dict_from_npz
 
 
-def to_one_hot(x: torch.LongTensor, num_classes: int):
+def to_one_hot(x: torch.LongTensor, num_classes: int) -> torch.Tensor:
+    """
+    Converts a tensor of class indices to a one-hot encoded tensor.
+
+    Args:
+        x (torch.LongTensor): Tensor of class indices.
+        num_classes (int): Number of classes.
+
+    Returns:
+        torch.Tensor: One-hot encoded tensor of shape (len(x), num_classes).
+    """
     one_hot = torch.zeros(len(x), num_classes, dtype=torch.float)
     one_hot.scatter_(1, x.unsqueeze(1), 1)
     return one_hot
+
+
+def from_one_hot(one_hot: torch.Tensor) -> torch.LongTensor:
+    """
+    Converts a one-hot encoded tensor back to a tensor of class indices.
+
+    Args:
+        one_hot (torch.Tensor): One-hot encoded tensor of shape (N, num_classes).
+
+    Returns:
+        torch.LongTensor: Tensor of class indices of shape (N,).
+    """
+    return torch.argmax(one_hot, dim=1).long()
 
 
 class MemoryDataLoader(object):
