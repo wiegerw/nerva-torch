@@ -1,6 +1,6 @@
-# The nerva-jax library
+# The nerva-torch library
 
-This repository contains an implementation of multilayer perceptrons in JAX.
+This repository contains an implementation of multilayer perceptrons in PyTorch.
 It is part of a group of five Python packages that can be installed via pip:
 
 * [nerva-jax](https://pypi.org/project/nerva_jax/) An implementation in [JAX](https://jax.readthedocs.io).
@@ -44,7 +44,7 @@ pip install nerva-torch
 ## Licensing
 
 The code is available under the [Boost Software License 1.0](http://www.boost.org/LICENSE_1_0.txt).
-A [local copy](https://github.com/wiegerw/nerva-jax/blob/main/LICENSE) is included in the repository.
+A [local copy](https://github.com/wiegerw/nerva-torch/blob/main/LICENSE) is included in the repository.
 
 ## Using the library
 

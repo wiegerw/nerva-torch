@@ -7,8 +7,7 @@ from typing import List
 
 from nerva_torch.datasets import DataLoader, create_npz_dataloaders
 from nerva_torch.learning_rate import LearningRateScheduler, parse_learning_rate
-from nerva_torch.loss_functions import *
-from nerva_torch.loss_functions import parse_loss_function
+from nerva_torch.loss_functions import parse_loss_function, LossFunction
 from nerva_torch.multilayer_perceptron import MultilayerPerceptron, parse_multilayer_perceptron
 from nerva_torch.utilities import StopWatch, pp, set_numpy_options, set_torch_options
 

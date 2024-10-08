@@ -6,6 +6,7 @@ import torch
 
 Matrix = torch.Tensor
 
+
 def set_bias_to_zero(b: Matrix):
     b.data.zero_()
 

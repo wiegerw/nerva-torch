@@ -46,8 +46,7 @@ def Sigmoid(X: Matrix):
 
 
 def Sigmoid_gradient(X: Matrix):
-    y = torch.sigmoid(X)
-    return y * (1 - y)
+    return Sigmoid(X) * (1 - Sigmoid(X))
 
 
 def Srelu(al, tl, ar, tr):
