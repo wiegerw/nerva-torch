@@ -16,6 +16,7 @@ from nerva_torch.training import compute_statistics
 from nerva_torch.utilities import StopWatch
 
 
+# The Core Training Loop (Mini-batch SGD)
 def sgd(M: MultilayerPerceptron,
         epochs: int,
         loss: LossFunction,
@@ -28,12 +29,26 @@ def sgd(M: MultilayerPerceptron,
 
     for epoch in range(epochs):
         timer = StopWatch()
+
+        # Get the learning rate for the current epoch
         lr = learning_rate(epoch)
 
+        # Iterate over mini-batches
         for (X, T) in train_loader:
+            # 1. Feedforward: Pass input data through the model
             Y = M.feedforward(X)
+
+            # 2. Compute Loss Gradient: Calculate the gradient of the loss
+            #    with respect to the model's output Y.
+            #    Divide by batch size for average gradient.
             DY = loss.gradient(Y, T) / Y.shape[0]
+
+            # 3. Backpropagate: Compute gradients of the loss
+            #    with respect to layer weights and biases.
             M.backpropagate(Y, DY)
+
+            # 4. Optimize: Update layer weights and biases
+            #    using the calculated gradients and the optimizer.
             M.optimize(lr)
 
         seconds = timer.seconds()
@@ -50,16 +65,35 @@ def main():
 
     train_loader, test_loader = create_npz_dataloaders("../data/mnist-flattened.npz", batch_size=100)
 
+    # Create a new MLP model
     M = MultilayerPerceptron()
-    M.layers = [ActivationLayer(784, 1024, ReLUActivation()),
-                ActivationLayer(1024, 512, ReLUActivation()),
-                LinearLayer(512, 10)]
+
+    # Define and add layers
+    M.layers = [
+        # Input layer followed by a ReLU activation
+        ActivationLayer(784, 1024, ReLUActivation()),
+
+        # Another layer with ReLU activation
+        ActivationLayer(1024, 512, ReLUActivation()),
+
+        # Output layer (Linear for classification scores)
+        LinearLayer(512, 10)
+    ]
+
     for layer in M.layers:
+        # Set the optimizer for the layer
         layer.set_optimizer('Momentum(0.9)')
+
+        # Set the weight initialization method
         layer.set_weights('Xavier')
 
+    # Define the loss function
     loss = SoftmaxCrossEntropyLossFunction()
+
+    # Define the learning rate scheduler (e.g., a constant learning rate of 0.01)
     learning_rate = ConstantScheduler(0.01)
+
+    # Define the number of training epochs
     epochs = 10
 
     sgd(M, epochs, loss, learning_rate, train_loader, test_loader)
