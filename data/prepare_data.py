@@ -222,7 +222,7 @@ def main():
     parser = argparse.ArgumentParser(description="Download and/or flatten MNIST and CIFAR10 datasets.")
     parser.add_argument("--dataset", type=str, choices=['mnist', 'cifar10'], help="Specify the dataset to process (mnist or cifar10)")
     parser.add_argument("--download", action="store_true", help="Download the specified dataset if it doesn't exist")
-    parser.add_argument("--data_dir", type=str, default=".", help="Directory to store the datasets (default: .)")
+    parser.add_argument("--data-dir", type=str, default=".", help="Directory to store the datasets (default: .)")
 
     args = parser.parse_args()
 
