@@ -8,6 +8,7 @@ import sympy as sp
 
 from nerva_sympy.loss_functions import LossFunction
 from nerva_sympy.matrix_operations import elements_sum
+from sympy import Lambda, Piecewise
 
 Matrix = sp.Matrix
 
@@ -49,7 +50,7 @@ class AbsoluteErrorLossFunction(LossFunction):
         return sign(Y - T)
 
 
-def test_loss_function_gradient():
+def test_absolute_error_loss_gradient():
     """Validates the gradient of AbsoluteErrorLossFunction."""
     K = 3
     N = 2
@@ -73,5 +74,26 @@ def test_loss_function_gradient():
         assert equal_matrices(Dy_i, DY.row(i))
 
 
+def elu(alpha=1):
+    x = sp.symbols('x', real=True)
+    fx = Piecewise((alpha * (sp.exp(x) - 1), x < 0), (x, True))
+    return Lambda(x, fx)
+
+
+def elu_derivative(alpha=1):
+    x = sp.symbols('x', real=True)
+    fx = Piecewise((alpha * sp.exp(x), x < 0), (1, True))
+    return Lambda(x, fx)
+
+
+def test_elu():
+    alpha = sp.symbols('alpha', real=True)
+    f = elu(alpha)
+    f1 = elu_derivative(alpha)
+    x = sp.symbols('x', real=True)
+    assert sp.simplify(f1(x)) == sp.simplify(f(x).diff(x))
+
+
 if __name__ == '__main__':
-    test_loss_function_gradient()
+    test_absolute_error_loss_gradient()
+    test_elu()
