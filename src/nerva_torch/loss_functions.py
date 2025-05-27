@@ -29,26 +29,6 @@ def Squared_error_loss_gradient(Y, T):
     return 2 * (Y - T)
 
 
-def mean_squared_error_loss(y, t):
-    N, K = y.shape
-    return squared_error_loss(y, t) / K
-
-
-def mean_squared_error_loss_gradient(y, t):
-    N, K = y.shape
-    return squared_error_loss_gradient(y, t) / K
-
-
-def Mean_squared_error_loss(Y, T):
-    N, K = Y.shape
-    return Squared_error_loss(Y, T) / (K * N)
-
-
-def Mean_squared_error_loss_gradient(Y, T):
-    N, K = Y.shape
-    return Squared_error_loss_gradient(Y, T) / (K * N)
-
-
 def cross_entropy_loss(y, t):
     return -dot(t, log(y))
 

@@ -4,12 +4,11 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
-import random
 from unittest import TestCase
 
 import torch
 
-from nerva_torch.loss_functions import Squared_error_loss, Cross_entropy_loss, Softmax_cross_entropy_loss, Logistic_cross_entropy_loss, Negative_log_likelihood_loss
+from nerva_torch.loss_functions import Squared_error_loss, Softmax_cross_entropy_loss
 from nerva_torch.loss_functions_torch import squared_error_loss_torch, softmax_cross_entropy_loss_torch
 from utilities import random_float_matrix, make_target
 
