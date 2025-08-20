@@ -2,6 +2,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
+"""Training helpers for the MLP, including a basic SGD loop and CLI glue."""
 
 from typing import List
 
@@ -17,6 +18,7 @@ class SGDOptions(object):
 
 
 def print_epoch(epoch, lr, loss, train_accuracy, test_accuracy, elapsed):
+    """Print formatted training statistics for one epoch."""
     print(f'epoch {epoch:3}  '
           f'lr: {lr:.8f}  '
           f'loss: {loss:.8f}  '
@@ -26,6 +28,7 @@ def print_epoch(epoch, lr, loss, train_accuracy, test_accuracy, elapsed):
          )
 
 def compute_accuracy(M: MultilayerPerceptron, data_loader: DataLoader):
+    """Compute mean classification accuracy for a model over a data loader."""
     N = len(data_loader.dataset)  # N is the number of examples
     total_correct = 0
     for X, T in data_loader:
@@ -38,6 +41,7 @@ def compute_accuracy(M: MultilayerPerceptron, data_loader: DataLoader):
 
 
 def compute_loss(M: MultilayerPerceptron, data_loader: DataLoader, loss: LossFunction):
+    """Compute mean loss for a model over a data loader using the given loss."""
     N = len(data_loader.dataset)  # N is the number of examples
     total_loss = 0.0
     for X, T in data_loader:
@@ -48,6 +52,7 @@ def compute_loss(M: MultilayerPerceptron, data_loader: DataLoader, loss: LossFun
 
 
 def compute_statistics(M, lr, loss, train_loader, test_loader, epoch, elapsed_seconds=0.0, print_statistics=True):
+    """Compute and optionally print loss and accuracy statistics."""
     if print_statistics:
         train_loss = compute_loss(M, train_loader, loss)
         train_accuracy = compute_accuracy(M, train_loader)
@@ -64,6 +69,7 @@ def sgd(M: MultilayerPerceptron,
         train_loader: DataLoader,
         test_loader: DataLoader
        ):
+    """Run a simple SGD training loop over epochs and batches."""
 
     lr = learning_rate(0)
     compute_statistics(M, lr, loss, train_loader, test_loader, epoch=0)
@@ -95,6 +101,7 @@ def sgd(M: MultilayerPerceptron,
 
 
 def train(layer_specifications: List[str],
+          
           linear_layer_sizes: List[int],
           linear_layer_optimizers: List[str],
           linear_layer_weight_initializers: List[str],
@@ -106,6 +113,7 @@ def train(layer_specifications: List[str],
           dataset_file: str,
           debug: bool
          ):
+    """High-level training convenience that wires parsing, data and SGD."""
     SGDOptions.debug = debug
     set_numpy_options()
     set_torch_options()

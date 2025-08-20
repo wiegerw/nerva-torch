@@ -2,6 +2,12 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
+"""Optimizers used to adjusts the model's parameters based on the gradients.
+
+Only SGD, Momentum and Nesterov variants are provided. The parser creates
+factory callables from textual specifications like "Momentum(mu=0.9)".
+"""
+
 from typing import Any, Callable, List
 
 import torch
@@ -9,49 +15,63 @@ from nerva_torch.utilities import parse_function_call
 
 
 class Optimizer(object):
+    """Minimal optimizer interface used by layers to update parameters."""
     def update(self, eta):
         raise NotImplementedError
 
 
 class CompositeOptimizer(Optimizer):
+    """Combines multiple optimizers to update different parameter groups."""
     def __init__(self, optimizers: List[Optimizer]):
         self.optimizers = optimizers
 
     def update(self, eta):
+        """Update all contained optimizers with the given learning rate."""
         for optimizer in self.optimizers:
             optimizer.update(eta)
 
 
 class GradientDescentOptimizer(Optimizer):
+    """Standard gradient descent optimizer: x -= eta * grad."""
     def __init__(self, x, Dx):
         self.x = x
         self.Dx = Dx
 
     def update(self, eta):
+        """Apply gradient descent update step."""
         self.x -= eta * self.Dx
 
 
 class MomentumOptimizer(GradientDescentOptimizer):
+    """Gradient descent with momentum for accelerated convergence."""
     def __init__(self, x, Dx, mu):
         super().__init__(x, Dx)
         self.mu = mu
         self.delta_x = torch.zeros_like(x)
 
     def update(self, eta):
+        """Apply momentum update step."""
         self.delta_x = self.mu * self.delta_x - eta * self.Dx
         self.x += self.delta_x
 
 
 class NesterovOptimizer(MomentumOptimizer):
+    """Nesterov accelerated gradient descent optimizer."""
     def __init__(self, x, Dx, mu):
         super().__init__(x, Dx, mu)
 
     def update(self, eta):
+        """Apply Nesterov accelerated gradient update step."""
         self.delta_x = self.mu * self.delta_x - eta * self.Dx
         self.x += self.mu * self.delta_x - eta * self.Dx
 
 
 def parse_optimizer(text: str) -> Callable[[Any, Any], Optimizer]:
+    """Parse a textual optimizer specification into a factory function.
+
+    Returns a callable that takes (x, Dx) and produces an Optimizer.
+    Supported names: GradientDescent, Momentum(mu=...), Nesterov(mu=...).
+    """
     try:
         func = parse_function_call(text)
         if func.name == 'GradientDescent':

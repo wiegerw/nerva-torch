@@ -2,6 +2,8 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
+"""Miscellaneous utilities (formatting, timing, parsing, I/O)."""
+
 import re
 import time
 from typing import Dict, Union
@@ -11,10 +13,12 @@ import torch
 
 
 def set_numpy_options():
+    """Configure NumPy print options for readable output."""
     np.set_printoptions(precision=8, edgeitems=3, threshold=5, suppress=True, linewidth=160)
 
 
 def set_torch_options():
+    """Configure PyTorch print options and multiprocessing strategy."""
     torch.set_printoptions(precision=8, edgeitems=3, threshold=5, sci_mode=False, linewidth=160)
 
     # avoid 'Too many open files' error when using data loaders
@@ -22,10 +26,11 @@ def set_torch_options():
 
 
 def pp(name: str, x: torch.Tensor):
+    """Pretty-print a tensor with name and shape info."""
     if x.dim() == 1:
-        print(f'{name} ({x.shape[0]})\n{x.data}')
+        print(f'{name} ({x.shape[0]})\\n{x.data}')
     else:
-        print(f'{name} ({x.shape[0]}x{x.shape[1]})\n{x.data}')
+        print(f'{name} ({x.shape[0]}x{x.shape[1]})\\n{x.data}')
 
 
 class StopWatch(object):
@@ -33,10 +38,12 @@ class StopWatch(object):
         self.start = time.perf_counter()
 
     def seconds(self):
+        """Get elapsed time in seconds since creation or last reset."""
         end = time.perf_counter()
         return end - self.start
 
     def reset(self):
+        """Reset the timer to the current time."""
         self.start = time.perf_counter()
 
 
@@ -46,6 +53,7 @@ class FunctionCall:
         self.arguments = arguments
 
     def has_key(self, key: str) -> bool:
+        """Check if the given key exists in parsed arguments."""
         return key in self.arguments
 
     def get_value(self, key: str) -> str:

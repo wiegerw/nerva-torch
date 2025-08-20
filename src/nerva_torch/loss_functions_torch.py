@@ -2,6 +2,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
+"""Thin wrappers around PyTorch loss modules for comparison and testing."""
 
 import torch
 from nerva_torch.datasets import from_one_hot

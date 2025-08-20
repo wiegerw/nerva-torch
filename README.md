@@ -116,6 +116,7 @@ Each major concept is implemented through clear interface classes. Implementatio
 
 Detailed documentation is available:
 
+- [API Reference (Sphinx)](https://wiegerw.github.io/nerva-torch/)
 - [nerva-torch Manual](https://wiegerw.github.io/nerva-torch/doc/nerva-torch.html) – usage of the `nerva_torch` Python module (🔗 TODO)
 - [Mathematical Specifications (PDF)](https://wiegerw.github.io/nerva-rowwise/pdf/nerva-library-specifications.pdf)
 
