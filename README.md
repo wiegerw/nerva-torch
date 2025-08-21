@@ -6,6 +6,8 @@
 **`nerva-torch`** is a minimal, transparent implementation of multilayer perceptrons using **PyTorch** tensors.  
 It is part of the [Nerva](https://github.com/wiegerw/nerva) project — a suite of Python and C++ libraries that provide well-specified, inspectable implementations of neural networks.
 
+➡️ **All equations in this repository are written in *batch (minibatch) matrix form***, meaning feedforward, backpropagation, and loss functions operate on minibatches of inputs rather than single examples.
+
 ## 🗺️ Overview
 
 The `nerva` libraries aim to demystify neural networks by:
@@ -106,6 +108,7 @@ Each major concept is implemented through clear interface classes. Implementatio
 ## 🛠 Features
 
 - Feedforward and backpropagation logic match documented equations exactly.
+- Formulas use batch matrix form, enabling efficient computation over minibatches.
 - Customizable optimizers per parameter group using a composite pattern.
 - Symbolic gradient validation using [nerva-sympy](https://github.com/wiegerw/nerva-sympy).
 - Lightweight command-line interface for experiments.
