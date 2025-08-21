@@ -27,7 +27,7 @@ jobs:
       - name: Build Sphinx HTML
         run: |
           mkdir -p output_directory
-          sphinx-build -b html docs/sphinx output_directory
+          sphinx-build -b html doc/sphinx output_directory
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
