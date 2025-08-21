@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 
 # Add src to path so autodoc can import the package
-sys.path.insert(0, os.path.abspath('../src'))
+sys.path.insert(0, os.path.abspath('../../src'))
 
 project = 'nerva_torch'
 author = 'Wieger Wesselink and contributors'
