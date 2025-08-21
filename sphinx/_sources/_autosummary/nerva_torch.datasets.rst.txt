@@ -1,0 +1,20 @@
+nerva\_torch.datasets
+=====================
+
+.. automodule:: nerva_torch.datasets
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      create_npz_dataloaders
+      from_one_hot
+      to_one_hot
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MemoryDataLoader
+   

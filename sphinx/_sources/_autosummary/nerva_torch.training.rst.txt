@@ -1,0 +1,23 @@
+nerva\_torch.training
+=====================
+
+.. automodule:: nerva_torch.training
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      compute_accuracy
+      compute_loss
+      compute_statistics
+      print_epoch
+      sgd
+      train
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SGDOptions
+   
