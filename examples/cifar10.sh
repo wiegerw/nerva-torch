@@ -9,6 +9,7 @@ if [ ! -f $dataset ]; then
     exit 1
 fi
 
+# tag::doc[]
 python3 -u ../tools/mlp.py \
         --layers="ReLU;ReLU;Linear" \
         --sizes="3072,1024,512,10" \
@@ -19,3 +20,4 @@ python3 -u ../tools/mlp.py \
         --loss=SoftmaxCrossEntropy \
         --learning-rate="Constant(0.01)" \
         --dataset=$dataset
+# end::doc[]
