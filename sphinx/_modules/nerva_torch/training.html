@@ -121,13 +121,24 @@
 <div class="viewcode-block" id="compute_accuracy">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.training.html#nerva_torch.training.compute_accuracy">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_accuracy</span><span class="p">(</span><span class="n">M</span><span class="p">:</span> <span class="n">MultilayerPerceptron</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute mean classification accuracy for a model over a data loader.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute mean classification accuracy for a model over a data loader.</span>
+
+<span class="sd">    Accepts either one-hot targets or class indices; maps to one-hot width K when needed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>  <span class="c1"># N is the number of examples</span>
     <span class="n">total_correct</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">output_size</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">X</span><span class="p">,</span> <span class="n">T</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="n">predicted</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># the predicted classes for the batch</span>
-        <span class="n">targets</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>    <span class="c1"># the expected classes</span>
+        <span class="k">if</span> <span class="n">T</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># handle possible width mismatch by padding</span>
+            <span class="k">if</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">K</span> <span class="ow">and</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">K</span><span class="p">:</span>
+                <span class="n">pad_cols</span> <span class="o">=</span> <span class="n">K</span> <span class="o">-</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">T</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">T</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pad_cols</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">device</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>    <span class="c1"># the expected classes</span>
         <span class="n">total_correct</span> <span class="o">+=</span> <span class="p">(</span><span class="n">predicted</span> <span class="o">==</span> <span class="n">targets</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">total_correct</span> <span class="o">/</span> <span class="n">N</span></div>
@@ -137,10 +148,25 @@
 <div class="viewcode-block" id="compute_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.training.html#nerva_torch.training.compute_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_loss</span><span class="p">(</span><span class="n">M</span><span class="p">:</span> <span class="n">MultilayerPerceptron</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">loss</span><span class="p">:</span> <span class="n">LossFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute mean loss for a model over a data loader using the given loss.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute mean loss for a model over a data loader using the given loss.</span>
+
+<span class="sd">    Ensures target matrices are one-hot with width equal to the model&#39;s output size.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>  <span class="c1"># N is the number of examples</span>
     <span class="n">total_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">output_size</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">X</span><span class="p">,</span> <span class="n">T</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
+        <span class="c1"># Ensure targets match the model&#39;s output width</span>
+        <span class="k">if</span> <span class="n">T</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="n">to_one_hot</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">K</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">T</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">K</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">K</span><span class="p">:</span>
+                <span class="c1"># pad zeros on the right to reach K classes</span>
+                <span class="n">pad_cols</span> <span class="o">=</span> <span class="n">K</span> <span class="o">-</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">T</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">T</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pad_cols</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">device</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target width </span><span class="si">{</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> exceeds model output size </span><span class="si">{</span><span class="n">K</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
         <span class="n">Y</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="n">total_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
 
@@ -171,8 +197,28 @@
                                 <span class="n">train_loader</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span>
                                 <span class="n">test_loader</span><span class="p">:</span> <span class="n">DataLoader</span>
                                 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run a simple SGD training loop over epochs and batches.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run a simple stochastic gradient descent (SGD) training loop using PyTorch data loaders.</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        M (MultilayerPerceptron): The neural network model to train.</span>
+<span class="sd">        epochs (int): Number of training epochs.</span>
+<span class="sd">        loss (LossFunction): The loss function instance (must provide `gradient` method).</span>
+<span class="sd">        learning_rate (LearningRateScheduler): Scheduler returning the learning rate per epoch.</span>
+<span class="sd">        train_loader (DataLoader): DataLoader that yields mini-batches `(X, T)` for training.</span>
+<span class="sd">            - `X`: input batch of shape (batch_size, input_dim).</span>
+<span class="sd">            - `T`: batch of target labels, either class indices (batch_size,) or one-hot</span>
+<span class="sd">              encoded (batch_size, num_classes).</span>
+<span class="sd">        test_loader (DataLoader): DataLoader that yields test batches `(X, T)` for evaluation.</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - The learning rate is updated once per epoch using the scheduler.</span>
+<span class="sd">        - Gradients are normalized by batch size before backpropagation.</span>
+
+<span class="sd">    Side Effects:</span>
+<span class="sd">        - Updates model parameters in-place via `M.optimize(lr)`.</span>
+<span class="sd">        - Prints statistics and training time to standard output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lr</span> <span class="o">=</span> <span class="n">learning_rate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">compute_statistics</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">training_time</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -183,7 +229,7 @@
 
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
             <span class="n">Y</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-            <span class="n">DY</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">DY</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">SGDOptions</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1"> batch: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -232,9 +278,13 @@
 <span class="sd">        shuffle (bool): Whether to shuffle training examples each epoch.</span>
 
 <span class="sd">    Notes:</span>
-<span class="sd">        - If `Ttrain` contains class indices, they will be converted to one-hot encoding.</span>
+<span class="sd">        - The learning rate is updated once per epoch using the scheduler.</span>
 <span class="sd">        - Gradients are normalized by batch size before backpropagation.</span>
-<span class="sd">        - This version expects row layout, unlike some column-major implementations.</span>
+<span class="sd">        - If `Ttrain` contains class indices, they will be converted to one-hot encoding.</span>
+
+<span class="sd">    Side Effects:</span>
+<span class="sd">        - Updates model parameters in-place via `M.optimize(lr)`.</span>
+<span class="sd">        - Prints statistics and training time to standard output.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">Xtrain</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># number of examples (row layout)</span>
     <span class="n">I</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
@@ -255,12 +305,20 @@
                 <span class="c1"># already one-hot encoded</span>
                 <span class="n">T</span> <span class="o">=</span> <span class="n">Ttrain</span><span class="p">[</span><span class="n">batch</span><span class="p">,</span> <span class="p">:]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># class indices -&gt; convert to one-hot</span>
-                <span class="n">T</span> <span class="o">=</span> <span class="n">to_one_hot</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+                <span class="c1"># class indices -&gt; convert to one-hot of width equal to output size</span>
+                <span class="n">T</span> <span class="o">=</span> <span class="n">to_one_hot</span><span class="p">(</span><span class="n">Ttrain</span><span class="p">[</span><span class="n">batch</span><span class="p">],</span> <span class="n">num_classes</span><span class="p">)</span>
 
             <span class="n">Y</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-            <span class="n">dY</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># normalize by batch size</span>
-            <span class="n">M</span><span class="o">.</span><span class="n">backpropagate</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">dY</span><span class="p">)</span>
+            <span class="n">DY</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">SGDOptions</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1"> batch: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">M</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+                <span class="n">pp</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+                <span class="n">pp</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+                <span class="n">pp</span><span class="p">(</span><span class="s2">&quot;DY&quot;</span><span class="p">,</span> <span class="n">DY</span><span class="p">)</span>
+
+            <span class="n">M</span><span class="o">.</span><span class="n">backpropagate</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">DY</span><span class="p">)</span>
             <span class="n">M</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">lr</span><span class="p">)</span></div>
 
 

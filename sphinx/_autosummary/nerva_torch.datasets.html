@@ -49,6 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.to_one_hot"><code class="docutils literal notranslate"><span class="pre">to_one_hot()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.from_one_hot"><code class="docutils literal notranslate"><span class="pre">from_one_hot()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.MemoryDataLoader"><code class="docutils literal notranslate"><span class="pre">MemoryDataLoader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.infer_num_classes"><code class="docutils literal notranslate"><span class="pre">infer_num_classes()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.create_npz_dataloaders"><code class="docutils literal notranslate"><span class="pre">create_npz_dataloaders()</span></code></a></li>
 </ul>
 </li>
@@ -104,7 +105,10 @@ DataLoader API but operates on in-memory tensors loaded from .npz files.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.datasets.from_one_hot" title="nerva_torch.datasets.from_one_hot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_one_hot</span></code></a>(one_hot)</p></td>
 <td><p>Convert one-hot encoded rows to class index tensor.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.datasets.to_one_hot" title="nerva_torch.datasets.to_one_hot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_one_hot</span></code></a>(x, num_classes)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.datasets.infer_num_classes" title="nerva_torch.datasets.infer_num_classes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_num_classes</span></code></a>(Ttrain, Ttest)</p></td>
+<td><p>Infer total number of classes from targets.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.datasets.to_one_hot" title="nerva_torch.datasets.to_one_hot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_one_hot</span></code></a>(x, num_classes)</p></td>
 <td><p>Convert class index tensor to one-hot matrix with num_classes columns.</p></td>
 </tr>
 </tbody>
@@ -112,8 +116,8 @@ DataLoader API but operates on in-memory tensors loaded from .npz files.</p>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.datasets.MemoryDataLoader" title="nerva_torch.datasets.MemoryDataLoader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MemoryDataLoader</span></code></a>(Xdata, Tdata[, batch_size, ...])</p></td>
-<td><p>A minimal data loader with an interface similar to torch.utils.data.DataLoader.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.datasets.MemoryDataLoader" title="nerva_torch.datasets.MemoryDataLoader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MemoryDataLoader</span></code></a>(Xdata, Tdata, batch_size[, ...])</p></td>
+<td><p>A minimal in-memory data loader with an interface similar to torch.utils.data.DataLoader.</p></td>
 </tr>
 </tbody>
 </table>
@@ -131,9 +135,30 @@ DataLoader API but operates on in-memory tensors loaded from .npz files.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="nerva_torch.datasets.MemoryDataLoader">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nerva_torch.datasets.</span></span><span class="sig-name descname"><span class="pre">MemoryDataLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Xdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.LongTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/datasets.html#MemoryDataLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.datasets.MemoryDataLoader" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nerva_torch.datasets.</span></span><span class="sig-name descname"><span class="pre">MemoryDataLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Xdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.LongTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/datasets.html#MemoryDataLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.datasets.MemoryDataLoader" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A minimal data loader with an interface similar to torch.utils.data.DataLoader.</p>
+<p>A minimal in-memory data loader with an interface similar to torch.utils.data.DataLoader.</p>
+<p>Notes / Warning:
+- When <cite>Tdata</cite> contains class indices (shape (N,) or (N,1)), this loader will one-hot encode</p>
+<blockquote>
+<div><p>the labels. If <cite>num_classes</cite> is not provided, it will be inferred as <cite>max(Tdata) + 1</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>On small datasets or subsets where some classes are absent, this inference can underestimate
+the true number of classes and produce one-hot targets with too few columns. This may cause
+dimension mismatches with the model output during training/evaluation.</p></li>
+<li><p>To avoid this, pass <cite>num_classes</cite> explicitly whenever you know the total number of classes.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nerva_torch.datasets.infer_num_classes">
+<span class="sig-prename descclassname"><span class="pre">nerva_torch.datasets.</span></span><span class="sig-name descname"><span class="pre">infer_num_classes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ttrain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ttest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/nerva_torch/datasets.html#infer_num_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.datasets.infer_num_classes" title="Link to this definition"></a></dt>
+<dd><p>Infer total number of classes from targets.</p>
+<ul class="simple">
+<li><p>If either Ttrain or Ttest is one-hot encoded (2D with width &gt; 1), use that width.</p></li>
+<li><p>Otherwise assume class indices and return max over both + 1.</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py function">
