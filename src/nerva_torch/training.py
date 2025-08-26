@@ -30,23 +30,49 @@ def print_epoch(epoch, lr, loss, train_accuracy, test_accuracy, elapsed):
          )
 
 def compute_accuracy(M: MultilayerPerceptron, data_loader: DataLoader):
-    """Compute mean classification accuracy for a model over a data loader."""
+    """Compute mean classification accuracy for a model over a data loader.
+
+    Accepts either one-hot targets or class indices; maps to one-hot width K when needed.
+    """
     N = len(data_loader.dataset)  # N is the number of examples
     total_correct = 0
+    K = M.layers[-1].output_size()
     for X, T in data_loader:
         Y = M.feedforward(X)
         predicted = Y.argmax(axis=1)  # the predicted classes for the batch
-        targets = T.argmax(axis=1)    # the expected classes
+        if T.ndim == 1 or (T.ndim == 2 and T.shape[1] == 1):
+            targets = T.view(-1)
+        else:
+            # handle possible width mismatch by padding
+            if T.shape[1] != K and T.shape[1] < K:
+                pad_cols = K - T.shape[1]
+                T = torch.cat([T, torch.zeros(T.shape[0], pad_cols, dtype=T.dtype, device=T.device)], dim=1)
+            targets = T.argmax(axis=1)    # the expected classes
         total_correct += (predicted == targets).sum().item()
 
     return total_correct / N
 
 
 def compute_loss(M: MultilayerPerceptron, data_loader: DataLoader, loss: LossFunction):
-    """Compute mean loss for a model over a data loader using the given loss."""
+    """Compute mean loss for a model over a data loader using the given loss.
+
+    Ensures target matrices are one-hot with width equal to the model's output size.
+    """
     N = len(data_loader.dataset)  # N is the number of examples
     total_loss = 0.0
+    K = M.layers[-1].output_size()
     for X, T in data_loader:
+        # Ensure targets match the model's output width
+        if T.ndim == 1 or (T.ndim == 2 and T.shape[1] == 1):
+            T = to_one_hot(T.view(-1), K)
+        elif T.ndim == 2 and T.shape[1] != K:
+            if T.shape[1] < K:
+                # pad zeros on the right to reach K classes
+                pad_cols = K - T.shape[1]
+                T = torch.cat([T, torch.zeros(T.shape[0], pad_cols, dtype=T.dtype, device=T.device)], dim=1)
+            else:
+                raise RuntimeError(f"Target width {T.shape[1]} exceeds model output size {K}")
+
         Y = M.feedforward(X)
         total_loss += loss(Y, T)
 
@@ -176,8 +202,8 @@ def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
                 # already one-hot encoded
                 T = Ttrain[batch, :]
             else:
-                # class indices -> convert to one-hot
-                T = to_one_hot(T, num_classes)
+                # class indices -> convert to one-hot of width equal to output size
+                T = to_one_hot(Ttrain[batch], num_classes)
 
             Y = M.feedforward(X)
             DY = loss.gradient(Y, T) / X.shape[0]

@@ -134,8 +134,8 @@ class TestMLP(unittest.TestCase):
         loss = SoftmaxCrossEntropyLossFunction()
         lr_sched = ConstantScheduler(spec.lr)
 
-        train_loader = MemoryDataLoader(spec.X, from_one_hot(spec.T), batch_size=spec.batch_size)
-        test_loader = MemoryDataLoader(spec.X, from_one_hot(spec.T), batch_size=spec.batch_size)
+        train_loader = MemoryDataLoader(spec.X, from_one_hot(spec.T), batch_size=spec.batch_size, num_classes=spec.sizes[-1])
+        test_loader = MemoryDataLoader(spec.X, from_one_hot(spec.T), batch_size=spec.batch_size, num_classes=spec.sizes[-1])
 
         # First forward pass before training
         Y = M.feedforward(spec.X)

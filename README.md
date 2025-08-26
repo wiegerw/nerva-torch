@@ -87,7 +87,7 @@ sgd(M, epochs, loss, learning_rate, train_loader, test_loader)
 > 🔍 Inputs should be of shape `(N, 784)`, where `N` is the batch size.  
 > Targets can be one-hot encoded or integer class indices from `0` to `9`.
 
-> 📘 See [`examples/mnist.py`](examples/mnist.py) for a full training setup.
+> 📘 See [`examples/train_mnist.py`](examples/train_mnist.py) for a full training setup.
 
 ---
 
