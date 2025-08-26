@@ -13,7 +13,7 @@ from nerva_torch.learning_rate import TimeBasedScheduler
 from nerva_torch.loss_functions import SoftmaxCrossEntropyLossFunction
 from nerva_torch.multilayer_perceptron import MultilayerPerceptron, parse_multilayer_perceptron
 from nerva_torch.optimizers import MomentumOptimizer, NesterovOptimizer, CompositeOptimizer
-from nerva_torch.training import sgd
+from nerva_torch.training import stochastic_gradient_descent
 from nerva_torch.weight_initializers import set_bias_to_zero, set_weights_xavier_normalized
 
 
@@ -71,10 +71,10 @@ def main():
     epochs = 10
 
     M1 = construct_mlp1()
-    sgd(M1, epochs, loss, learning_rate, train_loader, test_loader)
+    stochastic_gradient_descent(M1, epochs, loss, learning_rate, train_loader, test_loader)
 
     M2 = construct_mlp2()
-    sgd(M2, epochs, loss, learning_rate, train_loader, test_loader)
+    stochastic_gradient_descent(M2, epochs, loss, learning_rate, train_loader, test_loader)
 
 
 if __name__ == '__main__':

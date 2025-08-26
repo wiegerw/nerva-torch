@@ -17,7 +17,7 @@ from nerva_torch.loss_functions import LossFunction
 from nerva_torch.matrix_operations import elements_sum
 from nerva_torch.multilayer_perceptron import MultilayerPerceptron
 from nerva_torch.optimizers import MomentumOptimizer, NesterovOptimizer, CompositeOptimizer
-from nerva_torch.training import sgd
+from nerva_torch.training import stochastic_gradient_descent
 from nerva_torch.weight_initializers import set_bias_to_zero, set_weights_xavier_normalized
 
 Matrix = torch.Tensor
@@ -95,7 +95,7 @@ def main():
 
     epochs = 100
 
-    sgd(M, epochs, loss, learning_rate, train_loader, test_loader)
+    stochastic_gradient_descent(M, epochs, loss, learning_rate, train_loader, test_loader)
 
 
 if __name__ == '__main__':

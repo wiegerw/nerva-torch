@@ -14,7 +14,7 @@ from nerva_torch.layers import ActivationLayer, LinearLayer
 from nerva_torch.learning_rate import MultiStepLRScheduler
 from nerva_torch.loss_functions import SoftmaxCrossEntropyLossFunction
 from nerva_torch.multilayer_perceptron import MultilayerPerceptron
-from nerva_torch.training import sgd
+from nerva_torch.training import stochastic_gradient_descent
 
 
 def generate_synthetic_dataset(num_train_samples, num_test_samples, num_features, num_classes, num_redundant=2, class_sep=0.8, random_state=None):
@@ -68,7 +68,7 @@ def main():
     loss = SoftmaxCrossEntropyLossFunction()
     epochs = 20
     learning_rate = MultiStepLRScheduler(lr=0.1, milestones=[10, 15], gamma=0.3)
-    sgd(M, epochs, loss, learning_rate, train_loader, test_loader)
+    stochastic_gradient_descent(M, epochs, loss, learning_rate, train_loader, test_loader)
 
 
 if __name__ == '__main__':

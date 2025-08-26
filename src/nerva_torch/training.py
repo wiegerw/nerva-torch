@@ -4,9 +4,11 @@
 
 """Training helpers for the MLP, including a basic SGD loop and CLI glue."""
 
+import torch
+import random
 from typing import List
 
-from nerva_torch.datasets import DataLoader, create_npz_dataloaders
+from nerva_torch.datasets import DataLoader, create_npz_dataloaders, to_one_hot
 from nerva_torch.learning_rate import LearningRateScheduler, parse_learning_rate
 from nerva_torch.loss_functions import parse_loss_function, LossFunction
 from nerva_torch.multilayer_perceptron import MultilayerPerceptron, parse_multilayer_perceptron
@@ -62,13 +64,13 @@ def compute_statistics(M, lr, loss, train_loader, test_loader, epoch, elapsed_se
         print(f'epoch {epoch:3}')
 
 
-def sgd(M: MultilayerPerceptron,
-        epochs: int,
-        loss: LossFunction,
-        learning_rate: LearningRateScheduler,
-        train_loader: DataLoader,
-        test_loader: DataLoader
-       ):
+def stochastic_gradient_descent(M: MultilayerPerceptron,
+                                epochs: int,
+                                loss: LossFunction,
+                                learning_rate: LearningRateScheduler,
+                                train_loader: DataLoader,
+                                test_loader: DataLoader
+                                ):
     """Run a simple SGD training loop over epochs and batches."""
 
     lr = learning_rate(0)
@@ -100,8 +102,66 @@ def sgd(M: MultilayerPerceptron,
     print(f'Total training time for the {epochs} epochs: {training_time:.8f}s\n')
 
 
+def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
+                                      Xtrain: torch.Tensor,
+                                      Ttrain: torch.Tensor,
+                                      loss: LossFunction,
+                                      learning_rate: LearningRateScheduler,
+                                      epochs: int,
+                                      batch_size: int,
+                                      shuffle: bool
+                                     ):
+    """
+    Perform plain stochastic gradient descent training for a multilayer perceptron
+    using raw tensors in row layout (samples are rows).
+
+    Args:
+        M (MultilayerPerceptron): The neural network model to train.
+        Xtrain (torch.Tensor): Training input data of shape (N, input_dim),
+            where N is the number of training examples.
+        Ttrain (torch.Tensor): Training labels. Either:
+            - class indices of shape (N,) or (N, 1), or
+            - one-hot encoded labels of shape (N, num_classes).
+        loss (LossFunction): The loss function instance (with `gradient` method).
+        learning_rate (LearningRateScheduler): Scheduler returning the learning rate per epoch.
+        epochs (int): Number of training epochs.
+        batch_size (int): Number of examples per mini-batch.
+        shuffle (bool): Whether to shuffle training examples each epoch.
+
+    Notes:
+        - If `Ttrain` contains class indices, they will be converted to one-hot encoding.
+        - Gradients are normalized by batch size before backpropagation.
+        - This version expects row layout, unlike some column-major implementations.
+    """
+    N = Xtrain.shape[0]  # number of examples (row layout)
+    I = list(range(N))
+    K = N // batch_size  # number of full batches
+    num_classes = M.layers[-1].output_size()
+
+    for epoch in range(epochs):
+        if shuffle:
+            random.shuffle(I)
+        lr = learning_rate(epoch)  # update learning rate each epoch
+
+        for k in range(K):
+            batch = I[k * batch_size: (k + 1) * batch_size]
+            X = Xtrain[batch, :]   # shape (batch_size, input_dim)
+
+            # Handle labels depending on format
+            if Ttrain.ndim == 2 and Ttrain.shape[1] > 1:
+                # already one-hot encoded
+                T = Ttrain[batch, :]
+            else:
+                # class indices -> convert to one-hot
+                T = to_one_hot(T, num_classes)
+
+            Y = M.feedforward(X)
+            dY = loss.gradient(Y, T) / X.shape[0]  # normalize by batch size
+            M.backpropagate(Y, dY)
+            M.optimize(lr)
+
+
 def train(layer_specifications: List[str],
-          
           linear_layer_sizes: List[int],
           linear_layer_optimizers: List[str],
           linear_layer_weight_initializers: List[str],
@@ -114,6 +174,7 @@ def train(layer_specifications: List[str],
           debug: bool
          ):
     """High-level training convenience that wires parsing, data and SGD."""
+
     SGDOptions.debug = debug
     set_numpy_options()
     set_torch_options()
@@ -123,4 +184,4 @@ def train(layer_specifications: List[str],
     if weights_and_bias_file:
         M.load_weights_and_bias(weights_and_bias_file)
     train_loader, test_loader = create_npz_dataloaders(dataset_file, batch_size=batch_size)
-    sgd(M, epochs, loss, learning_rate, train_loader, test_loader)
+    stochastic_gradient_descent(M, epochs, loss, learning_rate, train_loader, test_loader)

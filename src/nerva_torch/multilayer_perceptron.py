@@ -62,7 +62,6 @@ class MultilayerPerceptron(object):
 
 
 def parse_multilayer_perceptron(layer_specifications: List[str],
-                                 
                                 linear_layer_sizes: List[int],
                                 optimizers: List[str],
                                 linear_layer_weight_initializers: List[str]
