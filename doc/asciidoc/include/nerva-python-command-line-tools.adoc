@@ -1,3 +1,5 @@
+include::../settings.adoc[]
+
 == Command line tools
 The tool `mlp.py` can be used to do training experiments with multilayer perceptrons.
 
@@ -6,7 +8,7 @@ An example invocation of the `mlp.py` tool is
 
 [source]
 ----
-include::../../python/examples/cifar10.sh[tag=doc]
+include::../../../examples/cifar10.sh[tag=doc]
 ----
 This will train a CIFAR-10 model using an MLP consisting of three layers with activation functions ReLU, ReLU and no activation. Note that it automatically downloads the CIFAR-10 dataset in the folder `../data` if it doesn't yet exist.
 
@@ -51,11 +53,3 @@ include::command-line-tools.adoc[tags=layer-configuration-options]
 include::command-line-tools.adoc[tags=training-configuration-options]
 
 include::command-line-tools.adoc[tags=dataset-options]
-
-ifdef::nerva-python[]
-include::command-line-tools.adoc[tags=pruning-options]
-
-include::command-line-tools.adoc[tags=computation-options]
-
-include::command-line-tools.adoc[tags=miscellaneous-options]
-endif::nerva-python[]

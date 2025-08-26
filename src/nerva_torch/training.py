@@ -30,52 +30,24 @@ def print_epoch(epoch, lr, loss, train_accuracy, test_accuracy, elapsed):
          )
 
 def compute_accuracy(M: MultilayerPerceptron, data_loader: DataLoader):
-    """Compute mean classification accuracy for a model over a data loader.
-
-    Accepts either one-hot targets or class indices; maps to one-hot width K when needed.
-    """
+    """Compute mean classification accuracy for a model over a data loader."""
     N = len(data_loader.dataset)  # N is the number of examples
     total_correct = 0
-    K = M.layers[-1].output_size()
     for X, T in data_loader:
         Y = M.feedforward(X)
         predicted = Y.argmax(axis=1)  # the predicted classes for the batch
-        if T.ndim == 1 or (T.ndim == 2 and T.shape[1] == 1):
-            targets = T.view(-1)
-        else:
-            # handle possible width mismatch by padding
-            if T.shape[1] != K and T.shape[1] < K:
-                pad_cols = K - T.shape[1]
-                T = torch.cat([T, torch.zeros(T.shape[0], pad_cols, dtype=T.dtype, device=T.device)], dim=1)
-            targets = T.argmax(axis=1)    # the expected classes
+        targets = T.argmax(axis=1)    # the expected classes
         total_correct += (predicted == targets).sum().item()
-
     return total_correct / N
 
 
 def compute_loss(M: MultilayerPerceptron, data_loader: DataLoader, loss: LossFunction):
-    """Compute mean loss for a model over a data loader using the given loss.
-
-    Ensures target matrices are one-hot with width equal to the model's output size.
-    """
+    """Compute mean loss for a model over a data loader using the given loss."""
     N = len(data_loader.dataset)  # N is the number of examples
     total_loss = 0.0
-    K = M.layers[-1].output_size()
     for X, T in data_loader:
-        # Ensure targets match the model's output width
-        if T.ndim == 1 or (T.ndim == 2 and T.shape[1] == 1):
-            T = to_one_hot(T.view(-1), K)
-        elif T.ndim == 2 and T.shape[1] != K:
-            if T.shape[1] < K:
-                # pad zeros on the right to reach K classes
-                pad_cols = K - T.shape[1]
-                T = torch.cat([T, torch.zeros(T.shape[0], pad_cols, dtype=T.dtype, device=T.device)], dim=1)
-            else:
-                raise RuntimeError(f"Target width {T.shape[1]} exceeds model output size {K}")
-
         Y = M.feedforward(X)
         total_loss += loss(Y, T)
-
     return total_loss / N
 
 
@@ -90,6 +62,18 @@ def compute_statistics(M, lr, loss, train_loader, test_loader, epoch, elapsed_se
         print(f'epoch {epoch:3}')
 
 
+def print_batch_debug_info(epoch: int, batch_idx: int,
+                           M: MultilayerPerceptron,
+                           X: torch.Tensor, Y: torch.Tensor, DY: torch.Tensor):
+    """Print detailed debug information for a training batch."""
+    print(f'epoch: {epoch} batch: {batch_idx}')
+    M.info()
+    pp("X", X)
+    pp("Y", Y)
+    pp("DY", DY)
+
+
+# tag::sgd[]
 def stochastic_gradient_descent(M: MultilayerPerceptron,
                                 epochs: int,
                                 loss: LossFunction,
@@ -97,6 +81,7 @@ def stochastic_gradient_descent(M: MultilayerPerceptron,
                                 train_loader: DataLoader,
                                 test_loader: DataLoader
                                 ):
+# end::sgd[]
     """
     Run a simple stochastic gradient descent (SGD) training loop using PyTorch data loaders.
 
@@ -114,11 +99,14 @@ def stochastic_gradient_descent(M: MultilayerPerceptron,
     Notes:
         - The learning rate is updated once per epoch using the scheduler.
         - Gradients are normalized by batch size before backpropagation.
+        - Debugging output is controlled by `SGDOptions.debug`. When enabled,
+          per-batch information is printed via `print_batch_debug_info`.
 
     Side Effects:
         - Updates model parameters in-place via `M.optimize(lr)`.
         - Prints statistics and training time to standard output.
     """
+# tag::sgd[]
     lr = learning_rate(0)
     compute_statistics(M, lr, loss, train_loader, test_loader, epoch=0)
     training_time = 0.0
@@ -132,11 +120,7 @@ def stochastic_gradient_descent(M: MultilayerPerceptron,
             DY = loss.gradient(Y, T) / X.shape[0]
 
             if SGDOptions.debug:
-                print(f'epoch: {epoch} batch: {k}')
-                M.info()
-                pp("X", X)
-                pp("Y", Y)
-                pp("DY", DY)
+                print_batch_debug_info(epoch, k, M, X, Y, DY)
 
             M.backpropagate(Y, DY)
             M.optimize(lr)
@@ -146,8 +130,10 @@ def stochastic_gradient_descent(M: MultilayerPerceptron,
         compute_statistics(M, lr, loss, train_loader, test_loader, epoch=epoch + 1, elapsed_seconds=seconds)
 
     print(f'Total training time for the {epochs} epochs: {training_time:.8f}s\n')
+# end::sgd[]
 
 
+# tag::sgd_plain[]
 def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
                                       Xtrain: torch.Tensor,
                                       Ttrain: torch.Tensor,
@@ -157,6 +143,7 @@ def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
                                       batch_size: int,
                                       shuffle: bool
                                      ):
+# end::sgd_plain[]
     """
     Perform plain stochastic gradient descent training for a multilayer perceptron
     using raw tensors in row layout (samples are rows).
@@ -177,12 +164,15 @@ def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
     Notes:
         - The learning rate is updated once per epoch using the scheduler.
         - Gradients are normalized by batch size before backpropagation.
+        - Debugging output is controlled by `SGDOptions.debug`. When enabled,
+          per-batch information is printed via `print_batch_debug_info`.
         - If `Ttrain` contains class indices, they will be converted to one-hot encoding.
 
     Side Effects:
         - Updates model parameters in-place via `M.optimize(lr)`.
         - Prints statistics and training time to standard output.
     """
+# tag::sgd_plain[]
     N = Xtrain.shape[0]  # number of examples (row layout)
     I = list(range(N))
     K = N // batch_size  # number of full batches
@@ -209,14 +199,11 @@ def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
             DY = loss.gradient(Y, T) / X.shape[0]
 
             if SGDOptions.debug:
-                print(f'epoch: {epoch} batch: {k}')
-                M.info()
-                pp("X", X)
-                pp("Y", Y)
-                pp("DY", DY)
+                print_batch_debug_info(epoch, k, M, X, Y, DY)
 
             M.backpropagate(Y, DY)
             M.optimize(lr)
+# end::sgd_plain[]
 
 
 def train(layer_specifications: List[str],
