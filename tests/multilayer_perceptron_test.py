@@ -9,8 +9,12 @@ from dataclasses import dataclass
 from typing import List
 
 import torch
+from nerva_torch.learning_rate import ConstantScheduler
+from nerva_torch.datasets import MemoryDataLoader, from_one_hot
 from nerva_torch.loss_functions import SoftmaxCrossEntropyLossFunction
-from nerva_torch.multilayer_perceptron import parse_multilayer_perceptron
+from nerva_torch.multilayer_perceptron import parse_multilayer_perceptron, MultilayerPerceptron
+from nerva_torch.training import stochastic_gradient_descent_plain, stochastic_gradient_descent
+
 
 # ----------------------------
 # Package-specific helpers
@@ -73,18 +77,22 @@ def construct_mlp(linear_layer_sizes: List[int]):
 
 class TestMLP(unittest.TestCase):
 
-    def _test_mlp(self, spec: MLPSpec):
+    def _initialize_mlp(self, spec: MLPSpec) -> MultilayerPerceptron:
+        """Helper to construct and initialize the MLP with fixed weights/biases."""
         M = construct_mlp(spec.sizes)
-
-        # Assign weights and biases
         for i, (W, b) in enumerate(zip(spec.W, spec.b)):
             M.layers[i].W[:] = W
             M.layers[i].b[:] = b
+        return M
 
+    def _test_mlp(self, spec: MLPSpec):
+        """Test MultilayerPerceptron against precomputed values."""
+        M = self._initialize_mlp(spec)
         loss = SoftmaxCrossEntropyLossFunction()
+
+        # First forward pass before training
         Y = M.feedforward(spec.X)
         DY = loss.gradient(Y, spec.T) / spec.batch_size
-
         check_tensors_are_close("Y", Y, "Y1", spec.Y1)
         check_tensors_are_close("DY", DY, "DY1", spec.DY1)
 
@@ -95,6 +103,57 @@ class TestMLP(unittest.TestCase):
 
         check_tensors_are_close("Y", Y, "Y2", spec.Y2)
         check_tensors_are_close("DY", DY, "DY2", spec.DY2)
+
+    def _test_sgd_plain(self, spec: MLPSpec):
+        """Test stochastic_gradient_descent_plain against precomputed values."""
+        M = self._initialize_mlp(spec)
+        loss = SoftmaxCrossEntropyLossFunction()
+        lr_sched = ConstantScheduler(spec.lr)
+
+        # First forward pass before training
+        Y = M.feedforward(spec.X)
+        DY = loss.gradient(Y, spec.T) / spec.batch_size
+        check_tensors_are_close("Y (sgd_plain before)", Y, "Y1", spec.Y1)
+        check_tensors_are_close("DY (sgd_plain before)", DY, "DY1", spec.DY1)
+
+        # Run one epoch (one batch) of SGD with plain tensors
+        stochastic_gradient_descent_plain(M, spec.X, spec.T, loss,
+                                          lr_sched, epochs=1,
+                                          batch_size=spec.batch_size,
+                                          shuffle=False)
+
+        # After one update step
+        Y = M.feedforward(spec.X)
+        DY = loss.gradient(Y, spec.T) / spec.batch_size
+        check_tensors_are_close("Y (sgd_plain after)", Y, "Y2", spec.Y2)
+        check_tensors_are_close("DY (sgd_plain after)", DY, "DY2", spec.DY2)
+
+    def _test_sgd_loader(self, spec: MLPSpec):
+        """Test stochastic_gradient_descent with MemoryDataLoader against precomputed values."""
+        M = self._initialize_mlp(spec)
+        loss = SoftmaxCrossEntropyLossFunction()
+        lr_sched = ConstantScheduler(spec.lr)
+
+        train_loader = MemoryDataLoader(spec.X, from_one_hot(spec.T), batch_size=spec.batch_size)
+        test_loader = MemoryDataLoader(spec.X, from_one_hot(spec.T), batch_size=spec.batch_size)
+
+        # First forward pass before training
+        Y = M.feedforward(spec.X)
+        DY = loss.gradient(Y, spec.T) / spec.batch_size
+        check_tensors_are_close("Y (sgd_loader before)", Y, "Y1", spec.Y1)
+        check_tensors_are_close("DY (sgd_loader before)", DY, "DY1", spec.DY1)
+
+        # Run one epoch (one batch) of SGD with loader
+        stochastic_gradient_descent(M, epochs=1, loss=loss,
+                                    learning_rate=lr_sched,
+                                    train_loader=train_loader,
+                                    test_loader=test_loader)
+
+        # After one update step
+        Y = M.feedforward(spec.X)
+        DY = loss.gradient(Y, spec.T) / spec.batch_size
+        check_tensors_are_close("Y (sgd_loader after)", Y, "Y2", spec.Y2)
+        check_tensors_are_close("DY (sgd_loader after)", DY, "DY2", spec.DY2)
 
     def test_mlp0(self):
         """
@@ -181,6 +240,8 @@ class TestMLP(unittest.TestCase):
         )
 
         self._test_mlp(spec)
+        self._test_sgd_plain(spec)
+        self._test_sgd_loader(spec)
 
     def test_mlp1(self):
         """
@@ -264,6 +325,8 @@ class TestMLP(unittest.TestCase):
             batch_size = 4
         )
         self._test_mlp(spec)
+        self._test_sgd_plain(spec)
+        self._test_sgd_loader(spec)
 
     def test_mlp2(self):
         """
@@ -367,3 +430,5 @@ class TestMLP(unittest.TestCase):
             batch_size = 8
         )
         self._test_mlp(spec)
+        self._test_sgd_plain(spec)
+        self._test_sgd_loader(spec)

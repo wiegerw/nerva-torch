@@ -71,8 +71,28 @@ def stochastic_gradient_descent(M: MultilayerPerceptron,
                                 train_loader: DataLoader,
                                 test_loader: DataLoader
                                 ):
-    """Run a simple SGD training loop over epochs and batches."""
+    """
+    Run a simple stochastic gradient descent (SGD) training loop using PyTorch data loaders.
 
+    Args:
+        M (MultilayerPerceptron): The neural network model to train.
+        epochs (int): Number of training epochs.
+        loss (LossFunction): The loss function instance (must provide `gradient` method).
+        learning_rate (LearningRateScheduler): Scheduler returning the learning rate per epoch.
+        train_loader (DataLoader): DataLoader that yields mini-batches `(X, T)` for training.
+            - `X`: input batch of shape (batch_size, input_dim).
+            - `T`: batch of target labels, either class indices (batch_size,) or one-hot
+              encoded (batch_size, num_classes).
+        test_loader (DataLoader): DataLoader that yields test batches `(X, T)` for evaluation.
+
+    Notes:
+        - The learning rate is updated once per epoch using the scheduler.
+        - Gradients are normalized by batch size before backpropagation.
+
+    Side Effects:
+        - Updates model parameters in-place via `M.optimize(lr)`.
+        - Prints statistics and training time to standard output.
+    """
     lr = learning_rate(0)
     compute_statistics(M, lr, loss, train_loader, test_loader, epoch=0)
     training_time = 0.0
@@ -83,7 +103,7 @@ def stochastic_gradient_descent(M: MultilayerPerceptron,
 
         for k, (X, T) in enumerate(train_loader):
             Y = M.feedforward(X)
-            DY = loss.gradient(Y, T) / Y.shape[0]
+            DY = loss.gradient(Y, T) / X.shape[0]
 
             if SGDOptions.debug:
                 print(f'epoch: {epoch} batch: {k}')
@@ -129,9 +149,13 @@ def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
         shuffle (bool): Whether to shuffle training examples each epoch.
 
     Notes:
-        - If `Ttrain` contains class indices, they will be converted to one-hot encoding.
+        - The learning rate is updated once per epoch using the scheduler.
         - Gradients are normalized by batch size before backpropagation.
-        - This version expects row layout, unlike some column-major implementations.
+        - If `Ttrain` contains class indices, they will be converted to one-hot encoding.
+
+    Side Effects:
+        - Updates model parameters in-place via `M.optimize(lr)`.
+        - Prints statistics and training time to standard output.
     """
     N = Xtrain.shape[0]  # number of examples (row layout)
     I = list(range(N))
@@ -156,8 +180,16 @@ def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
                 T = to_one_hot(T, num_classes)
 
             Y = M.feedforward(X)
-            dY = loss.gradient(Y, T) / X.shape[0]  # normalize by batch size
-            M.backpropagate(Y, dY)
+            DY = loss.gradient(Y, T) / X.shape[0]
+
+            if SGDOptions.debug:
+                print(f'epoch: {epoch} batch: {k}')
+                M.info()
+                pp("X", X)
+                pp("Y", Y)
+                pp("DY", DY)
+
+            M.backpropagate(Y, DY)
             M.optimize(lr)
 
 

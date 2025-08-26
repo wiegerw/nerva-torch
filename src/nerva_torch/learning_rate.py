@@ -16,7 +16,7 @@ from typing import List
 
 class LearningRateScheduler(object):
     """Interface for epoch-indexed learning-rate schedules."""
-    def __call__(self, epoch: int):
+    def __call__(self, epoch: int) -> float:
         raise NotImplementedError
 
 
@@ -28,7 +28,7 @@ class ConstantScheduler(LearningRateScheduler):
     def __str__(self):
         return f'ConstantScheduler(lr={self.lr})'
 
-    def __call__(self, epoch: int):
+    def __call__(self, epoch: int) -> float:
         return self.lr
 
 
