@@ -25,13 +25,12 @@ jobs:
           python -m pip install sphinx sphinx-rtd-theme
 
       - name: Build Sphinx HTML
-        run: |
-          mkdir -p output_directory
-          sphinx-build -b html doc/sphinx output_directory
+        run: bash doc/build_sphinx_documentation.sh
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output_directory
+          publish_dir: ./output_directory/sphinx
           destination_dir: sphinx
+
