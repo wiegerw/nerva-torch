@@ -1,0 +1,14 @@
+nerva\_torch.loss\_functions\_torch
+===================================
+
+.. automodule:: nerva_torch.loss_functions_torch
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      negative_likelihood_loss_torch
+      softmax_cross_entropy_loss_torch
+      squared_error_loss_torch
+   
