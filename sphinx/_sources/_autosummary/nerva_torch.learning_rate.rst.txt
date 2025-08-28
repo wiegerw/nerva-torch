@@ -1,0 +1,23 @@
+nerva\_torch.learning\_rate
+===========================
+
+.. automodule:: nerva_torch.learning_rate
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      parse_learning_rate
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ConstantScheduler
+      ExponentialScheduler
+      LearningRateScheduler
+      MultiStepLRScheduler
+      StepBasedScheduler
+      TimeBasedScheduler
+   

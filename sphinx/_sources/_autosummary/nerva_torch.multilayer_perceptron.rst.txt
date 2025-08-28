@@ -1,0 +1,18 @@
+nerva\_torch.multilayer\_perceptron
+===================================
+
+.. automodule:: nerva_torch.multilayer_perceptron
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      parse_multilayer_perceptron
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MultilayerPerceptron
+   
