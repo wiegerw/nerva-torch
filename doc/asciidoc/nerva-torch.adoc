@@ -25,15 +25,21 @@ endif::[]
 </style>
 ++++
 
-include::include/introduction.adoc[]
+include::settings.adoc[]
 
-include::include/nerva-python-command-line-tools.adoc[]
+include::include/nerva-python-introduction.adoc[]
+
+include::include/nerva-python-installation.adoc[]
 
 include::include/nerva-python-overview-of-the-code.adoc[]
 
+include::include/nerva-python-api-user-guide.adoc[]
+
+include::include/nerva-python-command-line-tools.adoc[]
+
 include::include/io.adoc[]
 
-include::include/matrix-operations.adoc[]
+include::include/nerva-python-advanced-topics.adoc[]
 
 == References
 
