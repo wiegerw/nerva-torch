@@ -93,7 +93,7 @@ def main():
 
     learning_rate = TimeBasedScheduler(lr=0.1, decay=0.09)
 
-    epochs = 100
+    epochs = 5
 
     stochastic_gradient_descent(M, epochs, loss, learning_rate, train_loader, test_loader)
 

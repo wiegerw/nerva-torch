@@ -94,7 +94,7 @@ def main():
     learning_rate = ConstantScheduler(0.01)
 
     # Define the number of training epochs
-    epochs = 10
+    epochs = 5
 
     sgd(M, epochs, loss, learning_rate, train_loader, test_loader)
 

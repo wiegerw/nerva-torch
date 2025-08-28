@@ -68,7 +68,7 @@ def main():
 
     loss = SoftmaxCrossEntropyLossFunction()
     learning_rate = TimeBasedScheduler(lr=0.1, decay=0.09)
-    epochs = 10
+    epochs = 5
 
     M1 = construct_mlp1()
     stochastic_gradient_descent(M1, epochs, loss, learning_rate, train_loader, test_loader)

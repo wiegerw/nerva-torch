@@ -66,7 +66,7 @@ def main():
 
     M = create_mlp([(num_features, 200), (200, 200), (200, num_classes)])
     loss = SoftmaxCrossEntropyLossFunction()
-    epochs = 20
+    epochs = 5
     learning_rate = MultiStepLRScheduler(lr=0.1, milestones=[10, 15], gamma=0.3)
     stochastic_gradient_descent(M, epochs, loss, learning_rate, train_loader, test_loader)
 
