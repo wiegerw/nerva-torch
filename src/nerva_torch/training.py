@@ -91,6 +91,7 @@ def stochastic_gradient_descent(M: MultilayerPerceptron,
         loss (LossFunction): The loss function instance (must provide `gradient` method).
         learning_rate (LearningRateScheduler): Scheduler returning the learning rate per epoch.
         train_loader (DataLoader): DataLoader that yields mini-batches `(X, T)` for training.
+
             - `X`: input batch of shape (batch_size, input_dim).
             - `T`: batch of target labels, either class indices (batch_size,) or one-hot
               encoded (batch_size, num_classes).

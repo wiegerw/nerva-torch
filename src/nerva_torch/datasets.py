@@ -4,8 +4,8 @@
 
 """In-memory data loader helpers and one-hot conversions.
 
-The DataLoader defined here mirrors a small subset of the PyTorch
-DataLoader API but operates on in-memory tensors loaded from .npz files.
+   The DataLoader defined here mirrors a small subset of the PyTorch
+   DataLoader API but operates on in-memory tensors loaded from .npz files.
 """
 
 from pathlib import Path
@@ -31,6 +31,7 @@ class MemoryDataLoader(object):
     """A minimal in-memory data loader with an interface similar to torch.utils.data.DataLoader.
 
     Notes / Warning:
+
     - When `Tdata` contains class indices (shape (N,) or (N,1)), this loader will one-hot encode
       the labels. If `num_classes` is not provided, it will be inferred as `max(Tdata) + 1`.
     - On small datasets or subsets where some classes are absent, this inference can underestimate
