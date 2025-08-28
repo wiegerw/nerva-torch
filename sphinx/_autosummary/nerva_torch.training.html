@@ -190,12 +190,12 @@
 <li><p><strong>epochs</strong> (<em>int</em>) – Number of training epochs.</p></li>
 <li><p><strong>loss</strong> (<a class="reference internal" href="nerva_torch.loss_functions.html#nerva_torch.loss_functions.LossFunction" title="nerva_torch.loss_functions.LossFunction"><em>LossFunction</em></a>) – The loss function instance (must provide <cite>gradient</cite> method).</p></li>
 <li><p><strong>learning_rate</strong> (<a class="reference internal" href="nerva_torch.learning_rate.html#nerva_torch.learning_rate.LearningRateScheduler" title="nerva_torch.learning_rate.LearningRateScheduler"><em>LearningRateScheduler</em></a>) – Scheduler returning the learning rate per epoch.</p></li>
-<li><p><strong>train_loader</strong> (<em>DataLoader</em>) – <p>DataLoader that yields mini-batches <cite>(X, T)</cite> for training.
-- <cite>X</cite>: input batch of shape (batch_size, input_dim).
-- <cite>T</cite>: batch of target labels, either class indices (batch_size,) or one-hot</p>
-<blockquote>
-<div><p>encoded (batch_size, num_classes).</p>
-</div></blockquote>
+<li><p><strong>train_loader</strong> (<em>DataLoader</em>) – <p>DataLoader that yields mini-batches <cite>(X, T)</cite> for training.</p>
+<ul>
+<li><p><cite>X</cite>: input batch of shape (batch_size, input_dim).</p></li>
+<li><p><cite>T</cite>: batch of target labels, either class indices (batch_size,) or one-hot
+encoded (batch_size, num_classes).</p></li>
+</ul>
 </p></li>
 <li><p><strong>test_loader</strong> (<em>DataLoader</em>) – DataLoader that yields test batches <cite>(X, T)</cite> for evaluation.</p></li>
 </ul>

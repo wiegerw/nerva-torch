@@ -138,12 +138,10 @@ DataLoader API but operates on in-memory tensors loaded from .npz files.</p>
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nerva_torch.datasets.</span></span><span class="sig-name descname"><span class="pre">MemoryDataLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Xdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.LongTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/datasets.html#MemoryDataLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.datasets.MemoryDataLoader" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A minimal in-memory data loader with an interface similar to torch.utils.data.DataLoader.</p>
-<p>Notes / Warning:
-- When <cite>Tdata</cite> contains class indices (shape (N,) or (N,1)), this loader will one-hot encode</p>
-<blockquote>
-<div><p>the labels. If <cite>num_classes</cite> is not provided, it will be inferred as <cite>max(Tdata) + 1</cite>.</p>
-</div></blockquote>
+<p>Notes / Warning:</p>
 <ul class="simple">
+<li><p>When <cite>Tdata</cite> contains class indices (shape (N,) or (N,1)), this loader will one-hot encode
+the labels. If <cite>num_classes</cite> is not provided, it will be inferred as <cite>max(Tdata) + 1</cite>.</p></li>
 <li><p>On small datasets or subsets where some classes are absent, this inference can underestimate
 the true number of classes and produce one-hot targets with too few columns. This may cause
 dimension mismatches with the model output during training/evaluation.</p></li>
