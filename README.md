@@ -162,7 +162,7 @@ def sgd(M: MultilayerPerceptron,
 
 We validate the manually written backpropagation code using symbolic differentiation via `nerva-sympy`.
 
-This example validates the gradient of the **softmax layer**. It also illustrates how the gradients `DW`, `Db` and `DX` of the weights `W`, bias `b` and input `X` are calculated from the output `Y` and its gradient `DY`.
+This example validates the gradient of the **softmax layer**. It also illustrates how the gradients `DZ`, `DW`, `Db` and `DX` of the intermediate variable `Z`, the weights `W`, bias `b` and input `X` are calculated from the output `Y` and its gradient `DY`.
 
 ```python
 # Backpropagation gradients
@@ -176,9 +176,13 @@ DW1 = gradient(loss(Y), w)
 assert equal_matrices(DW, DW1)
 ```
 
-> ℹ️ The `row_repeat` operation is defined in the [table of matrix operations](https://wiegerw.github.io/nerva-torch/doc/nerva-torch.html#_matrix_operations).
+## 🔢 Implementation via Matrix Operations
 
-This approach helps detect subtle bugs and pinpoints incorrect intermediate expressions if mismatches arise.
+The validated backpropagation formulae are implemented directly using the library's core set of primitive matrix operations. This approach provides a significant advantage in clarity and maintainability by expressing all computations from loss functions and activation layers to gradient calculations through a single, global vocabulary of operations.
+
+This stands in contrast to implementations that use hundreds of lines of scattered, special-case logic for the same mathematical result. By reducing complex formulae to a concise sequence of well-defined primitives, the implementation becomes both more readable and far easier to verify and debug.
+
+For a complete reference of all available operations, see the [Table of Matrix Operations](https://wiegerw.github.io/nerva-torch/nerva-torch.html#_matrix_operations).
 
 ---
 
