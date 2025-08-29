@@ -1,46 +1,38 @@
-# Copyright: Wieger Wesselink 2022 - 2024
-#
+# Copyright 2022 - 2025 Wieger Wesselink.
 # Distributed under the Boost Software License, Version 1.0.
-# (See accompanying file LICENSE_1_0.txt or copy at
-# http://www.boost.org/LICENSE_1_0.txt)
-#
-# \file multilayer_perceptron_test.py
-# \brief Tests for multilayer perceptrons.
+# (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
 import unittest
-
-import torch
-
 from nerva_torch.loss_functions import SoftmaxCrossEntropyLossFunction, LossFunction, SquaredErrorLossFunction, \
     NegativeLogLikelihoodLossFunction, CrossEntropyLossFunction, LogisticCrossEntropyLossFunction
 from nerva_torch.loss_functions import Squared_error_loss, Softmax_cross_entropy_loss
 from nerva_torch.loss_functions_torch import squared_error_loss_torch, softmax_cross_entropy_loss_torch
-from utilities import random_float_matrix, make_target
+from utilities import random_float_matrix, make_target, to_tensor, almost_equal
 
 
 class TestLossFunctions(unittest.TestCase):
-    def _test_loss(self, name: str, loss: LossFunction, expected_loss: float, Y: torch.tensor, T: torch.tensor):
+    def _test_loss(self, name: str, loss: LossFunction, expected_loss: float, Y, T):
         print(f"\n=== test_loss {name} ===\n")
         L = loss(Y, T)
-        self.assertAlmostEqual(expected_loss, L.item(), 5)
+        self.assertTrue(almost_equal(expected_loss, L, 1e-5))
 
 
     def test_losses_for_case(self):
-        Y = torch.tensor([
+        Y = to_tensor([
             [0.23759169, 0.42272727, 0.33968104],
             [0.43770149, 0.28115265, 0.28114586],
             [0.20141643, 0.45190243, 0.34668113],
             [0.35686849, 0.17944701, 0.46368450],
             [0.48552814, 0.26116029, 0.25331157],
-        ], dtype = torch.float32)
+        ])
 
-        T = torch.tensor([
+        T = to_tensor([
             [1.00000000, 0.00000000, 0.00000000],
             [1.00000000, 0.00000000, 0.00000000],
             [0.00000000, 1.00000000, 0.00000000],
             [0.00000000, 0.00000000, 1.00000000],
             [1.00000000, 0.00000000, 0.00000000],
-        ], dtype = torch.float32)
+        ])
 
         # List of (loss function, expected value)
         losses = [
@@ -56,21 +48,21 @@ class TestLossFunctions(unittest.TestCase):
             self.assertAlmostEqual(L, expected, places=5, msg=f"{loss_fn.__class__.__name__} failed: got {L}, expected {expected}")
     
     def test_loss2(self):
-        Y = torch.tensor([
+        Y = to_tensor([
             [0.24335898, 0.40191852, 0.35472250],
             [0.21134093, 0.53408849, 0.25457058],
             [0.24788846, 0.42021140, 0.33190014],
             [0.40312318, 0.24051313, 0.35636369],
             [0.43329234, 0.34433141, 0.22237625],
-        ], dtype = torch.float32)
+        ])
 
-        T = torch.tensor([
+        T = to_tensor([
             [1.00000000, 0.00000000, 0.00000000],
             [0.00000000, 0.00000000, 1.00000000],
             [0.00000000, 1.00000000, 0.00000000],
             [0.00000000, 1.00000000, 0.00000000],
             [1.00000000, 0.00000000, 0.00000000],
-        ], dtype = torch.float32)
+        ])
 
         # List of (loss function, expected value)
         losses = [
@@ -87,21 +79,21 @@ class TestLossFunctions(unittest.TestCase):
 
 
     def test_loss3(self):
-        Y = torch.tensor([
+        Y = to_tensor([
             [0.23774258, 0.42741216, 0.33484526],
             [0.29687977, 0.43115409, 0.27196615],
             [0.43420442, 0.22655227, 0.33924331],
             [0.28599538, 0.35224692, 0.36175770],
             [0.20014798, 0.43868708, 0.36116494],
-        ], dtype = torch.float32)
+        ])
 
-        T = torch.tensor([
+        T = to_tensor([
             [0.00000000, 1.00000000, 0.00000000],
             [0.00000000, 1.00000000, 0.00000000],
             [0.00000000, 1.00000000, 0.00000000],
             [1.00000000, 0.00000000, 0.00000000],
             [0.00000000, 0.00000000, 1.00000000],
-        ], dtype = torch.float32)
+        ])
 
         # List of (loss function, expected value)
         losses = [
@@ -118,21 +110,21 @@ class TestLossFunctions(unittest.TestCase):
 
 
     def test_loss4(self):
-        Y = torch.tensor([
+        Y = to_tensor([
             [0.26787616, 0.35447135, 0.37765249],
             [0.26073833, 0.45527664, 0.28398503],
             [0.31560020, 0.41003295, 0.27436685],
             [0.37231605, 0.17984538, 0.44783858],
             [0.49308039, 0.27786731, 0.22905230],
-        ], dtype = torch.float32)
+        ])
 
-        T = torch.tensor([
+        T = to_tensor([
             [0.00000000, 1.00000000, 0.00000000],
             [0.00000000, 0.00000000, 1.00000000],
             [1.00000000, 0.00000000, 0.00000000],
             [0.00000000, 0.00000000, 1.00000000],
             [0.00000000, 0.00000000, 1.00000000],
-        ], dtype = torch.float32)
+        ])
 
         # List of (loss function, expected value)
         losses = [
@@ -149,21 +141,21 @@ class TestLossFunctions(unittest.TestCase):
 
 
     def test_loss5(self):
-        Y = torch.tensor([
+        Y = to_tensor([
             [0.29207765, 0.40236525, 0.30555710],
             [0.38987005, 0.36536339, 0.24476656],
             [0.24441444, 0.32191037, 0.43367519],
             [0.38397493, 0.35636403, 0.25966104],
             [0.29902507, 0.25018760, 0.45078733],
-        ], dtype = torch.float32)
+        ])
 
-        T = torch.tensor([
+        T = to_tensor([
             [0.00000000, 0.00000000, 1.00000000],
             [1.00000000, 0.00000000, 0.00000000],
             [1.00000000, 0.00000000, 0.00000000],
             [0.00000000, 1.00000000, 0.00000000],
             [0.00000000, 0.00000000, 1.00000000],
-        ], dtype = torch.float32)
+        ])
 
         # List of (loss function, expected value)
         losses = [
@@ -188,8 +180,8 @@ class CompareLossFunctions(unittest.TestCase):
             Y = random_float_matrix(shape, a, b)
             T = make_target(Y).astype(float)
 
-            Y = torch.Tensor(Y)
-            T = torch.Tensor(T)
+            Y = to_tensor(Y)
+            T = to_tensor(T)
 
             loss_ms1 = squared_error_loss_torch(Y, T)
             loss_ms2 = Squared_error_loss(Y, T)

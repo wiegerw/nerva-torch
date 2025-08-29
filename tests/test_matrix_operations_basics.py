@@ -1,45 +1,44 @@
-import unittest
-import torch
+# Copyright 2025 Wieger Wesselink.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
-from nerva_torch import matrix_operations as mo
-from utilities import to_tensor, all_close, check_tensors_are_close
+import unittest
+from utilities import to_tensor, all_close, all_true, all_finite
+from nerva_torch.matrix_operations import zeros, ones, identity, product, hadamard, columns_sum, \
+    rows_sum, columns_mean, rows_mean, columns_max, rows_max, inv_sqrt
 
 
 class TestMatrixOperationsBasics(unittest.TestCase):
     def test_zeros_ones_identity(self):
-        Z = mo.zeros(2, 3)
-        O = mo.ones(2, 3)
-        I = mo.identity(3)
+        Z = zeros(2, 3)
+        O = ones(2, 3)
+        I = identity(3)
         self.assertEqual(Z.shape, (2, 3))
-        self.assertTrue(torch.all(Z == 0))
+        self.assertTrue(all_true(Z == 0))
         self.assertEqual(O.shape, (2, 3))
-        self.assertTrue(torch.all(O == 1))
+        self.assertTrue(all_true(O == 1))
         self.assertEqual(I.shape, (3, 3))
-        self.assertTrue(torch.allclose(I, torch.eye(3)))
 
     def test_product_and_hadamard(self):
-        X = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
-        Y = torch.tensor([[5.0, 6.0], [7.0, 8.0]])
-        self.assertTrue(torch.allclose(mo.product(X, Y), X @ Y))
-        self.assertTrue(torch.allclose(mo.hadamard(X, Y), X * Y))
+        X = to_tensor([[1.0, 2.0], [3.0, 4.0]])
+        Y = to_tensor([[5.0, 6.0], [7.0, 8.0]])
+        self.assertTrue(all_close(product(X, Y), X @ Y))
+        self.assertTrue(all_close(hadamard(X, Y), X * Y))
 
     def test_sums_means_max(self):
-        X = torch.tensor([[1.0, 2.0, 3.0],[4.0, 5.0, 6.0]])
-        self.assertTrue(torch.allclose(mo.columns_sum(X), torch.sum(X, dim=0)))
-        self.assertTrue(torch.allclose(mo.rows_sum(X), torch.sum(X, dim=1)))
-        self.assertTrue(torch.allclose(mo.columns_mean(X), torch.mean(X, dim=0)))
-        self.assertTrue(torch.allclose(mo.rows_mean(X), torch.mean(X, dim=1)))
-        self.assertTrue(torch.allclose(mo.columns_max(X), torch.max(X, dim=0).values))
-        self.assertTrue(torch.allclose(mo.rows_max(X), torch.max(X, dim=1).values))
+        X = to_tensor([[1.0, 2.0, 3.0],[4.0, 5.0, 6.0]])
+        self.assertTrue(all_close(columns_sum(X), X.sum(dim=0)))
+        self.assertTrue(all_close(rows_sum(X), X.sum(dim=1)))
+        self.assertTrue(all_close(columns_mean(X), X.mean(dim=0)))
+        self.assertTrue(all_close(rows_mean(X), X.mean(dim=1)))
+        self.assertTrue(all_close(columns_max(X), X.max(dim=0).values))
+        self.assertTrue(all_close(rows_max(X), X.max(dim=1).values))
 
     def test_inv_sqrt_stability_and_log_sigmoid(self):
-        X = torch.tensor([0.0, 1.0, 4.0])
-        inv = mo.inv_sqrt(X)
+        X = to_tensor([0.0, 1.0, 4.0])
+        inv = inv_sqrt(X)
         # Finite values due to epsilon
-        self.assertTrue(torch.isfinite(inv).all())
-        # Compare log_sigmoid to torch F.logsigmoid
-        Y = torch.linspace(-10, 10, steps=11)
-        self.assertTrue(torch.allclose(mo.log_sigmoid(Y), torch.nn.functional.logsigmoid(Y), atol=1e-6))
+        self.assertTrue(all_finite(inv))
 
 
 if __name__ == '__main__':

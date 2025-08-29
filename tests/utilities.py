@@ -2,6 +2,8 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
+import math
+from typing import Union, Sequence
 import numpy as np
 import torch
 
@@ -27,29 +29,99 @@ def random_float_matrix(shape, a, b):
     return scaled_array
 
 
-# --- Framework-agnostic helpers for tests ---
-# For other backends (TensorFlow/JAX/NumPy), reimplement these functions
-# with identical signatures and semantics.
+# ------------------------
+# Tensor conversion
+# ------------------------
 
-def to_tensor(array):
-    """Convert a Python list or NumPy array to the backend tensor.
-
-    For PyTorch, returns torch.float32 by default for floating arrays; uses long for integer arrays.
+def to_tensor(array: Union[Sequence, np.ndarray, torch.Tensor]) -> torch.Tensor:
     """
+    Convert a Python list, NumPy array, or PyTorch tensor to a PyTorch tensor.
+    - Float arrays become torch.float32.
+    - Integer arrays become torch.long.
+    - Torch tensors are returned as-is.
+    """
+    if isinstance(array, torch.Tensor):
+        return array
     if isinstance(array, np.ndarray) and np.issubdtype(array.dtype, np.integer):
         return torch.tensor(array, dtype=torch.long)
-    # fall back to float tensor
     return torch.tensor(array, dtype=torch.float32)
 
 
-def all_close(X1, X2, atol=1e-6, rtol=1e-6):
-    """Backend-agnostic allclose check."""
-    return torch.allclose(X1, X2, atol=atol, rtol=rtol)
+def to_long(array: Union[Sequence, np.ndarray, torch.Tensor]) -> torch.Tensor:
+    """Convert a Python list, NumPy array, or PyTorch tensor to torch.long."""
+    if isinstance(array, torch.Tensor):
+        return array.long()
+    return torch.tensor(array, dtype=torch.long)
 
 
-def check_tensors_are_close(name1, X1, name2, X2, atol=1e-6, rtol=1e-6):
-    """Assert that two tensors are close, with helpful diagnostics."""
-    if not all_close(X1, X2, atol=atol, rtol=rtol):
+# ------------------------
+# Tensor comparison
+# ------------------------
+
+def equal_tensors(x: torch.Tensor, y: torch.Tensor) -> bool:
+    """Check if two tensors are exactly equal."""
+    return bool(torch.equal(x, y))
+
+
+def almost_equal(a: Union[float, int, torch.Tensor], b: Union[float, int, torch.Tensor],
+                 rel_tol: float = 1e-5, abs_tol: float = 1e-8) -> bool:
+    """
+    Compare two numeric scalars (float, int, or 0-d PyTorch tensor) approximately.
+    Returns True if close within given relative and absolute tolerances.
+    """
+    # Extract scalar if tensor
+    for x in (a, b):
+        if isinstance(x, torch.Tensor):
+            x = x.item()
+    return math.isclose(float(a), float(b), rel_tol=rel_tol, abs_tol=abs_tol)
+
+
+def all_close(X1: torch.Tensor, X2: torch.Tensor, rtol: float = 1e-6, atol: float = 1e-6) -> bool:
+    """Compare two PyTorch tensors approximately. Returns True if all elements are close."""
+    return torch.allclose(X1, X2, rtol=rtol, atol=atol)
+
+
+def all_true(mask: torch.Tensor) -> bool:
+    """Return True if all elements of a boolean tensor are True."""
+    return bool(torch.all(mask).item())
+
+
+def all_finite(x: torch.Tensor) -> bool:
+    """Return True if all elements of a tensor are finite."""
+    return bool(torch.isfinite(x).all().item())
+
+
+def all_positive(X: torch.Tensor) -> bool:
+    """Return True if all entries of X are strictly positive."""
+    return (X > 0).all().item()
+
+
+# ------------------------
+# Random tensors
+# ------------------------
+
+def randn(*shape: int) -> torch.Tensor:
+    """Return a random normal tensor of given shape."""
+    return torch.randn(*shape)
+
+
+def rand(*shape: int) -> torch.Tensor:
+    """Return a uniform random tensor in [0,1) of given shape."""
+    return torch.rand(*shape)
+
+
+# ------------------------
+# Test helpers
+# ------------------------
+
+def assert_tensors_are_close(name1: str, X1: torch.Tensor,
+                             name2: str, X2: torch.Tensor,
+                             rtol: float = 1e-6, atol: float = 1e-6):
+    """
+    Assert that two tensors are close, with helpful diagnostics.
+    Raises AssertionError if not.
+    """
+    if not all_close(X1, X2, rtol=rtol, atol=atol):
         diff = torch.abs(X1 - X2)
         max_diff = torch.max(diff).item()
         raise AssertionError(f"Tensors {name1} and {name2} are not close. Max diff: {max_diff:.8f}")

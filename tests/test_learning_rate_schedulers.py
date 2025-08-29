@@ -1,14 +1,10 @@
-import unittest
+# Copyright 2025 Wieger Wesselink.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
-from utilities import to_tensor, all_close, check_tensors_are_close
-from nerva_torch.learning_rate import (
-    ConstantScheduler,
-    TimeBasedScheduler,
-    StepBasedScheduler,
-    MultiStepLRScheduler,
-    ExponentialScheduler,
-    parse_learning_rate,
-)
+import unittest
+from nerva_torch.learning_rate import ConstantScheduler, TimeBasedScheduler, StepBasedScheduler, MultiStepLRScheduler, \
+    ExponentialScheduler, parse_learning_rate
 
 
 class TestLearningRateSchedulers(unittest.TestCase):

@@ -1,23 +1,26 @@
+# Copyright 2025 Wieger Wesselink.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
+
 import os
 import tempfile
 import unittest
 import numpy as np
-import torch
-
-from utilities import to_tensor, all_close, check_tensors_are_close
+from utilities import randn, to_long, equal_tensors
 from nerva_torch.datasets import to_one_hot, from_one_hot, MemoryDataLoader, infer_num_classes, create_npz_dataloaders
+from nerva_torch.matrix_operations import identity
 
 
 class TestDatasetsBasics(unittest.TestCase):
     def test_one_hot_roundtrip(self):
-        idx = torch.tensor([0, 2, 1, 2], dtype=torch.long)
+        idx = to_long([0, 2, 1, 2])
         oh = to_one_hot(idx, num_classes=3)
         back = from_one_hot(oh)
-        self.assertTrue(torch.equal(back, idx))
+        self.assertTrue(equal_tensors(back, idx))
 
     def test_memory_dataloader_batches_and_shapes(self):
-        X = torch.randn(10, 4)
-        T = torch.tensor([0, 1, 0, 2, 1, 2, 0, 1, 2, 2], dtype=torch.long)
+        X = randn(10, 4)
+        T = to_long([0, 1, 0, 2, 1, 2, 0, 1, 2, 2])
         loader = MemoryDataLoader(X, T, batch_size=3)  # num_classes inferred -> 3
         batches = list(iter(loader))
         # floor(10/3) = 3 batches
@@ -28,11 +31,11 @@ class TestDatasetsBasics(unittest.TestCase):
             self.assertEqual(Ti.shape[1], 3)
 
     def test_infer_num_classes_indices_vs_onehot(self):
-        Ttrain = torch.tensor([0, 1, 2, 1], dtype=torch.long)
-        Ttest = torch.tensor([2, 0, 1, 1], dtype=torch.long)
+        Ttrain = to_long([0, 1, 2, 1])
+        Ttest = to_long([2, 0, 1, 1])
         self.assertEqual(infer_num_classes(Ttrain, Ttest), 3)
         # one-hot
-        Ttrain_oh = torch.eye(4)[:3]  # 3x4 one-hot with width 4
+        Ttrain_oh = identity(4)[:3]  # 3x4 one-hot with width 4
         self.assertEqual(infer_num_classes(Ttrain_oh, Ttest), 4)
 
     def test_create_npz_dataloaders_roundtrip(self):

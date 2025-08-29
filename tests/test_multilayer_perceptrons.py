@@ -19,7 +19,7 @@ from nerva_torch.training import stochastic_gradient_descent_plain, stochastic_g
 # ----------------------------
 # Package-agnostic helpers (imported from tests.utilities)
 # ----------------------------
-from utilities import to_tensor, all_close, check_tensors_are_close
+from utilities import to_tensor, all_close, assert_tensors_are_close
 
 # ----------------------------
 # MLPSpec dataclass
@@ -76,17 +76,17 @@ class TestMLP(unittest.TestCase):
         # First forward pass before training
         Y = M.feedforward(spec.X)
         DY = loss.gradient(Y, spec.T) / spec.batch_size
-        check_tensors_are_close("Y", Y, "Y1", spec.Y1)
-        check_tensors_are_close("DY", DY, "DY1", spec.DY1)
+        assert_tensors_are_close("Y", Y, "Y1", spec.Y1)
+        assert_tensors_are_close("DY", DY, "DY1", spec.DY1)
 
         M.backpropagate(Y, DY)
         M.optimize(spec.lr)
         Y = M.feedforward(spec.X)
         M.backpropagate(Y, DY)
 
-        check_tensors_are_close("Y", Y, "Y2", spec.Y2)
+        assert_tensors_are_close("Y", Y, "Y2", spec.Y2)
         # Allow a slightly looser tolerance for DY due to accumulation of small numeric differences
-        check_tensors_are_close("DY", DY, "DY2", spec.DY2, atol=1e-3, rtol=1e-3)
+        assert_tensors_are_close("DY", DY, "DY2", spec.DY2, atol=1e-3, rtol=1e-3)
 
     def _test_sgd_plain(self, spec: MLPSpec):
         """Test stochastic_gradient_descent_plain against precomputed values."""
@@ -97,8 +97,8 @@ class TestMLP(unittest.TestCase):
         # First forward pass before training
         Y = M.feedforward(spec.X)
         DY = loss.gradient(Y, spec.T) / spec.batch_size
-        check_tensors_are_close("Y (sgd_plain before)", Y, "Y1", spec.Y1)
-        check_tensors_are_close("DY (sgd_plain before)", DY, "DY1", spec.DY1)
+        assert_tensors_are_close("Y (sgd_plain before)", Y, "Y1", spec.Y1)
+        assert_tensors_are_close("DY (sgd_plain before)", DY, "DY1", spec.DY1)
 
         # Run one epoch (one batch) of SGD with plain tensors
         stochastic_gradient_descent_plain(M, spec.X, spec.T, loss,
@@ -109,8 +109,8 @@ class TestMLP(unittest.TestCase):
         # After one update step
         Y = M.feedforward(spec.X)
         DY = loss.gradient(Y, spec.T) / spec.batch_size
-        check_tensors_are_close("Y (sgd_plain after)", Y, "Y2", spec.Y2)
-        check_tensors_are_close("DY (sgd_plain after)", DY, "DY2", spec.DY2, atol=1e-3, rtol=1e-3)
+        assert_tensors_are_close("Y (sgd_plain after)", Y, "Y2", spec.Y2)
+        assert_tensors_are_close("DY (sgd_plain after)", DY, "DY2", spec.DY2, atol=1e-3, rtol=1e-3)
 
     def _test_sgd_loader(self, spec: MLPSpec):
         """Test stochastic_gradient_descent with MemoryDataLoader against precomputed values."""
@@ -124,8 +124,8 @@ class TestMLP(unittest.TestCase):
         # First forward pass before training
         Y = M.feedforward(spec.X)
         DY = loss.gradient(Y, spec.T) / spec.batch_size
-        check_tensors_are_close("Y (sgd_loader before)", Y, "Y1", spec.Y1)
-        check_tensors_are_close("DY (sgd_loader before)", DY, "DY1", spec.DY1)
+        assert_tensors_are_close("Y (sgd_loader before)", Y, "Y1", spec.Y1)
+        assert_tensors_are_close("DY (sgd_loader before)", DY, "DY1", spec.DY1)
 
         # Run one epoch (one batch) of SGD with loader
         stochastic_gradient_descent(M, epochs=1, loss=loss,
@@ -136,8 +136,8 @@ class TestMLP(unittest.TestCase):
         # After one update step
         Y = M.feedforward(spec.X)
         DY = loss.gradient(Y, spec.T) / spec.batch_size
-        check_tensors_are_close("Y (sgd_loader after)", Y, "Y2", spec.Y2)
-        check_tensors_are_close("DY (sgd_loader after)", DY, "DY2", spec.DY2, atol=1e-3, rtol=1e-3)
+        assert_tensors_are_close("Y (sgd_loader after)", Y, "Y2", spec.Y2)
+        assert_tensors_are_close("DY (sgd_loader after)", DY, "DY2", spec.DY2, atol=1e-3, rtol=1e-3)
 
     def test_mlp0(self):
         """
