@@ -3,6 +3,7 @@
 # (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
 import numpy as np
+import torch
 
 
 def random_float_matrix(shape, a, b):
@@ -24,6 +25,34 @@ def random_float_matrix(shape, a, b):
     scaled_array = a + (b - a) * rand_array
 
     return scaled_array
+
+
+# --- Framework-agnostic helpers for tests ---
+# For other backends (TensorFlow/JAX/NumPy), reimplement these functions
+# with identical signatures and semantics.
+
+def to_tensor(array):
+    """Convert a Python list or NumPy array to the backend tensor.
+
+    For PyTorch, returns torch.float32 by default for floating arrays; uses long for integer arrays.
+    """
+    if isinstance(array, np.ndarray) and np.issubdtype(array.dtype, np.integer):
+        return torch.tensor(array, dtype=torch.long)
+    # fall back to float tensor
+    return torch.tensor(array, dtype=torch.float32)
+
+
+def all_close(X1, X2, atol=1e-6, rtol=1e-6):
+    """Backend-agnostic allclose check."""
+    return torch.allclose(X1, X2, atol=atol, rtol=rtol)
+
+
+def check_tensors_are_close(name1, X1, name2, X2, atol=1e-6, rtol=1e-6):
+    """Assert that two tensors are close, with helpful diagnostics."""
+    if not all_close(X1, X2, atol=atol, rtol=rtol):
+        diff = torch.abs(X1 - X2)
+        max_diff = torch.max(diff).item()
+        raise AssertionError(f"Tensors {name1} and {name2} are not close. Max diff: {max_diff:.8f}")
 
 
 def make_target(Y: np.ndarray) -> np.ndarray:
