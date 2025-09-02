@@ -10,6 +10,7 @@ import torch
 from nerva_torch.datasets import DataLoader, create_npz_dataloaders, to_one_hot
 from nerva_torch.learning_rate import LearningRateScheduler, parse_learning_rate
 from nerva_torch.loss_functions import parse_loss_function, LossFunction
+from nerva_torch.matrix_operations import Matrix
 from nerva_torch.multilayer_perceptron import MultilayerPerceptron, parse_multilayer_perceptron
 from nerva_torch.utilities import StopWatch, pp, set_numpy_options, set_torch_options
 
@@ -64,7 +65,7 @@ def compute_statistics(M, lr, loss, train_loader, test_loader, epoch, elapsed_se
 
 def print_batch_debug_info(epoch: int, batch_idx: int,
                            M: MultilayerPerceptron,
-                           X: torch.Tensor, Y: torch.Tensor, DY: torch.Tensor):
+                           X: Matrix, Y: Matrix, DY: Matrix):
     """Print detailed debug information for a training batch."""
     print(f'epoch: {epoch} batch: {batch_idx}')
     M.info()
@@ -136,8 +137,8 @@ def stochastic_gradient_descent(M: MultilayerPerceptron,
 
 # tag::sgd_plain[]
 def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
-                                      Xtrain: torch.Tensor,
-                                      Ttrain: torch.Tensor,
+                                      Xtrain: Matrix,
+                                      Ttrain: Matrix,
                                       loss: LossFunction,
                                       learning_rate: LearningRateScheduler,
                                       epochs: int,

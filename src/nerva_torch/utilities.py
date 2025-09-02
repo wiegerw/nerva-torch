@@ -132,7 +132,7 @@ def load_dict_from_npz(filename: str) -> Dict[str, Union[torch.Tensor, torch.Lon
     """
     Loads a dictionary from a file in .npz format
     :param filename: a file name
-    :return: a dictionary with PyTorch tensors
+    :return: a dictionary with tensors
     """
     def make_tensor(x: np.ndarray) -> Union[torch.Tensor, torch.LongTensor]:
         if np.issubdtype(x.dtype, np.integer):
