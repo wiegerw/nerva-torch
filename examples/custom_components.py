@@ -8,19 +8,16 @@ from pathlib import Path
 
 import torch
 
-from nerva_torch.activation_functions import ActivationFunction, \
-    HyperbolicTangentActivation
+from nerva_torch.activation_functions import ActivationFunction, HyperbolicTangentActivation
 from nerva_torch.datasets import create_npz_dataloaders
 from nerva_torch.layers import ActivationLayer, LinearLayer
 from nerva_torch.learning_rate import TimeBasedScheduler
 from nerva_torch.loss_functions import LossFunction
-from nerva_torch.matrix_operations import elements_sum
+from nerva_torch.matrix_operations import elements_sum, Matrix
 from nerva_torch.multilayer_perceptron import MultilayerPerceptron
 from nerva_torch.optimizers import MomentumOptimizer, NesterovOptimizer, CompositeOptimizer
 from nerva_torch.training import stochastic_gradient_descent
 from nerva_torch.weight_initializers import set_bias_to_zero, set_weights_xavier_normalized
-
-Matrix = torch.Tensor
 
 
 # Define a custom activation function

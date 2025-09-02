@@ -10,7 +10,7 @@ Concrete LossFunction classes wrap these for use in the training loop.
 
 import torch
 from nerva_torch.activation_functions import Sigmoid
-from nerva_torch.matrix_operations import column_repeat, dot, elements_sum, hadamard, log, log_sigmoid, reciprocal, rows_sum
+from nerva_torch.matrix_operations import column_repeat, dot, elements_sum, hadamard, log, log_sigmoid, reciprocal, rows_sum, Matrix
 from nerva_torch.softmax_functions import log_softmax, softmax, stable_log_softmax, stable_softmax
 
 
@@ -160,8 +160,6 @@ def Negative_log_likelihood_loss_gradient(Y, T):
     """Gradient of negative log likelihood loss for matrices."""
     N, K = Y.shape
     return -hadamard(column_repeat(reciprocal(rows_sum(hadamard(Y, T))), K), T)
-
-Matrix = torch.Tensor
 
 
 class LossFunction(object):

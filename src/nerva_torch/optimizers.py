@@ -9,9 +9,8 @@ factory callables from textual specifications like "Momentum(mu=0.9)".
 """
 
 from typing import Any, Callable, List
-
-import torch
 from nerva_torch.utilities import parse_function_call
+import torch
 
 
 class Optimizer(object):

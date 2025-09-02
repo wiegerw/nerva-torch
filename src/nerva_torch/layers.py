@@ -12,12 +12,10 @@ import torch
 
 from nerva_torch.activation_functions import ActivationFunction, SReLUActivation, parse_activation
 from nerva_torch.matrix_operations import column_repeat, columns_mean, columns_sum, diag, elements_sum, hadamard, \
-    identity, ones, inv_sqrt, row_repeat, rows_sum, vector_size, zeros
+    identity, ones, inv_sqrt, row_repeat, rows_sum, vector_size, zeros, Matrix
 from nerva_torch.optimizers import CompositeOptimizer, parse_optimizer
 from nerva_torch.softmax_functions import log_softmax, softmax
 from nerva_torch.weight_initializers import set_layer_weights
-
-Matrix = torch.Tensor
 
 
 class Layer(object):

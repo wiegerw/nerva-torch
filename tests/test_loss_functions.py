@@ -11,12 +11,6 @@ from utilities import random_float_matrix, make_target, to_tensor, almost_equal
 
 
 class TestLossFunctions(unittest.TestCase):
-    def _test_loss(self, name: str, loss: LossFunction, expected_loss: float, Y, T):
-        print(f"\n=== test_loss {name} ===\n")
-        L = loss(Y, T)
-        self.assertTrue(almost_equal(expected_loss, L, 1e-5))
-
-
     def test_losses_for_case(self):
         Y = to_tensor([
             [0.23759169, 0.42272727, 0.33968104],

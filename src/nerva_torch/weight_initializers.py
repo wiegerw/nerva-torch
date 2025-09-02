@@ -5,8 +5,7 @@
 """Weight and bias initialization helpers for linear layers."""
 
 import torch
-
-Matrix = torch.Tensor
+from nerva_torch.matrix_operations import Matrix
 
 
 def set_bias_to_zero(b: Matrix):

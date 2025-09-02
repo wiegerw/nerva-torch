@@ -7,31 +7,10 @@ from typing import Union, Sequence
 import numpy as np
 import torch
 
-
-def random_float_matrix(shape, a, b):
-    """
-    Generates a random numpy array with the given shape and float values in the range [a, b].
-
-    Parameters:
-    shape (tuple): The shape of the numpy array to generate.
-    a (float): The minimum value in the range.
-    b (float): The maximum value in the range.
-
-    Returns:
-    np.ndarray: A numpy array of the specified shape with random float values in the range [a, b].
-    """
-    # Generate a random array with values in the range [0, 1)
-    rand_array = np.random.rand(*shape)
-
-    # Scale and shift the array to the range [a, b]
-    scaled_array = a + (b - a) * rand_array
-
-    return scaled_array
-
-
 # ------------------------
 # Tensor conversion
 # ------------------------
+
 
 def to_tensor(array: Union[Sequence, np.ndarray, torch.Tensor]) -> torch.Tensor:
     """
@@ -63,8 +42,10 @@ def equal_tensors(x: torch.Tensor, y: torch.Tensor) -> bool:
     return bool(torch.equal(x, y))
 
 
-def almost_equal(a: Union[float, int, torch.Tensor], b: Union[float, int, torch.Tensor],
-                 rel_tol: float = 1e-5, abs_tol: float = 1e-8) -> bool:
+def almost_equal(a: Union[float, int, torch.Tensor],
+                 b: Union[float, int, torch.Tensor],
+                 rel_tol: float = 1e-5,
+                 abs_tol: float = 1e-8) -> bool:
     """
     Compare two numeric scalars (float, int, or 0-d PyTorch tensor) approximately.
     Returns True if close within given relative and absolute tolerances.
@@ -125,6 +106,30 @@ def assert_tensors_are_close(name1: str, X1: torch.Tensor,
         diff = torch.abs(X1 - X2)
         max_diff = torch.max(diff).item()
         raise AssertionError(f"Tensors {name1} and {name2} are not close. Max diff: {max_diff:.8f}")
+
+# ------------------------
+# Test generation
+# ------------------------
+
+def random_float_matrix(shape, a, b):
+    """
+    Generates a random numpy array with the given shape and float values in the range [a, b].
+
+    Parameters:
+    shape (tuple): The shape of the numpy array to generate.
+    a (float): The minimum value in the range.
+    b (float): The maximum value in the range.
+
+    Returns:
+    np.ndarray: A numpy array of the specified shape with random float values in the range [a, b].
+    """
+    # Generate a random array with values in the range [0, 1)
+    rand_array = np.random.rand(*shape)
+
+    # Scale and shift the array to the range [a, b]
+    scaled_array = a + (b - a) * rand_array
+
+    return scaled_array
 
 
 def make_target(Y: np.ndarray) -> np.ndarray:

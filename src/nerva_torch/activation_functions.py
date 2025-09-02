@@ -12,8 +12,7 @@ that turns textual specifications into activation instances (e.g. "ReLU",
 import torch
 
 from nerva_torch.utilities import parse_function_call
-
-Matrix = torch.Tensor
+from nerva_torch.matrix_operations import Matrix
 
 
 def Relu(X: Matrix):

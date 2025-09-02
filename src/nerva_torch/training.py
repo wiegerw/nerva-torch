@@ -4,10 +4,9 @@
 
 """Training helpers for the MLP, including a basic SGD loop and CLI glue."""
 
-import torch
 import random
 from typing import List
-
+import torch
 from nerva_torch.datasets import DataLoader, create_npz_dataloaders, to_one_hot
 from nerva_torch.learning_rate import LearningRateScheduler, parse_learning_rate
 from nerva_torch.loss_functions import parse_loss_function, LossFunction
@@ -28,6 +27,7 @@ def print_epoch(epoch, lr, loss, train_accuracy, test_accuracy, elapsed):
           f'test accuracy: {test_accuracy:.8f}  '
           f'time: {elapsed:.8f}s'
          )
+
 
 def compute_accuracy(M: MultilayerPerceptron, data_loader: DataLoader):
     """Compute mean classification accuracy for a model over a data loader."""
@@ -151,9 +151,9 @@ def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
 
     Args:
         M (MultilayerPerceptron): The neural network model to train.
-        Xtrain (torch.Tensor): Training input data of shape (N, input_dim),
+        Xtrain: Training input data of shape (N, input_dim),
             where N is the number of training examples.
-        Ttrain (torch.Tensor): Training labels. Either:
+        Ttrain: Training labels. Either:
             - class indices of shape (N,) or (N, 1), or
             - one-hot encoded labels of shape (N, num_classes).
         loss (LossFunction): The loss function instance (with `gradient` method).
@@ -188,12 +188,11 @@ def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
             batch = I[k * batch_size: (k + 1) * batch_size]
             X = Xtrain[batch, :]   # shape (batch_size, input_dim)
 
-            # Handle labels depending on format
+            # Convert labels to one-hot if needed
             if Ttrain.ndim == 2 and Ttrain.shape[1] > 1:
                 # already one-hot encoded
                 T = Ttrain[batch, :]
             else:
-                # class indices -> convert to one-hot of width equal to output size
                 T = to_one_hot(Ttrain[batch], num_classes)
 
             Y = M.feedforward(X)

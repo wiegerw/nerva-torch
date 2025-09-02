@@ -7,11 +7,9 @@
 This module provides both function-only forms and simple callable classes.
 """
 
-import torch
 from nerva_torch.matrix_operations import Diag, column_repeat, exp, hadamard, identity, is_row_vector, log, reciprocal, \
-    row_repeat, rows_max, rows_sum
+    row_repeat, rows_max, rows_sum, Matrix
 
-Matrix = torch.Tensor
 
 def softmax(X: Matrix) -> Matrix:
     """Row-wise softmax with explicit normalization (numerically unsafe)."""
@@ -66,7 +64,6 @@ def stable_log_softmax_jacobian(x: Matrix) -> Matrix:
     """Jacobian matrix of stable log_softmax (same as log_softmax)."""
     return log_softmax_jacobian(x)
 
-Matrix = torch.Tensor
 
 class SoftmaxFunction(object):
     def __call__(self, X: Matrix) -> Matrix:

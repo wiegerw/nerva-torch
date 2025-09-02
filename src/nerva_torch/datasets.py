@@ -9,9 +9,10 @@
 """
 
 from pathlib import Path
-from typing import Tuple, Union
+from typing import Union, Tuple
 
 import torch
+from nerva_torch.matrix_operations import Matrix
 from nerva_torch.utilities import load_dict_from_npz
 
 
@@ -67,7 +68,12 @@ class MemoryDataLoader(object):
 DataLoader = Union[MemoryDataLoader, torch.utils.data.DataLoader]
 
 
-def infer_num_classes(Ttrain: torch.Tensor, Ttest: torch.Tensor) -> int:
+def max_(X: Matrix) -> Union[int, float]:
+    """Return the maximum element of X as a Python scalar."""
+    return torch.max(X).item()
+
+
+def infer_num_classes(Ttrain: Matrix, Ttest: Matrix) -> int:
     """Infer total number of classes from targets.
 
     - If either Ttrain or Ttest is one-hot encoded (2D with width > 1), use that width.
@@ -77,8 +83,11 @@ def infer_num_classes(Ttrain: torch.Tensor, Ttest: torch.Tensor) -> int:
         return int(Ttrain.shape[1])
     if len(Ttest.shape) == 2 and Ttest.shape[1] > 1:
         return int(Ttest.shape[1])
-    # class indices; use max over train and test
-    return int(torch.max(Ttrain.max(), Ttest.max()).item() + 1)
+
+    max_train = max_(Ttrain)
+    max_test = max_(Ttest)
+
+    return int(max(max_train, max_test) + 1)
 
 
 def create_npz_dataloaders(filename: str, batch_size: int=True) -> Tuple[MemoryDataLoader, MemoryDataLoader]:

@@ -8,10 +8,10 @@ import unittest
 from dataclasses import dataclass
 from typing import List
 
-import torch
 from nerva_torch.learning_rate import ConstantScheduler
 from nerva_torch.datasets import MemoryDataLoader, from_one_hot
 from nerva_torch.loss_functions import SoftmaxCrossEntropyLossFunction
+from nerva_torch.matrix_operations import Matrix
 from nerva_torch.multilayer_perceptron import parse_multilayer_perceptron, MultilayerPerceptron
 from nerva_torch.training import stochastic_gradient_descent_plain, stochastic_gradient_descent
 
@@ -28,14 +28,14 @@ from utilities import to_tensor, all_close, assert_tensors_are_close
 
 @dataclass
 class MLPSpec:
-    X: torch.Tensor
-    T: torch.Tensor
-    W: List[torch.Tensor]
-    b: List[torch.Tensor]
-    Y1: torch.Tensor
-    DY1: torch.Tensor
-    Y2: torch.Tensor
-    DY2: torch.Tensor
+    X: Matrix
+    T: Matrix
+    W: List[Matrix]
+    b: List[Matrix]
+    Y1: Matrix
+    DY1: Matrix
+    Y2: Matrix
+    DY2: Matrix
     lr: float
     sizes: List[int]
     batch_size: int
