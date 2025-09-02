@@ -90,11 +90,9 @@
 <span class="sd">This module provides both function-only forms and simple callable classes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.matrix_operations</span><span class="w"> </span><span class="kn">import</span> <span class="n">Diag</span><span class="p">,</span> <span class="n">column_repeat</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">hadamard</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">is_row_vector</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">reciprocal</span><span class="p">,</span> \
-    <span class="n">row_repeat</span><span class="p">,</span> <span class="n">rows_max</span><span class="p">,</span> <span class="n">rows_sum</span>
+    <span class="n">row_repeat</span><span class="p">,</span> <span class="n">rows_max</span><span class="p">,</span> <span class="n">rows_sum</span><span class="p">,</span> <span class="n">Matrix</span>
 
-<span class="n">Matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
 
 <div class="viewcode-block" id="softmax">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.softmax_functions.html#nerva_torch.softmax_functions.softmax">[docs]</a>
@@ -173,7 +171,6 @@
     <span class="k">return</span> <span class="n">log_softmax_jacobian</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 
-<span class="n">Matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
 
 <div class="viewcode-block" id="SoftmaxFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.softmax_functions.html#nerva_torch.softmax_functions.SoftmaxFunction">[docs]</a>

@@ -226,9 +226,9 @@ using raw tensors in row layout (samples are rows).</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>M</strong> (<a class="reference internal" href="nerva_torch.multilayer_perceptron.html#nerva_torch.multilayer_perceptron.MultilayerPerceptron" title="nerva_torch.multilayer_perceptron.MultilayerPerceptron"><em>MultilayerPerceptron</em></a>) – The neural network model to train.</p></li>
-<li><p><strong>Xtrain</strong> (<em>torch.Tensor</em>) – Training input data of shape (N, input_dim),
+<li><p><strong>Xtrain</strong> – Training input data of shape (N, input_dim),
 where N is the number of training examples.</p></li>
-<li><p><strong>Ttrain</strong> (<em>torch.Tensor</em>) – Training labels. Either:
+<li><p><strong>Ttrain</strong> – Training labels. Either:
 - class indices of shape (N,) or (N, 1), or
 - one-hot encoded labels of shape (N, num_classes).</p></li>
 <li><p><strong>loss</strong> (<a class="reference internal" href="nerva_torch.loss_functions.html#nerva_torch.loss_functions.LossFunction" title="nerva_torch.loss_functions.LossFunction"><em>LossFunction</em></a>) – The loss function instance (with <cite>gradient</cite> method).</p></li>

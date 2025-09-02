@@ -49,6 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.to_one_hot"><code class="docutils literal notranslate"><span class="pre">to_one_hot()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.from_one_hot"><code class="docutils literal notranslate"><span class="pre">from_one_hot()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.MemoryDataLoader"><code class="docutils literal notranslate"><span class="pre">MemoryDataLoader</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.max_"><code class="docutils literal notranslate"><span class="pre">max_()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.infer_num_classes"><code class="docutils literal notranslate"><span class="pre">infer_num_classes()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.datasets.create_npz_dataloaders"><code class="docutils literal notranslate"><span class="pre">create_npz_dataloaders()</span></code></a></li>
 </ul>
@@ -108,7 +109,10 @@ DataLoader API but operates on in-memory tensors loaded from .npz files.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.datasets.infer_num_classes" title="nerva_torch.datasets.infer_num_classes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_num_classes</span></code></a>(Ttrain, Ttest)</p></td>
 <td><p>Infer total number of classes from targets.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.datasets.to_one_hot" title="nerva_torch.datasets.to_one_hot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_one_hot</span></code></a>(x, num_classes)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.datasets.max_" title="nerva_torch.datasets.max_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_</span></code></a>(X)</p></td>
+<td><p>Return the maximum element of X as a Python scalar.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.datasets.to_one_hot" title="nerva_torch.datasets.to_one_hot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_one_hot</span></code></a>(x, num_classes)</p></td>
 <td><p>Convert class index tensor to one-hot matrix with num_classes columns.</p></td>
 </tr>
 </tbody>
@@ -147,6 +151,12 @@ the true number of classes and produce one-hot targets with too few columns. Thi
 dimension mismatches with the model output during training/evaluation.</p></li>
 <li><p>To avoid this, pass <cite>num_classes</cite> explicitly whenever you know the total number of classes.</p></li>
 </ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nerva_torch.datasets.max_">
+<span class="sig-prename descclassname"><span class="pre">nerva_torch.datasets.</span></span><span class="sig-name descname"><span class="pre">max_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/nerva_torch/datasets.html#max_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.datasets.max_" title="Link to this definition"></a></dt>
+<dd><p>Return the maximum element of X as a Python scalar.</p>
 </dd></dl>
 
 <dl class="py function">

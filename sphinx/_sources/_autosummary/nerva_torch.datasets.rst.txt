@@ -11,6 +11,7 @@ nerva\_torch.datasets
       create_npz_dataloaders
       from_one_hot
       infer_num_classes
+      max_
       to_one_hot
    
    .. rubric:: Classes

@@ -87,10 +87,9 @@
 
 <span class="sd">&quot;&quot;&quot;Training helpers for the MLP, including a basic SGD loop and CLI glue.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
-
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">create_npz_dataloaders</span><span class="p">,</span> <span class="n">to_one_hot</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.learning_rate</span><span class="w"> </span><span class="kn">import</span> <span class="n">LearningRateScheduler</span><span class="p">,</span> <span class="n">parse_learning_rate</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.loss_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_loss_function</span><span class="p">,</span> <span class="n">LossFunction</span>
@@ -116,6 +115,7 @@
           <span class="sa">f</span><span class="s1">&#39;test accuracy: </span><span class="si">{</span><span class="n">test_accuracy</span><span class="si">:</span><span class="s1">.8f</span><span class="si">}</span><span class="s1">  &#39;</span>
           <span class="sa">f</span><span class="s1">&#39;time: </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s1">.8f</span><span class="si">}</span><span class="s1">s&#39;</span>
          <span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="compute_accuracy">
@@ -257,9 +257,9 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        M (MultilayerPerceptron): The neural network model to train.</span>
-<span class="sd">        Xtrain (torch.Tensor): Training input data of shape (N, input_dim),</span>
+<span class="sd">        Xtrain: Training input data of shape (N, input_dim),</span>
 <span class="sd">            where N is the number of training examples.</span>
-<span class="sd">        Ttrain (torch.Tensor): Training labels. Either:</span>
+<span class="sd">        Ttrain: Training labels. Either:</span>
 <span class="sd">            - class indices of shape (N,) or (N, 1), or</span>
 <span class="sd">            - one-hot encoded labels of shape (N, num_classes).</span>
 <span class="sd">        loss (LossFunction): The loss function instance (with `gradient` method).</span>
@@ -294,12 +294,11 @@
             <span class="n">batch</span> <span class="o">=</span> <span class="n">I</span><span class="p">[</span><span class="n">k</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">:</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">]</span>
             <span class="n">X</span> <span class="o">=</span> <span class="n">Xtrain</span><span class="p">[</span><span class="n">batch</span><span class="p">,</span> <span class="p">:]</span>   <span class="c1"># shape (batch_size, input_dim)</span>
 
-            <span class="c1"># Handle labels depending on format</span>
+            <span class="c1"># Convert labels to one-hot if needed</span>
             <span class="k">if</span> <span class="n">Ttrain</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">Ttrain</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="c1"># already one-hot encoded</span>
                 <span class="n">T</span> <span class="o">=</span> <span class="n">Ttrain</span><span class="p">[</span><span class="n">batch</span><span class="p">,</span> <span class="p">:]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># class indices -&gt; convert to one-hot of width equal to output size</span>
                 <span class="n">T</span> <span class="o">=</span> <span class="n">to_one_hot</span><span class="p">(</span><span class="n">Ttrain</span><span class="p">[</span><span class="n">batch</span><span class="p">],</span> <span class="n">num_classes</span><span class="p">)</span>
 
             <span class="n">Y</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
