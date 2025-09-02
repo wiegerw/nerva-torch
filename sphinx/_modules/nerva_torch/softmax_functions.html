@@ -90,6 +90,7 @@
 <span class="sd">This module provides both function-only forms and simple callable classes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.matrix_operations</span><span class="w"> </span><span class="kn">import</span> <span class="n">Diag</span><span class="p">,</span> <span class="n">column_repeat</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">hadamard</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">is_row_vector</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">reciprocal</span><span class="p">,</span> \
     <span class="n">row_repeat</span><span class="p">,</span> <span class="n">rows_max</span><span class="p">,</span> <span class="n">rows_sum</span><span class="p">,</span> <span class="n">Matrix</span>
 
@@ -175,6 +176,8 @@
 <div class="viewcode-block" id="SoftmaxFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.softmax_functions.html#nerva_torch.softmax_functions.SoftmaxFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SoftmaxFunction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Callable implementing row-wise softmax and its Jacobian.&quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">softmax</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
@@ -189,6 +192,8 @@
 <div class="viewcode-block" id="StableSoftmaxFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.softmax_functions.html#nerva_torch.softmax_functions.StableSoftmaxFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">StableSoftmaxFunction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Callable implementing numerically stable row-wise softmax and its Jacobian.&quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">stable_softmax</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
@@ -203,6 +208,8 @@
 <div class="viewcode-block" id="LogSoftmaxFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.softmax_functions.html#nerva_torch.softmax_functions.LogSoftmaxFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LogSoftmaxFunction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Callable implementing row-wise log-softmax and its Jacobian.&quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">log_softmax</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
@@ -217,6 +224,8 @@
 <div class="viewcode-block" id="StableLogSoftmaxFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.softmax_functions.html#nerva_torch.softmax_functions.StableLogSoftmaxFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">StableLogSoftmaxFunction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Callable implementing numerically stable row-wise log-softmax and its Jacobian.&quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">stable_log_softmax</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 

@@ -109,14 +109,6 @@
 
 
 
-<div class="viewcode-block" id="set_bias_xavier">
-<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_bias_xavier">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">set_bias_xavier</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set bias to zero (Xavier scheme for bias).&quot;&quot;&quot;</span>
-    <span class="n">set_bias_to_zero</span><span class="p">(</span><span class="n">b</span><span class="p">)</span></div>
-
-
-
 <div class="viewcode-block" id="set_weights_xavier_normalized">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_xavier_normalized">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">set_weights_xavier_normalized</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
@@ -125,14 +117,6 @@
     <span class="n">xavier_stddev</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">K</span> <span class="o">+</span> <span class="n">D</span><span class="p">)))</span>
     <span class="n">random_matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
     <span class="n">W</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">random_matrix</span> <span class="o">*</span> <span class="n">xavier_stddev</span></div>
-
-
-
-<div class="viewcode-block" id="set_bias_xavier_normalized">
-<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_bias_xavier_normalized">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">set_bias_xavier_normalized</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set bias to zero (normalized Xavier scheme).&quot;&quot;&quot;</span>
-    <span class="n">set_bias_to_zero</span><span class="p">(</span><span class="n">b</span><span class="p">)</span></div>
 
 
 
@@ -147,27 +131,19 @@
 
 
 
-<div class="viewcode-block" id="set_bias_he">
-<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_bias_he">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">set_bias_he</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set bias to zero (He scheme for bias).&quot;&quot;&quot;</span>
-    <span class="n">set_bias_to_zero</span><span class="p">(</span><span class="n">b</span><span class="p">)</span></div>
-
-
-
 <div class="viewcode-block" id="set_layer_weights">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_layer_weights">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">set_layer_weights</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize a layer&#39;s parameters according to a named scheme.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;Xavier&#39;</span><span class="p">:</span>
         <span class="n">set_weights_xavier</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
-        <span class="n">set_bias_xavier</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">set_bias_to_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;XavierNormalized&#39;</span><span class="p">:</span>
         <span class="n">set_weights_xavier_normalized</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
-        <span class="n">set_bias_xavier_normalized</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">set_bias_to_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;He&#39;</span><span class="p">:</span>
         <span class="n">set_weights_he</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
-        <span class="n">set_bias_he</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">set_bias_to_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not parse weight initializer &quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span></div>
 

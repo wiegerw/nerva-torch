@@ -58,11 +58,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">nerva_torch.weight_initializers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.weight_initializers.set_bias_to_zero"><code class="docutils literal notranslate"><span class="pre">set_bias_to_zero()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.weight_initializers.set_weights_xavier"><code class="docutils literal notranslate"><span class="pre">set_weights_xavier()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.weight_initializers.set_bias_xavier"><code class="docutils literal notranslate"><span class="pre">set_bias_xavier()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.weight_initializers.set_weights_xavier_normalized"><code class="docutils literal notranslate"><span class="pre">set_weights_xavier_normalized()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.weight_initializers.set_bias_xavier_normalized"><code class="docutils literal notranslate"><span class="pre">set_bias_xavier_normalized()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.weight_initializers.set_weights_he"><code class="docutils literal notranslate"><span class="pre">set_weights_he()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.weight_initializers.set_bias_he"><code class="docutils literal notranslate"><span class="pre">set_bias_he()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.weight_initializers.set_layer_weights"><code class="docutils literal notranslate"><span class="pre">set_layer_weights()</span></code></a></li>
 </ul>
 </li>
@@ -99,28 +96,19 @@
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_bias_he" title="nerva_torch.weight_initializers.set_bias_he"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_bias_he</span></code></a>(b)</p></td>
-<td><p>Set bias to zero (He scheme for bias).</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_bias_to_zero" title="nerva_torch.weight_initializers.set_bias_to_zero"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_bias_to_zero</span></code></a>(b)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_bias_to_zero" title="nerva_torch.weight_initializers.set_bias_to_zero"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_bias_to_zero</span></code></a>(b)</p></td>
 <td><p>Set all bias values to zero.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_bias_xavier" title="nerva_torch.weight_initializers.set_bias_xavier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_bias_xavier</span></code></a>(b)</p></td>
-<td><p>Set bias to zero (Xavier scheme for bias).</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_bias_xavier_normalized" title="nerva_torch.weight_initializers.set_bias_xavier_normalized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_bias_xavier_normalized</span></code></a>(b)</p></td>
-<td><p>Set bias to zero (normalized Xavier scheme).</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_layer_weights" title="nerva_torch.weight_initializers.set_layer_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_layer_weights</span></code></a>(layer, text)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_layer_weights" title="nerva_torch.weight_initializers.set_layer_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_layer_weights</span></code></a>(layer, text)</p></td>
 <td><p>Initialize a layer's parameters according to a named scheme.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_weights_he" title="nerva_torch.weight_initializers.set_weights_he"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights_he</span></code></a>(W)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_weights_he" title="nerva_torch.weight_initializers.set_weights_he"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights_he</span></code></a>(W)</p></td>
 <td><p>Initialize weights using He initialization for ReLU networks.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_weights_xavier" title="nerva_torch.weight_initializers.set_weights_xavier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights_xavier</span></code></a>(W)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_weights_xavier" title="nerva_torch.weight_initializers.set_weights_xavier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights_xavier</span></code></a>(W)</p></td>
 <td><p>Initialize weights using Xavier/Glorot initialization.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_weights_xavier_normalized" title="nerva_torch.weight_initializers.set_weights_xavier_normalized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights_xavier_normalized</span></code></a>(W)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.weight_initializers.set_weights_xavier_normalized" title="nerva_torch.weight_initializers.set_weights_xavier_normalized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights_xavier_normalized</span></code></a>(W)</p></td>
 <td><p>Initialize weights using normalized Xavier initialization.</p></td>
 </tr>
 </tbody>
@@ -138,33 +126,15 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="nerva_torch.weight_initializers.set_bias_xavier">
-<span class="sig-prename descclassname"><span class="pre">nerva_torch.weight_initializers.</span></span><span class="sig-name descname"><span class="pre">set_bias_xavier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/weight_initializers.html#set_bias_xavier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.weight_initializers.set_bias_xavier" title="Link to this definition"></a></dt>
-<dd><p>Set bias to zero (Xavier scheme for bias).</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="nerva_torch.weight_initializers.set_weights_xavier_normalized">
 <span class="sig-prename descclassname"><span class="pre">nerva_torch.weight_initializers.</span></span><span class="sig-name descname"><span class="pre">set_weights_xavier_normalized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">W</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/weight_initializers.html#set_weights_xavier_normalized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.weight_initializers.set_weights_xavier_normalized" title="Link to this definition"></a></dt>
 <dd><p>Initialize weights using normalized Xavier initialization.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="nerva_torch.weight_initializers.set_bias_xavier_normalized">
-<span class="sig-prename descclassname"><span class="pre">nerva_torch.weight_initializers.</span></span><span class="sig-name descname"><span class="pre">set_bias_xavier_normalized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/weight_initializers.html#set_bias_xavier_normalized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.weight_initializers.set_bias_xavier_normalized" title="Link to this definition"></a></dt>
-<dd><p>Set bias to zero (normalized Xavier scheme).</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="nerva_torch.weight_initializers.set_weights_he">
 <span class="sig-prename descclassname"><span class="pre">nerva_torch.weight_initializers.</span></span><span class="sig-name descname"><span class="pre">set_weights_he</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">W</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/weight_initializers.html#set_weights_he"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.weight_initializers.set_weights_he" title="Link to this definition"></a></dt>
 <dd><p>Initialize weights using He initialization for ReLU networks.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="nerva_torch.weight_initializers.set_bias_he">
-<span class="sig-prename descclassname"><span class="pre">nerva_torch.weight_initializers.</span></span><span class="sig-name descname"><span class="pre">set_bias_he</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/weight_initializers.html#set_bias_he"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.weight_initializers.set_bias_he" title="Link to this definition"></a></dt>
-<dd><p>Set bias to zero (He scheme for bias).</p>
 </dd></dl>
 
 <dl class="py function">
