@@ -1,8 +1,4 @@
-ifndef::python-root[:python-root: ../..]
-ifndef::package[:package: nerva_torch]
-ifndef::package-folder[:package-folder: nerva-torch]
 ifndef::library[:library: pass:q[_Nerva-Torch Python Library_]]
 ifndef::mlptool[:mlptool: mlp.py]
 ifndef::module[:module: nerva_torch]
-ifndef::root[:root: ../../..]
-:no-cpp:
+:repo-url: https://github.com/wiegerw/nerva-torch/blob/main

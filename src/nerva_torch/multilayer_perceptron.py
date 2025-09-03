@@ -6,7 +6,6 @@
 
 from typing import List
 
-import torch
 from nerva_torch.layers import BatchNormalizationLayer, LinearLayer, parse_linear_layer
 from nerva_torch.matrix_operations import Matrix
 from nerva_torch.utilities import load_dict_from_npz, pp
