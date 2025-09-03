@@ -11,7 +11,6 @@ import torch
 # Tensor conversion
 # ------------------------
 
-
 def to_tensor(array: Union[Sequence, np.ndarray, torch.Tensor]) -> torch.Tensor:
     """
     Convert a Python list, NumPy array, or PyTorch tensor to a PyTorch tensor.
@@ -106,6 +105,13 @@ def assert_tensors_are_close(name1: str, X1: torch.Tensor,
         diff = torch.abs(X1 - X2)
         max_diff = torch.max(diff).item()
         raise AssertionError(f"Tensors {name1} and {name2} are not close. Max diff: {max_diff:.8f}")
+
+
+def as_float(x: torch.Tensor) -> float:
+    """Convert a 0-d Torch tensor to a Python float."""
+    if x.ndim != 0:
+        raise ValueError("Input must be 0-dimensional")
+    return float(x.item())
 
 # ------------------------
 # Test generation

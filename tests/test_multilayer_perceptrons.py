@@ -19,7 +19,7 @@ from nerva_torch.training import stochastic_gradient_descent_plain, stochastic_g
 # ----------------------------
 # Package-agnostic helpers (imported from tests.utilities)
 # ----------------------------
-from utilities import to_tensor, all_close, assert_tensors_are_close
+from utilities import to_tensor, assert_tensors_are_close
 
 # ----------------------------
 # MLPSpec dataclass

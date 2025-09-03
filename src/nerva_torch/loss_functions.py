@@ -8,7 +8,6 @@ Functions are provided in vector (lowercase) and matrix (uppercase) forms.
 Concrete LossFunction classes wrap these for use in the training loop.
 """
 
-import torch
 from nerva_torch.activation_functions import Sigmoid
 from nerva_torch.matrix_operations import column_repeat, dot, elements_sum, hadamard, log, log_sigmoid, reciprocal, rows_sum, Matrix
 from nerva_torch.softmax_functions import log_softmax, softmax, stable_log_softmax, stable_softmax
@@ -164,7 +163,7 @@ def Negative_log_likelihood_loss_gradient(Y, T):
 
 class LossFunction(object):
     """Interface for loss functions with value and gradient on batch matrices."""
-    def __call__(self, Y: Matrix, T: Matrix) -> float:
+    def __call__(self, Y: Matrix, T: Matrix):
         raise NotImplementedError
 
     def gradient(self, Y: Matrix, T: Matrix) -> Matrix:
@@ -173,7 +172,7 @@ class LossFunction(object):
 
 class SquaredErrorLossFunction(LossFunction):
     """Squared error loss function for regression tasks."""
-    def __call__(self, Y: Matrix, T: Matrix) -> float:
+    def __call__(self, Y: Matrix, T: Matrix):
         return Squared_error_loss(Y, T)
 
     def gradient(self, Y: Matrix, T: Matrix) -> Matrix:
@@ -182,7 +181,7 @@ class SquaredErrorLossFunction(LossFunction):
 
 class CrossEntropyLossFunction(LossFunction):
     """Cross entropy loss function for classification with probabilities."""
-    def __call__(self, Y: Matrix, T: Matrix) -> float:
+    def __call__(self, Y: Matrix, T: Matrix):
         return Cross_entropy_loss(Y, T)
 
     def gradient(self, Y: Matrix, T: Matrix) -> Matrix:
@@ -191,7 +190,7 @@ class CrossEntropyLossFunction(LossFunction):
 
 class SoftmaxCrossEntropyLossFunction(LossFunction):
     """Softmax cross entropy loss for classification with logits."""
-    def __call__(self, Y: Matrix, T: Matrix) -> float:
+    def __call__(self, Y: Matrix, T: Matrix):
         return Softmax_cross_entropy_loss(Y, T)
 
     def gradient(self, Y: Matrix, T: Matrix) -> Matrix:
@@ -200,7 +199,7 @@ class SoftmaxCrossEntropyLossFunction(LossFunction):
 
 class StableSoftmaxCrossEntropyLossFunction(LossFunction):
     """Numerically stable softmax cross entropy loss for classification."""
-    def __call__(self, Y: Matrix, T: Matrix) -> float:
+    def __call__(self, Y: Matrix, T: Matrix):
         return Stable_softmax_cross_entropy_loss(Y, T)
 
     def gradient(self, Y: Matrix, T: Matrix) -> Matrix:
@@ -209,7 +208,7 @@ class StableSoftmaxCrossEntropyLossFunction(LossFunction):
 
 class LogisticCrossEntropyLossFunction(LossFunction):
     """Logistic cross entropy loss for binary classification."""
-    def __call__(self, Y: Matrix, T: Matrix) -> float:
+    def __call__(self, Y: Matrix, T: Matrix):
         return Logistic_cross_entropy_loss(Y, T)
 
     def gradient(self, Y: Matrix, T: Matrix) -> Matrix:
@@ -218,7 +217,7 @@ class LogisticCrossEntropyLossFunction(LossFunction):
 
 class NegativeLogLikelihoodLossFunction(LossFunction):
     """Negative log likelihood loss for probabilistic outputs."""
-    def __call__(self, Y: Matrix, T: Matrix) -> float:
+    def __call__(self, Y: Matrix, T: Matrix):
         return Negative_log_likelihood_loss(Y, T)
 
     def gradient(self, Y: Matrix, T: Matrix) -> Matrix:

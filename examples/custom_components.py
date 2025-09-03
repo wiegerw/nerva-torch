@@ -19,8 +19,10 @@ from nerva_torch.optimizers import MomentumOptimizer, NesterovOptimizer, Composi
 from nerva_torch.training import stochastic_gradient_descent
 from nerva_torch.weight_initializers import set_bias_to_zero, set_weights_xavier_normalized
 
+# ------------------------
+# Custom activation function
+# ------------------------
 
-# Define a custom activation function
 def Elu(alpha):
     return lambda X: torch.where(X > 0, X, alpha * (torch.exp(X) - 1))
 
@@ -40,14 +42,20 @@ class ELUActivation(ActivationFunction):
         return Elu_gradient(self.alpha)(X)
 
 
-# Define a custom weight initializer
+# ------------------------
+# Custom weight initializer
+# ------------------------
+
 def set_weights_lecun(W: Matrix):
     K, D = W.shape
     stddev = torch.sqrt(torch.tensor(1.0 / D))
     W.data = torch.randn(K, D) * stddev
 
 
-# Define a custom loss function
+# ------------------------
+# Custom loss function
+# ------------------------
+
 class AbsoluteErrorLossFunction(LossFunction):
     def __call__(self, Y: Matrix, T: Matrix) -> float:
         return elements_sum(abs(Y - T))
