@@ -8,13 +8,11 @@ from typing import List
 
 from nerva_torch.layers import BatchNormalizationLayer, LinearLayer, parse_linear_layer
 from nerva_torch.matrix_operations import Matrix
-from nerva_torch.utilities import load_dict_from_npz, pp
+from nerva_torch.utilities import load_dict_from_npz, pp, save_dict_to_npz
 
 
 class MultilayerPerceptron(object):
-    """
-    Multilayer perceptron
-    """
+    """Multilayer perceptron"""
     def __init__(self, layers=None):
         if not layers:
             layers = []
@@ -43,11 +41,9 @@ class MultilayerPerceptron(object):
                 index += 1
 
     def load_weights_and_bias(self, filename: str):
-        """
-        Loads the weights and biases from a file in .npz format
+        """Loads the weights and biases from a file in .npz format
 
         The weight matrices are stored using the keys W1, W2, ... and the bias vectors using the keys b1, b2, ...
-        :param filename: the name of the file
         """
         print(f'Loading weights and bias from {filename}')
         data = load_dict_from_npz(filename)
@@ -57,6 +53,21 @@ class MultilayerPerceptron(object):
                 layer.W[:] = data[f'W{index}']
                 layer.b[:] = data[f'b{index}']
                 index += 1
+
+    def save_weights_and_bias(self, filename: str):
+        """Saves the weights and biases to a file in compressed .npz format.
+
+        The weight matrices are stored using the keys W1, W2, ... and the bias vectors using the keys b1, b2, ...
+        """
+        print(f"Saving weights and bias to {filename}")
+        data = {}
+        index = 1
+        for layer in self.layers:
+            if isinstance(layer, LinearLayer):
+                data[f"W{index}"] = layer.W
+                data[f"b{index}"] = layer.b
+                index += 1
+        save_dict_to_npz(filename, data)
 
 
 def parse_multilayer_perceptron(layer_specifications: List[str],

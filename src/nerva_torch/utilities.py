@@ -129,11 +129,7 @@ def parse_function_call(text: str) -> FunctionCall:
 
 
 def load_dict_from_npz(filename: str) -> Dict[str, Union[torch.Tensor, torch.LongTensor]]:
-    """
-    Loads a dictionary from a file in .npz format
-    :param filename: a file name
-    :return: a dictionary with tensors
-    """
+    """Loads a dictionary from a file in .npz format"""
     def make_tensor(x: np.ndarray) -> Union[torch.Tensor, torch.LongTensor]:
         if np.issubdtype(x.dtype, np.integer):
             return torch.LongTensor(x)
@@ -142,3 +138,13 @@ def load_dict_from_npz(filename: str) -> Dict[str, Union[torch.Tensor, torch.Lon
     data = dict(np.load(filename, allow_pickle=True))
     data = {key: make_tensor(value) for key, value in data.items()}
     return data
+
+
+def save_dict_to_npz(filename: str, data: Dict[str, torch.Tensor]):
+    """Saves a dictionary of torch tensors to a compressed .npz file."""
+    if not filename.endswith(".npz"):
+        filename += ".npz"
+
+    # convert all torch tensors to numpy arrays
+    numpy_data = {key: value.detach().cpu().numpy() for key, value in data.items()}
+    np.savez_compressed(filename, **numpy_data)
