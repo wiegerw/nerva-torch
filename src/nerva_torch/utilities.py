@@ -28,9 +28,9 @@ def set_torch_options():
 def pp(name: str, x: torch.Tensor):
     """Pretty-print a tensor with name and shape info."""
     if x.dim() == 1:
-        print(f'{name} ({x.shape[0]})\\n{x.data}')
+        print(f'{name} ({x.shape[0]})\n{x.data}')
     else:
-        print(f'{name} ({x.shape[0]}x{x.shape[1]})\\n{x.data}')
+        print(f'{name} ({x.shape[0]}x{x.shape[1]})\n{x.data}')
 
 
 class StopWatch(object):
