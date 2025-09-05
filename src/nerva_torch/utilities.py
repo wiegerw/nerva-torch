@@ -25,12 +25,20 @@ def set_torch_options():
     torch.multiprocessing.set_sharing_strategy('file_system')
 
 
-def pp(name: str, x: torch.Tensor):
-    """Pretty-print a tensor with name and shape info."""
-    if x.dim() == 1:
-        print(f'{name} ({x.shape[0]})\n{x.data}')
+def pp_numpy(name: str, arr: np.ndarray):
+    """Internal helper: pretty-print using NumPy arrays only."""
+    if arr.ndim == 1:
+        print(f"{name} ({arr.shape[0]})")
+    elif arr.ndim == 2:
+        print(f"{name} ({arr.shape[0]}x{arr.shape[1]})")
     else:
-        print(f'{name} ({x.shape[0]}x{x.shape[1]})\n{x.data}')
+        print(f"{name} {arr.shape}")
+    print(arr)
+
+
+def pp_torch(name: str, x: torch.Tensor):
+    """Pretty-print a tensor with name and shape info, using NumPy formatting."""
+    pp_numpy(name, x.detach().cpu().numpy())
 
 
 class StopWatch(object):
