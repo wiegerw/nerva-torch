@@ -58,6 +58,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">nerva_torch.utilities</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.utilities.set_numpy_options"><code class="docutils literal notranslate"><span class="pre">set_numpy_options()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.utilities.set_torch_options"><code class="docutils literal notranslate"><span class="pre">set_torch_options()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.utilities.pp_numpy"><code class="docutils literal notranslate"><span class="pre">pp_numpy()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.utilities.pp"><code class="docutils literal notranslate"><span class="pre">pp()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.utilities.StopWatch"><code class="docutils literal notranslate"><span class="pre">StopWatch</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#nerva_torch.utilities.StopWatch.seconds"><code class="docutils literal notranslate"><span class="pre">StopWatch.seconds()</span></code></a></li>
@@ -117,15 +118,18 @@
 <td><p>Parse a string of the shape <cite>NAME(key1=value1, key2=value2, ...)</cite>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.utilities.pp" title="nerva_torch.utilities.pp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pp</span></code></a>(name, x)</p></td>
-<td><p>Pretty-print a tensor with name and shape info.</p></td>
+<td><p>Pretty-print a tensor with name and shape info, using NumPy formatting.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.utilities.save_dict_to_npz" title="nerva_torch.utilities.save_dict_to_npz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_dict_to_npz</span></code></a>(filename, data)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.utilities.pp_numpy" title="nerva_torch.utilities.pp_numpy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pp_numpy</span></code></a>(name, arr)</p></td>
+<td><p>Internal helper: pretty-print using NumPy arrays only.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.utilities.save_dict_to_npz" title="nerva_torch.utilities.save_dict_to_npz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_dict_to_npz</span></code></a>(filename, data)</p></td>
 <td><p>Saves a dictionary of torch tensors to a compressed .npz file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.utilities.set_numpy_options" title="nerva_torch.utilities.set_numpy_options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_numpy_options</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.utilities.set_numpy_options" title="nerva_torch.utilities.set_numpy_options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_numpy_options</span></code></a>()</p></td>
 <td><p>Configure NumPy print options for readable output.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.utilities.set_torch_options" title="nerva_torch.utilities.set_torch_options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_torch_options</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.utilities.set_torch_options" title="nerva_torch.utilities.set_torch_options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_torch_options</span></code></a>()</p></td>
 <td><p>Configure PyTorch print options and multiprocessing strategy.</p></td>
 </tr>
 </tbody>
@@ -154,9 +158,15 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="nerva_torch.utilities.pp_numpy">
+<span class="sig-prename descclassname"><span class="pre">nerva_torch.utilities.</span></span><span class="sig-name descname"><span class="pre">pp_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/utilities.html#pp_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.utilities.pp_numpy" title="Link to this definition"></a></dt>
+<dd><p>Internal helper: pretty-print using NumPy arrays only.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="nerva_torch.utilities.pp">
 <span class="sig-prename descclassname"><span class="pre">nerva_torch.utilities.</span></span><span class="sig-name descname"><span class="pre">pp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/utilities.html#pp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.utilities.pp" title="Link to this definition"></a></dt>
-<dd><p>Pretty-print a tensor with name and shape info.</p>
+<dd><p>Pretty-print a tensor with name and shape info, using NumPy formatting.</p>
 </dd></dl>
 
 <dl class="py class">

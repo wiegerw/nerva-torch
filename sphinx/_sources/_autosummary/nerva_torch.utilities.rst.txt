@@ -11,6 +11,7 @@ nerva\_torch.utilities
       load_dict_from_npz
       parse_function_call
       pp
+      pp_numpy
       save_dict_to_npz
       set_numpy_options
       set_torch_options
