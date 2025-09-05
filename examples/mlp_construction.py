@@ -10,7 +10,7 @@ from nerva_torch.activation_functions import ReLUActivation, LeakyReLUActivation
 from nerva_torch.datasets import create_npz_dataloaders
 from nerva_torch.layers import ActivationLayer, LinearLayer
 from nerva_torch.learning_rate import TimeBasedScheduler
-from nerva_torch.loss_functions import SoftmaxCrossEntropyLossFunction
+from nerva_torch.loss_functions import StableSoftmaxCrossEntropyLossFunction
 from nerva_torch.multilayer_perceptron import MultilayerPerceptron, parse_multilayer_perceptron
 from nerva_torch.optimizers import MomentumOptimizer, NesterovOptimizer, CompositeOptimizer
 from nerva_torch.training import stochastic_gradient_descent
@@ -66,7 +66,7 @@ def main():
 
     train_loader, test_loader = create_npz_dataloaders("../data/mnist-flattened.npz", batch_size=100)
 
-    loss = SoftmaxCrossEntropyLossFunction()
+    loss = StableSoftmaxCrossEntropyLossFunction()
     learning_rate = TimeBasedScheduler(lr=0.1, decay=0.09)
     epochs = 5
 

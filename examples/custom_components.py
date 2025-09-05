@@ -19,9 +19,11 @@ from nerva_torch.optimizers import MomentumOptimizer, NesterovOptimizer, Composi
 from nerva_torch.training import stochastic_gradient_descent
 from nerva_torch.weight_initializers import set_bias_to_zero, set_weights_xavier_normalized
 
+
 # ------------------------
 # Custom activation function
 # ------------------------
+
 
 def Elu(alpha):
     return lambda X: torch.where(X > 0, X, alpha * (torch.exp(X) - 1))
