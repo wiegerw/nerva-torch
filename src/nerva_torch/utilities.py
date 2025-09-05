@@ -36,7 +36,7 @@ def pp_numpy(name: str, arr: np.ndarray):
     print(arr)
 
 
-def pp_torch(name: str, x: torch.Tensor):
+def pp(name: str, x: torch.Tensor):
     """Pretty-print a tensor with name and shape info, using NumPy formatting."""
     pp_numpy(name, x.detach().cpu().numpy())
 
