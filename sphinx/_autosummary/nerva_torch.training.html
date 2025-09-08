@@ -55,15 +55,19 @@
 <li class="toctree-l1"><a class="reference internal" href="nerva_torch.optimizers.html">nerva_torch.optimizers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nerva_torch.softmax_functions.html">nerva_torch.softmax_functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">nerva_torch.training</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.SGDOptions"><code class="docutils literal notranslate"><span class="pre">SGDOptions</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#nerva_torch.training.SGDOptions.debug"><code class="docutils literal notranslate"><span class="pre">SGDOptions.debug</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.TrainOptions"><code class="docutils literal notranslate"><span class="pre">TrainOptions</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nerva_torch.training.TrainOptions.debug"><code class="docutils literal notranslate"><span class="pre">TrainOptions.debug</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nerva_torch.training.TrainOptions.print_statistics"><code class="docutils literal notranslate"><span class="pre">TrainOptions.print_statistics</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nerva_torch.training.TrainOptions.print_digits"><code class="docutils literal notranslate"><span class="pre">TrainOptions.print_digits</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.print_epoch"><code class="docutils literal notranslate"><span class="pre">print_epoch()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.print_epoch_header"><code class="docutils literal notranslate"><span class="pre">print_epoch_header()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.print_epoch_line"><code class="docutils literal notranslate"><span class="pre">print_epoch_line()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.print_epoch_footer"><code class="docutils literal notranslate"><span class="pre">print_epoch_footer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.print_batch_debug_info"><code class="docutils literal notranslate"><span class="pre">print_batch_debug_info()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.compute_accuracy"><code class="docutils literal notranslate"><span class="pre">compute_accuracy()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.compute_loss"><code class="docutils literal notranslate"><span class="pre">compute_loss()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.compute_statistics"><code class="docutils literal notranslate"><span class="pre">compute_statistics()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.print_batch_debug_info"><code class="docutils literal notranslate"><span class="pre">print_batch_debug_info()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.stochastic_gradient_descent"><code class="docutils literal notranslate"><span class="pre">stochastic_gradient_descent()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.stochastic_gradient_descent_plain"><code class="docutils literal notranslate"><span class="pre">stochastic_gradient_descent_plain()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nerva_torch.training.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
@@ -116,8 +120,14 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.training.print_batch_debug_info" title="nerva_torch.training.print_batch_debug_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_batch_debug_info</span></code></a>(epoch, batch_idx, M, ...)</p></td>
 <td><p>Print detailed debug information for a training batch.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.training.print_epoch" title="nerva_torch.training.print_epoch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_epoch</span></code></a>(epoch, lr, loss, train_accuracy, ...)</p></td>
-<td><p>Print formatted training statistics for one epoch.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.training.print_epoch_footer" title="nerva_torch.training.print_epoch_footer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_epoch_footer</span></code></a>(total_time)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.training.print_epoch_header" title="nerva_torch.training.print_epoch_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_epoch_header</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.training.print_epoch_line" title="nerva_torch.training.print_epoch_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_epoch_line</span></code></a>(epoch, lr, loss, ...)</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#nerva_torch.training.stochastic_gradient_descent" title="nerva_torch.training.stochastic_gradient_descent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stochastic_gradient_descent</span></code></a>(M, epochs, loss, ...)</p></td>
 <td><p>Run a simple stochastic gradient descent (SGD) training loop using PyTorch data loaders.</p></td>
@@ -133,26 +143,51 @@
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.training.SGDOptions" title="nerva_torch.training.SGDOptions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SGDOptions</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#nerva_torch.training.TrainOptions" title="nerva_torch.training.TrainOptions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainOptions</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
-<dt class="sig sig-object py" id="nerva_torch.training.SGDOptions">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nerva_torch.training.</span></span><span class="sig-name descname"><span class="pre">SGDOptions</span></span><a class="reference internal" href="../_modules/nerva_torch/training.html#SGDOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.training.SGDOptions" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="nerva_torch.training.TrainOptions">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nerva_torch.training.</span></span><span class="sig-name descname"><span class="pre">TrainOptions</span></span><a class="reference internal" href="../_modules/nerva_torch/training.html#TrainOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.training.TrainOptions" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="nerva_torch.training.SGDOptions.debug">
-<span class="sig-name descname"><span class="pre">debug</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#nerva_torch.training.SGDOptions.debug" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="nerva_torch.training.TrainOptions.debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#nerva_torch.training.TrainOptions.debug" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nerva_torch.training.TrainOptions.print_statistics">
+<span class="sig-name descname"><span class="pre">print_statistics</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#nerva_torch.training.TrainOptions.print_statistics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="nerva_torch.training.TrainOptions.print_digits">
+<span class="sig-name descname"><span class="pre">print_digits</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#nerva_torch.training.TrainOptions.print_digits" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="nerva_torch.training.print_epoch">
-<span class="sig-prename descclassname"><span class="pre">nerva_torch.training.</span></span><span class="sig-name descname"><span class="pre">print_epoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_accuracy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_accuracy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elapsed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/training.html#print_epoch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.training.print_epoch" title="Link to this definition"></a></dt>
-<dd><p>Print formatted training statistics for one epoch.</p>
+<dt class="sig sig-object py" id="nerva_torch.training.print_epoch_header">
+<span class="sig-prename descclassname"><span class="pre">nerva_torch.training.</span></span><span class="sig-name descname"><span class="pre">print_epoch_header</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/training.html#print_epoch_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.training.print_epoch_header" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nerva_torch.training.print_epoch_line">
+<span class="sig-prename descclassname"><span class="pre">nerva_torch.training.</span></span><span class="sig-name descname"><span class="pre">print_epoch_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_accuracy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_accuracy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elapsed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/training.html#print_epoch_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.training.print_epoch_line" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nerva_torch.training.print_epoch_footer">
+<span class="sig-prename descclassname"><span class="pre">nerva_torch.training.</span></span><span class="sig-name descname"><span class="pre">print_epoch_footer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/training.html#print_epoch_footer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.training.print_epoch_footer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nerva_torch.training.print_batch_debug_info">
+<span class="sig-prename descclassname"><span class="pre">nerva_torch.training.</span></span><span class="sig-name descname"><span class="pre">print_batch_debug_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="nerva_torch.multilayer_perceptron.html#nerva_torch.multilayer_perceptron.MultilayerPerceptron" title="nerva_torch.multilayer_perceptron.MultilayerPerceptron"><span class="pre">MultilayerPerceptron</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DY</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/training.html#print_batch_debug_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.training.print_batch_debug_info" title="Link to this definition"></a></dt>
+<dd><p>Print detailed debug information for a training batch.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -169,14 +204,8 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="nerva_torch.training.compute_statistics">
-<span class="sig-prename descclassname"><span class="pre">nerva_torch.training.</span></span><span class="sig-name descname"><span class="pre">compute_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elapsed_seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_statistics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/training.html#compute_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.training.compute_statistics" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">nerva_torch.training.</span></span><span class="sig-name descname"><span class="pre">compute_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elapsed_seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/training.html#compute_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.training.compute_statistics" title="Link to this definition"></a></dt>
 <dd><p>Compute and optionally print loss and accuracy statistics.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="nerva_torch.training.print_batch_debug_info">
-<span class="sig-prename descclassname"><span class="pre">nerva_torch.training.</span></span><span class="sig-name descname"><span class="pre">print_batch_debug_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="nerva_torch.multilayer_perceptron.html#nerva_torch.multilayer_perceptron.MultilayerPerceptron" title="nerva_torch.multilayer_perceptron.MultilayerPerceptron"><span class="pre">MultilayerPerceptron</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DY</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nerva_torch/training.html#print_batch_debug_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nerva_torch.training.print_batch_debug_info" title="Link to this definition"></a></dt>
-<dd><p>Print detailed debug information for a training batch.</p>
 </dd></dl>
 
 <dl class="py function">
