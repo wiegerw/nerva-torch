@@ -47,7 +47,7 @@ class MLPSpec:
 
 def construct_mlp(linear_layer_sizes: List[int]):
     layer_specifications = ["ReLU", "ReLU", "Linear"]
-    linear_layer_weights = ["Xavier", "Xavier", "Xavier"]
+    linear_layer_weights = ["XavierNormal", "XavierNormal", "XavierNormal"]
     layer_optimizers = ["GradientDescent", "GradientDescent", "GradientDescent"]
     return parse_multilayer_perceptron(layer_specifications,
                                        linear_layer_sizes,

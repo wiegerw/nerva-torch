@@ -14,7 +14,7 @@ from nerva_torch.loss_functions import StableSoftmaxCrossEntropyLossFunction
 from nerva_torch.multilayer_perceptron import MultilayerPerceptron, parse_multilayer_perceptron
 from nerva_torch.optimizers import MomentumOptimizer, NesterovOptimizer, CompositeOptimizer
 from nerva_torch.training import stochastic_gradient_descent
-from nerva_torch.weight_initializers import set_bias_to_zero, set_weights_xavier_normalized
+from nerva_torch.weight_initializers import set_bias_zero, set_weights_xavier_normal
 
 
 def construct_mlp1() -> MultilayerPerceptron:
@@ -23,20 +23,20 @@ def construct_mlp1() -> MultilayerPerceptron:
 
     # configure layer 1
     layer1 = ActivationLayer(784, 1024, ReLUActivation())
-    set_weights_xavier_normalized(layer1.W)
-    set_bias_to_zero(layer1.b)
+    set_weights_xavier_normal(layer1.W)
+    set_bias_zero(layer1.b)
     optimizer_W = MomentumOptimizer(layer1.W, layer1.DW, 0.9)
     optimizer_b = NesterovOptimizer(layer1.b, layer1.Db, 0.75)
     layer1.optimizer = CompositeOptimizer([optimizer_W, optimizer_b])
 
     # configure layer 2
     layer2 = ActivationLayer(1024, 512, LeakyReLUActivation(0.5))
-    layer2.set_weights("Xavier")
+    layer2.set_weights("XavierNormal")
     layer2.set_optimizer("Momentum(0.8)")
 
     # configure layer 3
     layer3 = LinearLayer(512, 10)
-    layer3.set_weights("He")
+    layer3.set_weights("HeNormal")
     layer3.set_optimizer("GradientDescent")
 
     M.layers = [layer1, layer2, layer3]
@@ -50,7 +50,7 @@ def construct_mlp2() -> MultilayerPerceptron:
     layer_specifications = ["ReLU", "LeakyReLU(0.5)", "Linear"]
     linear_layer_sizes = [784, 1024, 512, 10]
     linear_layer_optimizers = ["Nesterov(0.9)", "Momentum(0.8)", "GradientDescent"]
-    linear_layer_weight_initializers = ["XavierNormalized", "Xavier", "He"]
+    linear_layer_weight_initializers = ["XavierNormal", "XavierUniform", "HeNormal"]
     M = parse_multilayer_perceptron(layer_specifications,
                                     linear_layer_sizes,
                                     linear_layer_optimizers,

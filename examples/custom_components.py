@@ -17,7 +17,7 @@ from nerva_torch.matrix_operations import elements_sum, Matrix
 from nerva_torch.multilayer_perceptron import MultilayerPerceptron
 from nerva_torch.optimizers import MomentumOptimizer, NesterovOptimizer, CompositeOptimizer
 from nerva_torch.training import stochastic_gradient_descent
-from nerva_torch.weight_initializers import set_bias_to_zero, set_weights_xavier_normalized
+from nerva_torch.weight_initializers import set_bias_zero, set_weights_xavier_normal
 
 
 # ------------------------
@@ -77,8 +77,8 @@ def main():
 
     # configure layer 1
     layer1 = ActivationLayer(784, 1024, ELUActivation(0.1))
-    set_weights_xavier_normalized(layer1.W)
-    set_bias_to_zero(layer1.b)
+    set_weights_xavier_normal(layer1.W)
+    set_bias_zero(layer1.b)
     optimizer_W = MomentumOptimizer(layer1.W, layer1.DW, 0.9)
     optimizer_b = NesterovOptimizer(layer1.b, layer1.Db, 0.75)
     layer1.optimizer = CompositeOptimizer([optimizer_W, optimizer_b])
@@ -86,12 +86,12 @@ def main():
     # configure layer 2
     layer2 = ActivationLayer(1024, 512, HyperbolicTangentActivation())
     set_weights_lecun(layer2.W)
-    set_bias_to_zero(layer2.b)
+    set_bias_zero(layer2.b)
     layer2.set_optimizer("Momentum(0.8)")
 
     # configure layer 3
     layer3 = LinearLayer(512, 10)
-    layer3.set_weights("He")
+    layer3.set_weights("HeNormal")
     layer3.set_optimizer("GradientDescent")
 
     M.layers = [layer1, layer2, layer3]

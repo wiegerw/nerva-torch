@@ -47,7 +47,7 @@ def create_mlp(sizes: List[Tuple[int, int]]):
         else:
             layer = ActivationLayer(input_size, output_size, ReLUActivation())
         layer.set_optimizer('Momentum(0.9)')
-        layer.set_weights('Xavier')
+        layer.set_weights('XavierNormal')
         M.layers.append(layer)
 
     return M
