@@ -9,7 +9,7 @@ from typing import List, Tuple
 import sklearn.datasets as dt
 import torch
 from nerva_torch.activation_functions import ReLUActivation
-from nerva_torch.datasets import MemoryDataLoader
+from nerva_torch.datasets import DataLoader
 from nerva_torch.layers import ActivationLayer, LinearLayer
 from nerva_torch.learning_rate import MultiStepLRScheduler
 from nerva_torch.loss_functions import StableSoftmaxCrossEntropyLossFunction
@@ -61,8 +61,8 @@ def main():
     batch_size = 100
 
     Xtrain, Ttrain, Xtest, Ttest = generate_synthetic_dataset(num_train_samples, num_test_samples, num_features, num_classes)
-    train_loader = MemoryDataLoader(Xtrain, Ttrain, batch_size=batch_size, num_classes=num_classes)
-    test_loader = MemoryDataLoader(Xtest, Ttest, batch_size=batch_size, num_classes=num_classes)
+    train_loader = DataLoader(Xtrain, Ttrain, batch_size=batch_size, num_classes=num_classes)
+    test_loader = DataLoader(Xtest, Ttest, batch_size=batch_size, num_classes=num_classes)
 
     M = create_mlp([(num_features, 200), (200, 200), (200, num_classes)])
     loss = StableSoftmaxCrossEntropyLossFunction()

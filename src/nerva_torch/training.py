@@ -6,7 +6,6 @@
 
 import random
 from typing import List
-import torch
 from nerva_torch.datasets import DataLoader, create_npz_dataloaders, to_one_hot
 from nerva_torch.learning_rate import LearningRateScheduler, parse_learning_rate
 from nerva_torch.loss_functions import parse_loss_function, LossFunction
@@ -78,7 +77,7 @@ def print_batch_debug_info(epoch: int, batch_idx: int,
 
 def compute_accuracy(M: MultilayerPerceptron, data_loader: DataLoader):
     """Compute mean classification accuracy for a model over a data loader."""
-    N = len(data_loader.dataset)  # N is the number of examples
+    N = data_loader.dataset_size  # N is the number of examples
     total_correct = 0
     for X, T in data_loader:
         Y = M.feedforward(X)
@@ -90,7 +89,7 @@ def compute_accuracy(M: MultilayerPerceptron, data_loader: DataLoader):
 
 def compute_loss(M: MultilayerPerceptron, data_loader: DataLoader, loss: LossFunction):
     """Compute mean loss for a model over a data loader using the given loss."""
-    N = len(data_loader.dataset)  # N is the number of examples
+    N = data_loader.dataset_size  # N is the number of examples
     total_loss = 0.0
     for X, T in data_loader:
         Y = M.feedforward(X)
