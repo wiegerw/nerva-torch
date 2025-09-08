@@ -81,53 +81,124 @@
            <div itemprop="articleBody">
              
   <h1>Source code for nerva_torch.weight_initializers</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Copyright 2023 Wieger Wesselink.</span>
+<span></span><span class="c1"># Copyright 2023 - 2025 Wieger Wesselink.</span>
 <span class="c1"># Distributed under the Boost Software License, Version 1.0.</span>
 <span class="c1"># (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)</span>
 
 <span class="sd">&quot;&quot;&quot;Weight and bias initialization helpers for linear layers.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_function_call</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.matrix_operations</span><span class="w"> </span><span class="kn">import</span> <span class="n">Matrix</span>
 
 
-<div class="viewcode-block" id="set_bias_to_zero">
-<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_bias_to_zero">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">set_bias_to_zero</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
+<div class="viewcode-block" id="set_bias_zero">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_bias_zero">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_bias_zero</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set all bias values to zero.&quot;&quot;&quot;</span>
     <span class="n">b</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span></div>
 
 
 
-<div class="viewcode-block" id="set_weights_xavier">
-<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_xavier">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">set_weights_xavier</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize weights using Xavier/Glorot initialization.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="set_bias_uniform">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_bias_uniform">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_bias_uniform</span><span class="p">(</span><span class="n">b_</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uniform initialization within [a, b).&quot;&quot;&quot;</span>
+    <span class="n">b_</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_bias_normal">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_bias_normal">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_bias_normal</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normal (Gaussian) initialization with given mean and std.&quot;&quot;&quot;</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_weights_uniform">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_uniform">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_weights_uniform</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uniform initialization within [a, b).&quot;&quot;&quot;</span>
+    <span class="n">W</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_weights_normal">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_normal">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_weights_normal</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normal (Gaussian) initialization with given mean and std.&quot;&quot;&quot;</span>
+    <span class="n">W</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_weights_xavier_uniform">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_xavier_uniform">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_weights_xavier_uniform</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Xavier / Glorot uniform initialization (for tanh/sigmoid).</span>
+
+<span class="sd">    K = fan-out (output size)</span>
+<span class="sd">    D = fan-in  (input size)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">K</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">xavier_stddev</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">K</span> <span class="o">+</span> <span class="n">D</span><span class="p">)))</span>
-    <span class="n">W</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span> <span class="o">*</span> <span class="n">xavier_stddev</span></div>
+    <span class="n">limit</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">6.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="n">K</span><span class="p">))</span>  <span class="c1"># sqrt(6 / (fan_in + fan_out))</span>
+    <span class="n">W</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="o">-</span><span class="n">limit</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span></div>
 
 
 
-<div class="viewcode-block" id="set_weights_xavier_normalized">
-<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_xavier_normalized">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">set_weights_xavier_normalized</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize weights using normalized Xavier initialization.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="set_weights_xavier_normal">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_xavier_normal">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_weights_xavier_normal</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Xavier / Glorot normal initialization (for tanh/sigmoid).</span>
+
+<span class="sd">    K = fan-out (output size)</span>
+<span class="sd">    D = fan-in  (input size)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">K</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">xavier_stddev</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">K</span> <span class="o">+</span> <span class="n">D</span><span class="p">)))</span>
-    <span class="n">random_matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
-    <span class="n">W</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">random_matrix</span> <span class="o">*</span> <span class="n">xavier_stddev</span></div>
+    <span class="n">std</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="n">K</span><span class="p">))</span>  <span class="c1"># sqrt(2 / (fan_in + fan_out))</span>
+    <span class="n">W</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span></div>
 
 
 
-<div class="viewcode-block" id="set_weights_he">
-<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_he">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">set_weights_he</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize weights using He initialization for ReLU networks.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="set_weights_he_normal">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_he_normal">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_weights_he_normal</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;He / Kaiming normal initialization (for ReLU).</span>
+
+<span class="sd">    K = fan-out (output size)</span>
+<span class="sd">    D = fan-in  (input size)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">K</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">he_stddev</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">D</span><span class="p">))</span>
-    <span class="n">random_matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
-    <span class="n">W</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">random_matrix</span> <span class="o">*</span> <span class="n">he_stddev</span></div>
+    <span class="n">std</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">D</span><span class="p">)</span>  <span class="c1"># sqrt(2 / fan_in)</span>
+    <span class="n">W</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_weights_he_uniform">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_he_uniform">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_weights_he_uniform</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;He / Kaiming uniform initialization (for ReLU, less common).</span>
+
+<span class="sd">    K = fan-out (output size)</span>
+<span class="sd">    D = fan-in  (input size)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">K</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">limit</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">6.0</span> <span class="o">/</span> <span class="n">D</span><span class="p">)</span>  <span class="c1"># sqrt(6 / fan_in)</span>
+    <span class="n">W</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uniform_</span><span class="p">(</span><span class="o">-</span><span class="n">limit</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_weights_zero">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_weights_zero">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_weights_zero</span><span class="p">(</span><span class="n">W</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize weights to zero.</span>
+
+<span class="sd">    Note: Initializing all weights to zero is generally not recommended because</span>
+<span class="sd">    it causes all neurons to learn the same features during training, leading to</span>
+<span class="sd">    symmetry that prevents effective learning and updates (the &quot;symmetry breaking&quot; problem).</span>
+<span class="sd">    This initializer can be useful for biases or special cases but should be avoided for weights.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">W</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span></div>
 
 
 
@@ -135,15 +206,32 @@
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.weight_initializers.html#nerva_torch.weight_initializers.set_layer_weights">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">set_layer_weights</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize a layer&#39;s parameters according to a named scheme.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;Xavier&#39;</span><span class="p">:</span>
-        <span class="n">set_weights_xavier</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
-        <span class="n">set_bias_to_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;XavierNormalized&#39;</span><span class="p">:</span>
-        <span class="n">set_weights_xavier_normalized</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
-        <span class="n">set_bias_to_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;He&#39;</span><span class="p">:</span>
-        <span class="n">set_weights_he</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
-        <span class="n">set_bias_to_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="n">parse_function_call</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Uniform&#39;</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">set_weights_uniform</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+        <span class="n">set_bias_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Normal&#39;</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">set_weights_normal</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+        <span class="n">set_bias_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;XavierUniform&#39;</span><span class="p">:</span>
+        <span class="n">set_weights_xavier_uniform</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+        <span class="n">set_bias_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;XavierNormal&#39;</span><span class="p">:</span>
+        <span class="n">set_weights_xavier_normal</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+        <span class="n">set_bias_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;HeUniform&#39;</span><span class="p">:</span>
+        <span class="n">set_weights_he_uniform</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+        <span class="n">set_bias_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;HeNormal&#39;</span><span class="p">:</span>
+        <span class="n">set_weights_he_normal</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+        <span class="n">set_bias_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Zero&#39;</span><span class="p">:</span>
+        <span class="n">set_weights_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+        <span class="n">set_bias_zero</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not parse weight initializer &quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span></div>
 

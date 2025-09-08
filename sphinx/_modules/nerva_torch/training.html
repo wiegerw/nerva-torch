@@ -89,7 +89,6 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">create_npz_dataloaders</span><span class="p">,</span> <span class="n">to_one_hot</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.learning_rate</span><span class="w"> </span><span class="kn">import</span> <span class="n">LearningRateScheduler</span><span class="p">,</span> <span class="n">parse_learning_rate</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.loss_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_loss_function</span><span class="p">,</span> <span class="n">LossFunction</span>
@@ -178,7 +177,7 @@
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.training.html#nerva_torch.training.compute_accuracy">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_accuracy</span><span class="p">(</span><span class="n">M</span><span class="p">:</span> <span class="n">MultilayerPerceptron</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute mean classification accuracy for a model over a data loader.&quot;&quot;&quot;</span>
-    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>  <span class="c1"># N is the number of examples</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">data_loader</span><span class="o">.</span><span class="n">dataset_size</span>  <span class="c1"># N is the number of examples</span>
     <span class="n">total_correct</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">X</span><span class="p">,</span> <span class="n">T</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -193,7 +192,7 @@
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.training.html#nerva_torch.training.compute_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_loss</span><span class="p">(</span><span class="n">M</span><span class="p">:</span> <span class="n">MultilayerPerceptron</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">loss</span><span class="p">:</span> <span class="n">LossFunction</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute mean loss for a model over a data loader using the given loss.&quot;&quot;&quot;</span>
-    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>  <span class="c1"># N is the number of examples</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">data_loader</span><span class="o">.</span><span class="n">dataset_size</span>  <span class="c1"># N is the number of examples</span>
     <span class="n">total_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">X</span><span class="p">,</span> <span class="n">T</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>

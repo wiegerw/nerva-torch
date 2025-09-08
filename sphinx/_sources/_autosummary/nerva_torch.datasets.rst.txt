@@ -18,5 +18,5 @@ nerva\_torch.datasets
 
    .. autosummary::
    
-      MemoryDataLoader
+      DataLoader
    

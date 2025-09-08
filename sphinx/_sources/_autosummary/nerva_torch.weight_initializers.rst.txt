@@ -8,9 +8,15 @@ nerva\_torch.weight\_initializers
 
    .. autosummary::
    
-      set_bias_to_zero
+      set_bias_normal
+      set_bias_uniform
+      set_bias_zero
       set_layer_weights
-      set_weights_he
-      set_weights_xavier
-      set_weights_xavier_normalized
+      set_weights_he_normal
+      set_weights_he_uniform
+      set_weights_normal
+      set_weights_uniform
+      set_weights_xavier_normal
+      set_weights_xavier_uniform
+      set_weights_zero
    
