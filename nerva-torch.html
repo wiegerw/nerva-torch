@@ -900,6 +900,7 @@ handles batching, shuffling, and iteration over the dataset.</p>
                                 <span class="n">train_loader</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span>
                                 <span class="n">test_loader</span><span class="p">:</span> <span class="n">DataLoader</span>
                                 <span class="p">):</span>
+    <span class="nf">print_epoch_header</span><span class="p">()</span>
     <span class="n">lr</span> <span class="o">=</span> <span class="nf">learning_rate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="nf">compute_statistics</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">training_time</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -912,7 +913,7 @@ handles batching, shuffling, and iteration over the dataset.</p>
             <span class="n">Y</span> <span class="o">=</span> <span class="n">M</span><span class="p">.</span><span class="nf">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
             <span class="n">DY</span> <span class="o">=</span> <span class="n">loss</span><span class="p">.</span><span class="nf">gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">X</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="n">SGDOptions</span><span class="p">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">TrainOptions</span><span class="p">.</span><span class="n">debug</span><span class="p">:</span>
                 <span class="nf">print_batch_debug_info</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">DY</span><span class="p">)</span>
 
             <span class="n">M</span><span class="p">.</span><span class="nf">backpropagate</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">DY</span><span class="p">)</span>
@@ -922,7 +923,7 @@ handles batching, shuffling, and iteration over the dataset.</p>
         <span class="n">training_time</span> <span class="o">+=</span> <span class="n">seconds</span>
         <span class="nf">compute_statistics</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">elapsed_seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">)</span>
 
-    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Total training time for the </span><span class="si">{</span><span class="n">epochs</span><span class="si">}</span><span class="s"> epochs: </span><span class="si">{</span><span class="n">training_time</span><span class="si">:</span><span class="p">.</span><span class="mi">8</span><span class="n">f</span><span class="si">}</span><span class="s">s</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span></code></pre>
+    <span class="nf">print_epoch_footer</span><span class="p">(</span><span class="n">training_time</span><span class="p">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -965,7 +966,7 @@ shuffling, but at the cost of additional boilerplate.</p>
             <span class="n">Y</span> <span class="o">=</span> <span class="n">M</span><span class="p">.</span><span class="nf">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
             <span class="n">DY</span> <span class="o">=</span> <span class="n">loss</span><span class="p">.</span><span class="nf">gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">X</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="n">SGDOptions</span><span class="p">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">TrainOptions</span><span class="p">.</span><span class="n">debug</span><span class="p">:</span>
                 <span class="nf">print_batch_debug_info</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">DY</span><span class="p">)</span>
 
             <span class="n">M</span><span class="p">.</span><span class="nf">backpropagate</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">DY</span><span class="p">)</span>
@@ -1861,7 +1862,7 @@ This must be specified separately when reloading weights.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-05 10:12:28 UTC
+Last updated 2025-09-08 10:03:35 UTC
 </div>
 </div>
 <script type="text/x-mathjax-config">
