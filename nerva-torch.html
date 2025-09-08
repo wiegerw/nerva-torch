@@ -776,20 +776,20 @@ pip <span class="nb">install </span>nerva-torch</code></pre>
 
     <span class="cp"># configure layer 1
 </span>    <span class="n">layer1</span> <span class="o">=</span> <span class="n">ActivationLayer</span><span class="p">(</span><span class="mi">784</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">ReLUActivation</span><span class="p">())</span>
-    <span class="n">set_weights_xavier_normalized</span><span class="p">(</span><span class="n">layer1</span><span class="p">.</span><span class="n">W</span><span class="p">)</span>
-    <span class="n">set_bias_to_zero</span><span class="p">(</span><span class="n">layer1</span><span class="p">.</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">set_weights_xavier_normal</span><span class="p">(</span><span class="n">layer1</span><span class="p">.</span><span class="n">W</span><span class="p">)</span>
+    <span class="n">set_bias_zero</span><span class="p">(</span><span class="n">layer1</span><span class="p">.</span><span class="n">b</span><span class="p">)</span>
     <span class="n">optimizer_W</span> <span class="o">=</span> <span class="n">MomentumOptimizer</span><span class="p">(</span><span class="n">layer1</span><span class="p">.</span><span class="n">W</span><span class="p">,</span> <span class="n">layer1</span><span class="p">.</span><span class="n">DW</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>
     <span class="n">optimizer_b</span> <span class="o">=</span> <span class="n">NesterovOptimizer</span><span class="p">(</span><span class="n">layer1</span><span class="p">.</span><span class="n">b</span><span class="p">,</span> <span class="n">layer1</span><span class="p">.</span><span class="n">Db</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">)</span>
     <span class="n">layer1</span><span class="p">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">CompositeOptimizer</span><span class="p">([</span><span class="n">optimizer_W</span><span class="p">,</span> <span class="n">optimizer_b</span><span class="p">])</span>
 
     <span class="cp"># configure layer 2
 </span>    <span class="n">layer2</span> <span class="o">=</span> <span class="n">ActivationLayer</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="n">LeakyReLUActivation</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
-    <span class="n">layer2</span><span class="p">.</span><span class="n">set_weights</span><span class="p">(</span><span class="s">"Xavier"</span><span class="p">)</span>
+    <span class="n">layer2</span><span class="p">.</span><span class="n">set_weights</span><span class="p">(</span><span class="s">"XavierNormal"</span><span class="p">)</span>
     <span class="n">layer2</span><span class="p">.</span><span class="n">set_optimizer</span><span class="p">(</span><span class="s">"Momentum(0.8)"</span><span class="p">)</span>
 
     <span class="cp"># configure layer 3
 </span>    <span class="n">layer3</span> <span class="o">=</span> <span class="n">LinearLayer</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">layer3</span><span class="p">.</span><span class="n">set_weights</span><span class="p">(</span><span class="s">"He"</span><span class="p">)</span>
+    <span class="n">layer3</span><span class="p">.</span><span class="n">set_weights</span><span class="p">(</span><span class="s">"HeNormal"</span><span class="p">)</span>
     <span class="n">layer3</span><span class="p">.</span><span class="n">set_optimizer</span><span class="p">(</span><span class="s">"GradientDescent"</span><span class="p">)</span>
 
     <span class="n">M</span><span class="p">.</span><span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">layer1</span><span class="p">,</span> <span class="n">layer2</span><span class="p">,</span> <span class="n">layer3</span><span class="p">]</span></code></pre>
@@ -806,7 +806,7 @@ pip <span class="nb">install </span>nerva-torch</code></pre>
 <pre class="rouge highlight"><code data-lang="cpp">    <span class="n">layer_specifications</span> <span class="o">=</span> <span class="p">[</span><span class="s">"ReLU"</span><span class="p">,</span> <span class="s">"LeakyReLU(0.5)"</span><span class="p">,</span> <span class="s">"Linear"</span><span class="p">]</span>
     <span class="n">linear_layer_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">784</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
     <span class="n">linear_layer_optimizers</span> <span class="o">=</span> <span class="p">[</span><span class="s">"Nesterov(0.9)"</span><span class="p">,</span> <span class="s">"Momentum(0.8)"</span><span class="p">,</span> <span class="s">"GradientDescent"</span><span class="p">]</span>
-    <span class="n">linear_layer_weight_initializers</span> <span class="o">=</span> <span class="p">[</span><span class="s">"XavierNormalized"</span><span class="p">,</span> <span class="s">"Xavier"</span><span class="p">,</span> <span class="s">"He"</span><span class="p">]</span>
+    <span class="n">linear_layer_weight_initializers</span> <span class="o">=</span> <span class="p">[</span><span class="s">"XavierNormal"</span><span class="p">,</span> <span class="s">"XavierUniform"</span><span class="p">,</span> <span class="s">"HeNormal"</span><span class="p">]</span>
     <span class="n">M</span> <span class="o">=</span> <span class="n">parse_multilayer_perceptron</span><span class="p">(</span><span class="n">layer_specifications</span><span class="p">,</span>
                                     <span class="n">linear_layer_sizes</span><span class="p">,</span>
                                     <span class="n">linear_layer_optimizers</span><span class="p">,</span>
@@ -1040,7 +1040,7 @@ implemented manually inside the training loop.</p>
 <pre class="rouge highlight"><code data-lang="bash">python3 <span class="nt">-u</span> ../tools/mlp.py <span class="se">\</span>
         <span class="nt">--layers</span><span class="o">=</span><span class="s2">"ReLU;ReLU;Linear"</span> <span class="se">\</span>
         <span class="nt">--layer-sizes</span><span class="o">=</span><span class="s2">"3072;1024;512;10"</span> <span class="se">\</span>
-        <span class="nt">--layer-weights</span><span class="o">=</span><span class="s2">"Xavier;Xavier;Xavier"</span> <span class="se">\</span>
+        <span class="nt">--layer-weights</span><span class="o">=</span><span class="s2">"XavierNormal;XavierNormal;XavierNormal"</span> <span class="se">\</span>
         <span class="nt">--optimizers</span><span class="o">=</span><span class="s2">"Momentum(0.9);Momentum(0.9);Momentum(0.9)"</span> <span class="se">\</span>
         <span class="nt">--batch-size</span><span class="o">=</span>100 <span class="se">\</span>
         <span class="nt">--epochs</span><span class="o">=</span>5 <span class="se">\</span>
@@ -1216,24 +1216,32 @@ Specify the weight initialization method for linear layers. Supported values:</p
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Xavier</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Xavier initialization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>XavierNormal</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Xavier Glorot weights (normal distribution)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>XavierNormalized</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Normalized Xavier initialization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>XavierUniform</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Xavier Glorot weights (uniform distribution)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>He</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Kaiming He initialization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>HeNormal</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kaiming He weights (normal distribution)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>HeUniform</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kaiming He weights (uniform distribution)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Normal</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Normal distribution</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Uniform</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Uniform random initialization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uniform distribution</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Zero</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">All weights initialized to zero (usually not recommended)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All weights are zero (N.B. This is not recommended for training)</p></td>
 </tr>
 </tbody>
 </table>
@@ -1601,7 +1609,7 @@ It is safe to rerun the script without overwriting existing files.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>When constructing <code>MemoryDataLoader</code> instances from integer class labels, explicitly pass <code>num_classes</code>.
+<p>When constructing <code>DataLoader</code> instances from integer class labels, explicitly pass <code>num_classes</code>.
 If omitted, the loader infers it as <code>max(label) + 1</code>, which may underestimate the number of classes for small subsets, leading to one-hot vectors with too few columns and mismatched dimensions with the model output.</p>
 </div>
 <div class="paragraph">
@@ -1862,7 +1870,7 @@ This must be specified separately when reloading weights.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-08 10:03:35 UTC
+Last updated 2025-09-08 15:39:23 UTC
 </div>
 </div>
 <script type="text/x-mathjax-config">
