@@ -40,6 +40,11 @@ class GradientDescentOptimizer(Optimizer):
         """Apply gradient descent update step."""
         self.x -= eta * self.Dx
 
+    def __repr__(self) -> str:
+        return "GradientDescent()"
+
+    __str__ = __repr__
+
 
 class MomentumOptimizer(GradientDescentOptimizer):
     """Gradient descent with momentum for accelerated convergence."""
@@ -53,6 +58,11 @@ class MomentumOptimizer(GradientDescentOptimizer):
         self.delta_x = self.mu * self.delta_x - eta * self.Dx
         self.x += self.delta_x
 
+    def __repr__(self) -> str:
+        return f"Momentum(mu={float(self.mu)})"
+
+    __str__ = __repr__
+
 
 class NesterovOptimizer(MomentumOptimizer):
     """Nesterov accelerated gradient descent optimizer."""
@@ -63,6 +73,11 @@ class NesterovOptimizer(MomentumOptimizer):
         """Apply Nesterov accelerated gradient update step."""
         self.delta_x = self.mu * self.delta_x - eta * self.Dx
         self.x += self.mu * self.delta_x - eta * self.Dx
+
+    def __repr__(self) -> str:
+        return f"Nesterov(mu={float(self.mu)})"
+
+    __str__ = __repr__
 
 
 def parse_optimizer(text: str) -> Callable[[Any, Any], Optimizer]:
