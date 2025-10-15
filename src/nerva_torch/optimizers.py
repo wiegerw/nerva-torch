@@ -9,6 +9,7 @@ factory callables from textual specifications like "Momentum(mu=0.9)".
 """
 
 from typing import Any, Callable, List
+
 from nerva_torch.utilities import parse_function_call
 import torch
 
@@ -28,6 +29,12 @@ class CompositeOptimizer(Optimizer):
         """Update all contained optimizers with the given learning rate."""
         for optimizer in self.optimizers:
             optimizer.update(eta)
+
+    def __repr__(self) -> str:
+        optimizers_str = ", ".join(str(opt) for opt in self.optimizers)
+        return f"CompositeOptimizer([{optimizers_str}])"
+
+    __str__ = __repr__
 
 
 class GradientDescentOptimizer(Optimizer):

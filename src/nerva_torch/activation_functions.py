@@ -14,13 +14,17 @@ import torch
 from nerva_torch.utilities import parse_function_call
 from nerva_torch.matrix_operations import Matrix
 
+# Naming conventions:
+# - lowercase functions operate on real numbers
+# - uppercase functions operate on matrices
 
-def Relu(X: Matrix):
+
+def Relu(X: Matrix) -> Matrix:
     """Rectified linear unit activation: max(0, X)."""
     return torch.max(torch.zeros_like(X), X)
 
 
-def Relu_gradient(X: Matrix):
+def Relu_gradient(X: Matrix) -> Matrix:
     """Gradient of ReLU: 1 where X > 0, 0 elsewhere."""
     return torch.where(X > 0, torch.ones_like(X), torch.zeros_like(X))
 
@@ -45,22 +49,22 @@ def All_relu_gradient(alpha):
     return lambda X: torch.where(X < 0, alpha, 1)
 
 
-def Hyperbolic_tangent(X: Matrix):
+def Hyperbolic_tangent(X: Matrix) -> Matrix:
     """Hyperbolic tangent activation."""
     return torch.tanh(X)
 
 
-def Hyperbolic_tangent_gradient(X: Matrix):
+def Hyperbolic_tangent_gradient(X: Matrix) -> Matrix:
     """Gradient of tanh: 1 - tanh²(X)."""
     return 1 - torch.tanh(X) ** 2
 
 
-def Sigmoid(X: Matrix):
+def Sigmoid(X: Matrix) -> Matrix:
     """Sigmoid activation: 1 / (1 + exp(-X))."""
     return torch.sigmoid(X)
 
 
-def Sigmoid_gradient(X: Matrix):
+def Sigmoid_gradient(X: Matrix) -> Matrix:
     """Gradient of sigmoid: σ(X) * (1 - σ(X))."""
     return Sigmoid(X) * (1 - Sigmoid(X))
 
