@@ -87,6 +87,7 @@
 
 <span class="sd">&quot;&quot;&quot;Miscellaneous utilities (formatting, timing, parsing, I/O).&quot;&quot;&quot;</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
@@ -111,6 +112,16 @@
 
     <span class="c1"># avoid &#39;Too many open files&#39; error when using data loaders</span>
     <span class="n">torch</span><span class="o">.</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">set_sharing_strategy</span><span class="p">(</span><span class="s1">&#39;file_system&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="disable_gpu">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.disable_gpu">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">disable_gpu</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disable GPU usage for PyTorch.&quot;&quot;&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;CUDA_DEVICE_ORDER&quot;</span><span class="p">,</span> <span class="s2">&quot;PCI_BUS_ID&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;OPENAI_ACCELERATE_DISABLE_CUDA&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">)</span></div>
 
 
 
