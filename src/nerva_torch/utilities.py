@@ -4,6 +4,7 @@
 
 """Miscellaneous utilities (formatting, timing, parsing, I/O)."""
 
+import os
 import re
 import time
 from typing import Dict, Union
@@ -23,6 +24,13 @@ def set_torch_options():
 
     # avoid 'Too many open files' error when using data loaders
     torch.multiprocessing.set_sharing_strategy('file_system')
+
+
+def disable_gpu():
+    """Disable GPU usage for PyTorch."""
+    os.environ.setdefault("CUDA_VISIBLE_DEVICES", "")
+    os.environ.setdefault("CUDA_DEVICE_ORDER", "PCI_BUS_ID")
+    os.environ.setdefault("OPENAI_ACCELERATE_DISABLE_CUDA", "1")
 
 
 def pp_numpy(name: str, arr: np.ndarray):
