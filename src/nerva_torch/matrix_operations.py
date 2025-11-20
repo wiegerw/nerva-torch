@@ -188,3 +188,13 @@ def inv_sqrt(X: Matrix) -> Matrix:
 def log_sigmoid(X: Matrix) -> Matrix:
     """Element-wise log(sigmoid(X)) computed stably."""
     return -torch.nn.functional.softplus(-X)
+
+
+def abs(X: Matrix) -> Matrix:
+    """Element-wise absolute value |X|."""
+    return torch.abs(X)
+
+
+def clip(X: Matrix, a_min: float, a_max: float) -> Matrix:
+    """Element-wise clip of X to [a_min, a_max]."""
+    return torch.clamp(X, min=a_min, max=a_max)

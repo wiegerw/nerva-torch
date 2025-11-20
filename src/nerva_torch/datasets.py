@@ -104,7 +104,10 @@ def create_npz_dataloaders(filename: str, batch_size: int=True) -> Tuple[DataLoa
         raise RuntimeError(f"Could not load file '{path}'")
 
     data = load_dict_from_npz(filename)
-    Xtrain, Ttrain, Xtest, Ttest = data['Xtrain'], data['Ttrain'], data['Xtest'], data['Ttest']
+    Xtrain = torch.as_tensor(data['Xtrain'], dtype=torch.float32)
+    Ttrain = torch.as_tensor(data['Ttrain'], dtype=torch.long)
+    Xtest = torch.as_tensor(data['Xtest'], dtype=torch.float32)
+    Ttest = torch.as_tensor(data['Ttest'], dtype=torch.long)
 
     # Determine number of classes robustly to avoid underestimating when some classes are absent
     num_classes = infer_num_classes(Ttrain, Ttest)
