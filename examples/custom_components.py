@@ -63,6 +63,12 @@ class AbsoluteErrorLossFunction(LossFunction):
         return elements_sum(abs(Y - T))
 
     def gradient(self, Y: Matrix, T: Matrix) -> Matrix:
+        # NOTE:
+        #   The absolute value function |x| is not differentiable at x = 0.
+        #   Its subgradient at zero is the entire interval [-1, 1], but most
+        #   implementations choose a single value (typically 0). This can make
+        #   the gradient uninformative when Y == T and may lead to stalled
+        #   optimization near exact matches.
         return torch.sign(Y - T)
 
 
