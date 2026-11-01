@@ -1,4 +1,2 @@
-numpy
-torch
-torchvision
-scikit-learn
+numpy>=1.23
+torch>=2.0

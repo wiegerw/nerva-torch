@@ -4,12 +4,10 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
-from pathlib import Path
-
 import torch
 
 from nerva_torch.activation_functions import ActivationFunction, HyperbolicTangentActivation
-from nerva_torch.datasets import create_npz_dataloaders
+from nerva_torch.shapes_dataset import create_shapes_dataloaders
 from nerva_torch.layers import ActivationLayer, LinearLayer
 from nerva_torch.learning_rate import TimeBasedScheduler
 from nerva_torch.loss_functions import LossFunction
@@ -73,11 +71,7 @@ class AbsoluteErrorLossFunction(LossFunction):
 
 
 def main():
-    if not Path("../data/mnist-flattened.npz").exists():
-        print("Error: MNIST dataset not found. Please provide the correct location or run the prepare_datasets.py script first.")
-        return
-
-    train_loader, test_loader = create_npz_dataloaders("../data/mnist-flattened.npz", batch_size=100)
+    train_loader, test_loader = create_shapes_dataloaders(batch_size=100)
 
     M = MultilayerPerceptron()
 

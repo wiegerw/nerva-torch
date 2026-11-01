@@ -5,11 +5,15 @@
 """In-memory data loader helpers and one-hot conversions.
 
    The DataLoader defined here mirrors a small subset of the PyTorch
-   DataLoader API but operates on in-memory tensors loaded from .npz files.
+   DataLoader API but operates on in-memory tensors. Data loaders can be
+   created from .npz files (create_npz_dataloaders) or from NumPy arrays
+   (create_array_dataloaders). See also the module shapes_dataset, which
+   generates a synthetic dataset.
 """
 
 from pathlib import Path
 from typing import Tuple, Union
+import numpy as np
 import torch
 from nerva_torch.matrix_operations import Matrix
 from nerva_torch.utilities import load_dict_from_npz
@@ -96,7 +100,7 @@ def infer_num_classes(Ttrain: Matrix, Ttest: Matrix) -> int:
     return int(max(max_train, max_test) + 1)
 
 
-def create_npz_dataloaders(filename: str, batch_size: int=True) -> Tuple[DataLoader, DataLoader]:
+def create_npz_dataloaders(filename: str, batch_size: int = 1) -> Tuple[DataLoader, DataLoader]:
     """Creates a data loader from a file containing a dictionary with Xtrain, Ttrain, Xtest and Ttest tensors."""
     path = Path(filename)
     print(f'Loading dataset from file {path}')
@@ -112,6 +116,21 @@ def create_npz_dataloaders(filename: str, batch_size: int=True) -> Tuple[DataLoa
     # Determine number of classes robustly to avoid underestimating when some classes are absent
     num_classes = infer_num_classes(Ttrain, Ttest)
 
+    train_loader = DataLoader(Xtrain, Ttrain, batch_size, num_classes=num_classes)
+    test_loader = DataLoader(Xtest, Ttest, batch_size, num_classes=num_classes)
+    return train_loader, test_loader
+
+
+def create_array_dataloaders(Xtrain: np.ndarray, Ttrain: np.ndarray, Xtest: np.ndarray, Ttest: np.ndarray,
+                             batch_size: int = 1, num_classes: int = 0) -> Tuple[DataLoader, DataLoader]:
+    """Creates data loaders for a training and a test set that are given as numpy arrays.
+
+    Xtrain and Xtest contain the examples (one per row), and Ttrain and Ttest the class indices.
+    If num_classes is 0, the number of classes is inferred from the targets.
+    """
+    Xtrain, Ttrain, Xtest, Ttest = torch.as_tensor(Xtrain, dtype=torch.float32), torch.as_tensor(Ttrain, dtype=torch.int64), torch.as_tensor(Xtest, dtype=torch.float32), torch.as_tensor(Ttest, dtype=torch.int64)
+    if num_classes == 0:
+        num_classes = infer_num_classes(Ttrain, Ttest)
     train_loader = DataLoader(Xtrain, Ttrain, batch_size, num_classes=num_classes)
     test_loader = DataLoader(Xtest, Ttest, batch_size, num_classes=num_classes)
     return train_loader, test_loader

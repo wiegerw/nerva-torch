@@ -5,7 +5,7 @@
 """Training helpers for the MLP, including a basic SGD loop and CLI glue."""
 
 import random
-from typing import List
+from typing import List, Optional
 from nerva_torch.datasets import DataLoader, create_npz_dataloaders, to_one_hot
 from nerva_torch.learning_rate import LearningRateScheduler, parse_learning_rate
 from nerva_torch.loss_functions import parse_loss_function, LossFunction
@@ -242,6 +242,15 @@ def stochastic_gradient_descent_plain(M: MultilayerPerceptron,
 # end::sgd_plain[]
 
 
+def set_seed(seed: int):
+    """Seed the random number generators used for weight initialization and shuffling."""
+    import numpy
+    random.seed(seed)
+    numpy.random.seed(seed)
+    import torch
+    torch.manual_seed(seed)
+
+
 def train(layer_specifications: List[str],
           linear_layer_sizes: List[int],
           linear_layer_optimizers: List[str],
@@ -252,11 +261,14 @@ def train(layer_specifications: List[str],
           learning_rate: str,
           weights_and_bias_file: str,
           dataset_file: str,
-          debug: bool
+          debug: bool,
+          seed: Optional[int] = None
          ):
     """High-level training convenience that wires parsing, data and SGD."""
 
     TrainOptions.debug = debug
+    if seed is not None:
+        set_seed(seed)
     set_numpy_options()
     set_torch_options()
     loss = parse_loss_function(loss)
