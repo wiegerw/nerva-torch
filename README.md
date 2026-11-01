@@ -67,6 +67,31 @@ pip install .
 pip install nerva-torch
 ```
 
+`nerva-torch` requires Python 3.11 or newer. Optional extras:
+
+```bash
+pip install "nerva-torch[examples]"   # dependencies of the examples (scikit-learn)
+pip install "nerva-torch[test]"       # pytest
+```
+
+#### CPU and GPU
+
+On Linux, the default PyTorch packages on PyPI include CUDA libraries of several GB. `nerva-torch` currently
+runs on the CPU only, so the much smaller CPU-only build of PyTorch is sufficient. Install it before `nerva-torch`:
+
+```bash
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+
+See the [PyTorch installation guide](https://pytorch.org/get-started/locally/) for other platforms.
+
+#### Running the tests
+
+```bash
+pip install ".[test]"
+python -m pytest tests
+```
+
 ### Example: Define and Train an MLP
 
 ```python
