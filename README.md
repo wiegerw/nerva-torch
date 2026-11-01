@@ -70,7 +70,7 @@ pip install nerva-torch
 `nerva-torch` requires Python 3.11 or newer. Optional extras:
 
 ```bash
-pip install "nerva-torch[examples]"   # dependencies of the examples (scikit-learn)
+pip install "nerva-torch[examples]"   # scikit-learn, used by examples/train_synthetic.py
 pip install "nerva-torch[test]"       # pytest
 ```
 

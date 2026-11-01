@@ -23,6 +23,7 @@ API reference
    nerva_torch
    nerva_torch.activation_functions
    nerva_torch.datasets
+   nerva_torch.shapes_dataset
    nerva_torch.layers
    nerva_torch.learning_rate
    nerva_torch.loss_functions
