@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>nerva_torch.utilities &mdash; nerva_torch  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -43,6 +43,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.html">nerva_torch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.activation_functions.html">nerva_torch.activation_functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.datasets.html">nerva_torch.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.shapes_dataset.html">nerva_torch.shapes_dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.layers.html">nerva_torch.layers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.learning_rate.html">nerva_torch.learning_rate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.loss_functions.html">nerva_torch.loss_functions</a></li>
@@ -85,7 +86,7 @@
 <span class="c1"># Distributed under the Boost Software License, Version 1.0.</span>
 <span class="c1"># (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)</span>
 
-<span class="sd">&quot;&quot;&quot;Miscellaneous utilities (formatting, timing, parsing, I/O).&quot;&quot;&quot;</span>
+<span class="sd">"""Miscellaneous utilities (formatting, timing, parsing, I/O)."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
@@ -99,7 +100,7 @@
 <div class="viewcode-block" id="set_numpy_options">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.set_numpy_options">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">set_numpy_options</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure NumPy print options for readable output.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Configure NumPy print options for readable output."""</span>
     <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">edgeitems</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span></div>
 
 
@@ -107,34 +108,34 @@
 <div class="viewcode-block" id="set_torch_options">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.set_torch_options">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">set_torch_options</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure PyTorch print options and multiprocessing strategy.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Configure PyTorch print options and multiprocessing strategy."""</span>
     <span class="n">torch</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">edgeitems</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sci_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
 
-    <span class="c1"># avoid &#39;Too many open files&#39; error when using data loaders</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">set_sharing_strategy</span><span class="p">(</span><span class="s1">&#39;file_system&#39;</span><span class="p">)</span></div>
+    <span class="c1"># avoid 'Too many open files' error when using data loaders</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">set_sharing_strategy</span><span class="p">(</span><span class="s1">'file_system'</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="disable_gpu">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.disable_gpu">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">disable_gpu</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disable GPU usage for PyTorch.&quot;&quot;&quot;</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;CUDA_DEVICE_ORDER&quot;</span><span class="p">,</span> <span class="s2">&quot;PCI_BUS_ID&quot;</span><span class="p">)</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;OPENAI_ACCELERATE_DISABLE_CUDA&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">)</span></div>
+<span class="w">    </span><span class="sd">"""Disable GPU usage for PyTorch."""</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"CUDA_VISIBLE_DEVICES"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"CUDA_DEVICE_ORDER"</span><span class="p">,</span> <span class="s2">"PCI_BUS_ID"</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"OPENAI_ACCELERATE_DISABLE_CUDA"</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="pp_numpy">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.pp_numpy">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">pp_numpy</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Internal helper: pretty-print using NumPy arrays only.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Internal helper: pretty-print using NumPy arrays only."""</span>
     <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span></div>
 
 
@@ -142,7 +143,7 @@
 <div class="viewcode-block" id="pp">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.pp">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">pp</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pretty-print a tensor with name and shape info, using NumPy formatting.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Pretty-print a tensor with name and shape info, using NumPy formatting."""</span>
     <span class="n">pp_numpy</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span></div>
 
 
@@ -156,7 +157,7 @@
 <div class="viewcode-block" id="StopWatch.seconds">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.StopWatch.seconds">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get elapsed time in seconds since creation or last reset.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get elapsed time in seconds since creation or last reset."""</span>
         <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">end</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span></div>
 
@@ -164,7 +165,7 @@
 <div class="viewcode-block" id="StopWatch.reset">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.StopWatch.reset">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the timer to the current time.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Reset the timer to the current time."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span></div>
 </div>
 
@@ -180,7 +181,7 @@
 <div class="viewcode-block" id="FunctionCall.has_key">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.FunctionCall.has_key">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the given key exists in parsed arguments.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check if the given key exists in parsed arguments."""</span>
         <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span></div>
 
 
@@ -189,9 +190,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s2">&quot;&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s2">""</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="s2">""</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">""</span></div>
 
 
 <div class="viewcode-block" id="FunctionCall.as_scalar">
@@ -202,18 +203,18 @@
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># Assuming scalar is a float, adjust if necessary</span>
         <span class="k">elif</span> <span class="n">default_value</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">default_value</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find an argument named </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not find an argument named </span><span class="se">\"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\"</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FunctionCall.as_string">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.FunctionCall.as_string">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">value</span>
         <span class="k">elif</span> <span class="n">default_value</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">default_value</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find an argument named </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not find an argument named </span><span class="se">\"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\"</span><span class="s2">"</span><span class="p">)</span></div>
 </div>
 
 
@@ -221,46 +222,46 @@
 <div class="viewcode-block" id="parse_function_call">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.parse_function_call">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_function_call</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FunctionCall</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Parse a string of the shape `NAME(key1=value1, key2=value2, ...)`.</span>
 <span class="sd">    If there are no arguments the parentheses may be omitted.</span>
 <span class="sd">    If there is only one parameter, it is allowed to pass `NAME(value)` instead of `NAME(key=value)`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">error</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not parse function call </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not parse function call </span><span class="se">\"</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">\"</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">arguments</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># no parentheses</span>
-    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\w+$)&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">"(\w+$)"</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">FunctionCall</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
 
     <span class="c1"># with parentheses</span>
-    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\w+)\((.*?)\)&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">"(\w+)\((.*?)\)"</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">","</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s2">&quot;=&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s2">"="</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="c1"># NAME(value)</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="n">arguments</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">arguments</span><span class="p">[</span><span class="s2">""</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
             <span class="k">return</span> <span class="n">FunctionCall</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># NAME(key1=value1, ...)</span>
             <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-                <span class="n">words</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s*=\s*&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">words</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\s*=\s*"</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
                     <span class="n">error</span><span class="p">()</span>
                 <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">words</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">arguments</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Key </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> appears multiple times.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Key </span><span class="se">\"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\"</span><span class="s2"> appears multiple times."</span><span class="p">)</span>
                     <span class="n">error</span><span class="p">()</span>
                 <span class="n">arguments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
             <span class="k">return</span> <span class="n">FunctionCall</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
@@ -272,7 +273,7 @@
 <div class="viewcode-block" id="load_dict_from_npz">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.load_dict_from_npz">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_dict_from_npz</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads a dictionary from a file in .npz format&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Loads a dictionary from a file in .npz format"""</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">make_tensor</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -287,9 +288,9 @@
 <div class="viewcode-block" id="save_dict_to_npz">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.utilities.html#nerva_torch.utilities.save_dict_to_npz">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">save_dict_to_npz</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves a dictionary of torch tensors to a compressed .npz file.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.npz&quot;</span><span class="p">):</span>
-        <span class="n">filename</span> <span class="o">+=</span> <span class="s2">&quot;.npz&quot;</span>
+<span class="w">    </span><span class="sd">"""Saves a dictionary of torch tensors to a compressed .npz file."""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".npz"</span><span class="p">):</span>
+        <span class="n">filename</span> <span class="o">+=</span> <span class="s2">".npz"</span>
 
     <span class="c1"># convert all torch tensors to numpy arrays</span>
     <span class="n">numpy_data</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
@@ -304,7 +305,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Wieger Wesselink and contributors.</p>
+    <p>&#169; Copyright 2026, Wieger Wesselink and contributors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

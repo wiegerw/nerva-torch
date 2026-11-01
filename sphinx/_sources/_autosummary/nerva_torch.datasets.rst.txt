@@ -8,6 +8,7 @@ nerva\_torch.datasets
 
    .. autosummary::
    
+      create_array_dataloaders
       create_npz_dataloaders
       from_one_hot
       infer_num_classes

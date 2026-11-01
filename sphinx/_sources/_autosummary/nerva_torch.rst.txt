@@ -19,6 +19,7 @@
    matrix_operations
    multilayer_perceptron
    optimizers
+   shapes_dataset
    softmax_functions
    training
    utilities

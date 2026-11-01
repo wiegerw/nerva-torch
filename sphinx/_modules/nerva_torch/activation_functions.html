@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>nerva_torch.activation_functions &mdash; nerva_torch  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -43,6 +43,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.html">nerva_torch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.activation_functions.html">nerva_torch.activation_functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.datasets.html">nerva_torch.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.shapes_dataset.html">nerva_torch.shapes_dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.layers.html">nerva_torch.layers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.learning_rate.html">nerva_torch.learning_rate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.loss_functions.html">nerva_torch.loss_functions</a></li>
@@ -85,12 +86,12 @@
 <span class="c1"># Distributed under the Boost Software License, Version 1.0.</span>
 <span class="c1"># (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)</span>
 
-<span class="sd">&quot;&quot;&quot;Activation functions and utilities used by the MLP implementation.</span>
+<span class="sd">"""Activation functions and utilities used by the MLP implementation.</span>
 
 <span class="sd">This module provides simple callable classes for common activations and a parser</span>
-<span class="sd">that turns textual specifications into activation instances (e.g. &quot;ReLU&quot;,</span>
-<span class="sd">&quot;LeakyReLU(alpha=0.1)&quot;, &quot;SReLU(al=0, tl=0, ar=0, tr=1)&quot;).</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">that turns textual specifications into activation instances (e.g. "ReLU",</span>
+<span class="sd">"LeakyReLU(alpha=0.1)", "SReLU(al=0, tl=0, ar=0, tr=1)").</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
@@ -105,7 +106,7 @@
 <div class="viewcode-block" id="Relu">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.Relu">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Relu</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rectified linear unit activation: max(0, X).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Rectified linear unit activation: max(0, X)."""</span>
     <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">X</span><span class="p">)</span></div>
 
 
@@ -113,7 +114,7 @@
 <div class="viewcode-block" id="Relu_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.Relu_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Relu_gradient</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of ReLU: 1 where X &gt; 0, 0 elsewhere.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of ReLU: 1 where X &gt; 0, 0 elsewhere."""</span>
     <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">X</span><span class="p">))</span></div>
 
 
@@ -121,7 +122,7 @@
 <div class="viewcode-block" id="Leaky_relu">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.Leaky_relu">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Leaky_relu</span><span class="p">(</span><span class="n">alpha</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Leaky ReLU factory: max(X, alpha * X).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Leaky ReLU factory: max(X, alpha * X)."""</span>
     <span class="k">return</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span></div>
 
 
@@ -129,7 +130,7 @@
 <div class="viewcode-block" id="Leaky_relu_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.Leaky_relu_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Leaky_relu_gradient</span><span class="p">(</span><span class="n">alpha</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient factory for leaky ReLU.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient factory for leaky ReLU."""</span>
     <span class="k">return</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">alpha</span><span class="p">))</span></div>
 
 
@@ -137,7 +138,7 @@
 <div class="viewcode-block" id="All_relu">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.All_relu">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">All_relu</span><span class="p">(</span><span class="n">alpha</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;AllReLU factory.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""AllReLU factory."""</span>
     <span class="k">return</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">X</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span></div>
 
 
@@ -145,7 +146,7 @@
 <div class="viewcode-block" id="All_relu_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.All_relu_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">All_relu_gradient</span><span class="p">(</span><span class="n">alpha</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient factory for AllReLU.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient factory for AllReLU."""</span>
     <span class="k">return</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 
@@ -153,7 +154,7 @@
 <div class="viewcode-block" id="Hyperbolic_tangent">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.Hyperbolic_tangent">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Hyperbolic_tangent</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hyperbolic tangent activation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Hyperbolic tangent activation."""</span>
     <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
 
@@ -161,7 +162,7 @@
 <div class="viewcode-block" id="Hyperbolic_tangent_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.Hyperbolic_tangent_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Hyperbolic_tangent_gradient</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of tanh: 1 - tanh²(X).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of tanh: 1 - tanh²(X)."""</span>
     <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span></div>
 
 
@@ -169,7 +170,7 @@
 <div class="viewcode-block" id="Sigmoid">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.Sigmoid">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Sigmoid</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sigmoid activation: 1 / (1 + exp(-X)).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Sigmoid activation: 1 / (1 + exp(-X))."""</span>
     <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
 
@@ -177,7 +178,7 @@
 <div class="viewcode-block" id="Sigmoid_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.Sigmoid_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Sigmoid_gradient</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of sigmoid: σ(X) * (1 - σ(X)).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of sigmoid: σ(X) * (1 - σ(X))."""</span>
     <span class="k">return</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="n">X</span><span class="p">))</span></div>
 
 
@@ -185,7 +186,7 @@
 <div class="viewcode-block" id="Srelu">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.Srelu">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Srelu</span><span class="p">(</span><span class="n">al</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="n">tr</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;SReLU factory: smooth rectified linear with learnable parameters.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""SReLU factory: smooth rectified linear with learnable parameters."""</span>
     <span class="k">return</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span> <span class="o">&lt;=</span> <span class="n">tl</span><span class="p">,</span> <span class="n">tl</span> <span class="o">+</span> <span class="n">al</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">tl</span><span class="p">),</span>
                      <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span> <span class="o">&lt;</span> <span class="n">tr</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">tr</span> <span class="o">+</span> <span class="n">ar</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">tr</span><span class="p">)))</span></div>
 
@@ -194,7 +195,7 @@
 <div class="viewcode-block" id="Srelu_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.Srelu_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Srelu_gradient</span><span class="p">(</span><span class="n">al</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="n">tr</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient factory for SReLU.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient factory for SReLU."""</span>
     <span class="k">return</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span> <span class="o">&lt;=</span> <span class="n">tl</span><span class="p">,</span> <span class="n">al</span><span class="p">,</span>
                      <span class="n">torch</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">X</span> <span class="o">&lt;</span> <span class="n">tr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ar</span><span class="p">))</span></div>
 
@@ -203,7 +204,7 @@
 <div class="viewcode-block" id="ActivationFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.ActivationFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ActivationFunction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface for activation functions with value and gradient methods.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Interface for activation functions with value and gradient methods."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
@@ -218,19 +219,19 @@
 <div class="viewcode-block" id="ReLUActivation">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.ReLUActivation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ReLUActivation</span><span class="p">(</span><span class="n">ActivationFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;ReLU activation function: max(0, x).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""ReLU activation function: max(0, x)."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Relu</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ReLUActivation.gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.ReLUActivation.gradient">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute gradient of ReLU.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Compute gradient of ReLU."""</span>
         <span class="k">return</span> <span class="n">Relu_gradient</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;ReLU&quot;</span>
+        <span class="k">return</span> <span class="s2">"ReLU"</span>
 
     <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span></div>
 
@@ -239,23 +240,23 @@
 <div class="viewcode-block" id="LeakyReLUActivation">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.LeakyReLUActivation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LeakyReLUActivation</span><span class="p">(</span><span class="n">ActivationFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Leaky ReLU activation: max(x, alpha * x).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Leaky ReLU activation: max(x, alpha * x)."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply leaky ReLU activation.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Apply leaky ReLU activation."""</span>
         <span class="k">return</span> <span class="n">Leaky_relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)(</span><span class="n">X</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LeakyReLUActivation.gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.LeakyReLUActivation.gradient">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute gradient of leaky ReLU.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Compute gradient of leaky ReLU."""</span>
         <span class="k">return</span> <span class="n">Leaky_relu_gradient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)(</span><span class="n">X</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;LeakyReLU(alpha=</span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"LeakyReLU(alpha=</span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span>
 
     <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span></div>
 
@@ -264,23 +265,23 @@
 <div class="viewcode-block" id="AllReLUActivation">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.AllReLUActivation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AllReLUActivation</span><span class="p">(</span><span class="n">ActivationFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;AllReLU activation (alternative parameterization of leaky ReLU).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""AllReLU activation (alternative parameterization of leaky ReLU)."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply AllReLU activation.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Apply AllReLU activation."""</span>
         <span class="k">return</span> <span class="n">All_relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)(</span><span class="n">X</span><span class="p">)</span>
 
 <div class="viewcode-block" id="AllReLUActivation.gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.AllReLUActivation.gradient">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute gradient of AllReLU.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Compute gradient of AllReLU."""</span>
         <span class="k">return</span> <span class="n">All_relu_gradient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)(</span><span class="n">X</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;AllReLU(alpha=</span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"AllReLU(alpha=</span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span>
 
     <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span></div>
 
@@ -289,19 +290,19 @@
 <div class="viewcode-block" id="HyperbolicTangentActivation">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.HyperbolicTangentActivation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HyperbolicTangentActivation</span><span class="p">(</span><span class="n">ActivationFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hyperbolic tangent activation function.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Hyperbolic tangent activation function."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Hyperbolic_tangent</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <div class="viewcode-block" id="HyperbolicTangentActivation.gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.HyperbolicTangentActivation.gradient">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute gradient of hyperbolic tangent.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Compute gradient of hyperbolic tangent."""</span>
         <span class="k">return</span> <span class="n">Hyperbolic_tangent_gradient</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;HyperbolicTangent&quot;</span>
+        <span class="k">return</span> <span class="s2">"HyperbolicTangent"</span>
 
     <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span></div>
 
@@ -310,19 +311,19 @@
 <div class="viewcode-block" id="SigmoidActivation">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.SigmoidActivation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SigmoidActivation</span><span class="p">(</span><span class="n">ActivationFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sigmoid activation function: 1 / (1 + exp(-x)).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Sigmoid activation function: 1 / (1 + exp(-x))."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SigmoidActivation.gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.SigmoidActivation.gradient">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute gradient of sigmoid.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Compute gradient of sigmoid."""</span>
         <span class="k">return</span> <span class="n">Sigmoid_gradient</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;Sigmoid&quot;</span>
+        <span class="k">return</span> <span class="s2">"Sigmoid"</span>
 
     <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span></div>
 
@@ -331,7 +332,7 @@
 <div class="viewcode-block" id="SReLUActivation">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.SReLUActivation">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SReLUActivation</span><span class="p">(</span><span class="n">ActivationFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Smooth rectified linear activation with learnable parameters.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Smooth rectified linear activation with learnable parameters."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">al</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">tl</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ar</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">tr</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="c1"># Store the parameters and their gradients in matrices.</span>
         <span class="c1"># This is to make them usable for optimizers.</span>
@@ -339,21 +340,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Dx</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply SReLU activation with current parameters.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Apply SReLU activation with current parameters."""</span>
         <span class="n">al</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
         <span class="k">return</span> <span class="n">Srelu</span><span class="p">(</span><span class="n">al</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="n">tr</span><span class="p">)(</span><span class="n">X</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SReLUActivation.gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.SReLUActivation.gradient">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute gradient of SReLU with current parameters.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Compute gradient of SReLU with current parameters."""</span>
         <span class="n">al</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
         <span class="k">return</span> <span class="n">Srelu_gradient</span><span class="p">(</span><span class="n">al</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="n">tr</span><span class="p">)(</span><span class="n">X</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">al</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="n">tr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">]</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;SReLU(al=</span><span class="si">{</span><span class="n">al</span><span class="si">}</span><span class="s2">, tl=</span><span class="si">{</span><span class="n">tl</span><span class="si">}</span><span class="s2">, ar=</span><span class="si">{</span><span class="n">ar</span><span class="si">}</span><span class="s2">, tr=</span><span class="si">{</span><span class="n">tr</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"SReLU(al=</span><span class="si">{</span><span class="n">al</span><span class="si">}</span><span class="s2">, tl=</span><span class="si">{</span><span class="n">tl</span><span class="si">}</span><span class="s2">, ar=</span><span class="si">{</span><span class="n">ar</span><span class="si">}</span><span class="s2">, tr=</span><span class="si">{</span><span class="n">tr</span><span class="si">}</span><span class="s2">)"</span>
 
     <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span></div>
 
@@ -362,35 +363,35 @@
 <div class="viewcode-block" id="parse_activation">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.activation_functions.html#nerva_torch.activation_functions.parse_activation">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_activation</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActivationFunction</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a textual activation specification into an ActivationFunction.</span>
+<span class="w">    </span><span class="sd">"""Parse a textual activation specification into an ActivationFunction.</span>
 
-<span class="sd">    Examples include &quot;ReLU&quot;, &quot;Sigmoid&quot;, &quot;HyperbolicTangent&quot;,</span>
-<span class="sd">    &quot;AllReLU(alpha=0.1)&quot;, &quot;LeakyReLU(alpha=0.1)&quot;, and</span>
-<span class="sd">    &quot;SReLU(al=0, tl=0, ar=0, tr=1)&quot;.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Examples include "ReLU", "Sigmoid", "HyperbolicTangent",</span>
+<span class="sd">    "AllReLU(alpha=0.1)", "LeakyReLU(alpha=0.1)", and</span>
+<span class="sd">    "SReLU(al=0, tl=0, ar=0, tr=1)".</span>
+<span class="sd">    """</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">func</span> <span class="o">=</span> <span class="n">parse_function_call</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;ReLU&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'ReLU'</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ReLUActivation</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Sigmoid&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'Sigmoid'</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">SigmoidActivation</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;HyperbolicTangent&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'HyperbolicTangent'</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">HyperbolicTangentActivation</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;AllReLU&#39;</span><span class="p">:</span>
-            <span class="n">alpha</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'AllReLU'</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">'alpha'</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">AllReLUActivation</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;LeakyReLU&#39;</span><span class="p">:</span>
-            <span class="n">alpha</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'LeakyReLU'</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">'alpha'</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">LeakyReLUActivation</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;SReLU&#39;</span><span class="p">:</span>
-            <span class="n">al</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">&#39;al&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">tl</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">&#39;tl&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">ar</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">&#39;ar&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">tr</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">&#39;tr&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'SReLU'</span><span class="p">:</span>
+            <span class="n">al</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">'al'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">tl</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">'tl'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">ar</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">'ar'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">as_scalar</span><span class="p">(</span><span class="s1">'tr'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">SReLUActivation</span><span class="p">(</span><span class="n">al</span><span class="p">,</span> <span class="n">tl</span><span class="p">,</span> <span class="n">ar</span><span class="p">,</span> <span class="n">tr</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">pass</span>
-    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not parse activation &quot;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Could not parse activation "</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s1">"'</span><span class="p">)</span></div>
 
 </pre></div>
 
@@ -401,7 +402,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Wieger Wesselink and contributors.</p>
+    <p>&#169; Copyright 2026, Wieger Wesselink and contributors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

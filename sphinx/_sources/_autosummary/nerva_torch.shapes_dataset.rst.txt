@@ -1,0 +1,15 @@
+nerva\_torch.shapes\_dataset
+============================
+
+.. automodule:: nerva_torch.shapes_dataset
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      create_shapes_dataloaders
+      main
+      make_shapes
+      make_shapes_dataset
+   

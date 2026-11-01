@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>nerva_torch.loss_functions &mdash; nerva_torch  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -43,6 +43,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.html">nerva_torch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.activation_functions.html">nerva_torch.activation_functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.datasets.html">nerva_torch.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.shapes_dataset.html">nerva_torch.shapes_dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.layers.html">nerva_torch.layers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.learning_rate.html">nerva_torch.learning_rate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.loss_functions.html">nerva_torch.loss_functions</a></li>
@@ -85,11 +86,11 @@
 <span class="c1"># Distributed under the Boost Software License, Version 1.0.</span>
 <span class="c1"># (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)</span>
 
-<span class="sd">&quot;&quot;&quot;Analytic loss functions and their gradients used during training.</span>
+<span class="sd">"""Analytic loss functions and their gradients used during training.</span>
 
 <span class="sd">Functions are provided in vector (lowercase) and matrix (uppercase) forms.</span>
 <span class="sd">Concrete LossFunction classes wrap these for use in the training loop.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.activation_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sigmoid</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.matrix_operations</span><span class="w"> </span><span class="kn">import</span> <span class="n">column_repeat</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">elements_sum</span><span class="p">,</span> <span class="n">hadamard</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">log_sigmoid</span><span class="p">,</span> <span class="n">reciprocal</span><span class="p">,</span> <span class="n">rows_sum</span><span class="p">,</span> <span class="n">Matrix</span>
@@ -104,7 +105,7 @@
 <div class="viewcode-block" id="squared_error_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.squared_error_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">squared_error_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Squared error loss for vectors: ||y - t||².&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Squared error loss for vectors: ||y - t||²."""</span>
     <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">t</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span></div>
 
 
@@ -112,7 +113,7 @@
 <div class="viewcode-block" id="squared_error_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.squared_error_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">squared_error_loss_gradient</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of squared error loss for vectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of squared error loss for vectors."""</span>
     <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span></div>
 
 
@@ -120,7 +121,7 @@
 <div class="viewcode-block" id="Squared_error_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Squared_error_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Squared_error_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Squared error loss for matrices: sum of ||Y - T||².&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Squared error loss for matrices: sum of ||Y - T||²."""</span>
     <span class="k">return</span> <span class="n">elements_sum</span><span class="p">(</span><span class="n">hadamard</span><span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="n">T</span><span class="p">,</span> <span class="n">Y</span> <span class="o">-</span> <span class="n">T</span><span class="p">))</span></div>
 
 
@@ -128,7 +129,7 @@
 <div class="viewcode-block" id="Squared_error_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Squared_error_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Squared_error_loss_gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of squared error loss for matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of squared error loss for matrices."""</span>
     <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="n">T</span><span class="p">)</span></div>
 
 
@@ -136,7 +137,7 @@
 <div class="viewcode-block" id="cross_entropy_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.cross_entropy_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cross_entropy_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cross entropy loss for vectors: -t^T log(y).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Cross entropy loss for vectors: -t^T log(y)."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">dot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">log</span><span class="p">(</span><span class="n">y</span><span class="p">))</span></div>
 
 
@@ -144,7 +145,7 @@
 <div class="viewcode-block" id="cross_entropy_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.cross_entropy_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cross_entropy_loss_gradient</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of cross entropy loss for vectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of cross entropy loss for vectors."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">hadamard</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">reciprocal</span><span class="p">(</span><span class="n">y</span><span class="p">))</span></div>
 
 
@@ -152,7 +153,7 @@
 <div class="viewcode-block" id="Cross_entropy_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Cross_entropy_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Cross_entropy_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cross entropy loss for matrices: -sum(T ⊙ log(Y)).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Cross entropy loss for matrices: -sum(T ⊙ log(Y))."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">elements_sum</span><span class="p">(</span><span class="n">hadamard</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">log</span><span class="p">(</span><span class="n">Y</span><span class="p">)))</span></div>
 
 
@@ -160,7 +161,7 @@
 <div class="viewcode-block" id="Cross_entropy_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Cross_entropy_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Cross_entropy_loss_gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of cross entropy loss for matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of cross entropy loss for matrices."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">hadamard</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">reciprocal</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span></div>
 
 
@@ -168,7 +169,7 @@
 <div class="viewcode-block" id="softmax_cross_entropy_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.softmax_cross_entropy_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">softmax_cross_entropy_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Softmax cross entropy loss for vectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Softmax cross entropy loss for vectors."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">dot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">log_softmax</span><span class="p">(</span><span class="n">y</span><span class="p">))</span></div>
 
 
@@ -176,7 +177,7 @@
 <div class="viewcode-block" id="softmax_cross_entropy_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.softmax_cross_entropy_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">softmax_cross_entropy_loss_gradient</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of softmax cross entropy loss for vectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of softmax cross entropy loss for vectors."""</span>
     <span class="k">return</span> <span class="n">elements_sum</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">softmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">t</span></div>
 
 
@@ -184,7 +185,7 @@
 <div class="viewcode-block" id="softmax_cross_entropy_loss_gradient_one_hot">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.softmax_cross_entropy_loss_gradient_one_hot">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">softmax_cross_entropy_loss_gradient_one_hot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of softmax cross entropy for one-hot targets.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of softmax cross entropy for one-hot targets."""</span>
     <span class="k">return</span> <span class="n">softmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">t</span></div>
 
 
@@ -192,7 +193,7 @@
 <div class="viewcode-block" id="Softmax_cross_entropy_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Softmax_cross_entropy_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Softmax_cross_entropy_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Softmax cross entropy loss for matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Softmax cross entropy loss for matrices."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">elements_sum</span><span class="p">(</span><span class="n">hadamard</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">log_softmax</span><span class="p">(</span><span class="n">Y</span><span class="p">)))</span></div>
 
 
@@ -200,7 +201,7 @@
 <div class="viewcode-block" id="Softmax_cross_entropy_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Softmax_cross_entropy_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Softmax_cross_entropy_loss_gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of softmax cross entropy loss for matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of softmax cross entropy loss for matrices."""</span>
     <span class="n">N</span><span class="p">,</span> <span class="n">K</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">return</span> <span class="n">hadamard</span><span class="p">(</span><span class="n">softmax</span><span class="p">(</span><span class="n">Y</span><span class="p">),</span> <span class="n">column_repeat</span><span class="p">(</span><span class="n">rows_sum</span><span class="p">(</span><span class="n">T</span><span class="p">),</span> <span class="n">K</span><span class="p">))</span> <span class="o">-</span> <span class="n">T</span></div>
 
@@ -209,7 +210,7 @@
 <div class="viewcode-block" id="Softmax_cross_entropy_loss_gradient_one_hot">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Softmax_cross_entropy_loss_gradient_one_hot">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Softmax_cross_entropy_loss_gradient_one_hot</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of softmax cross entropy for one-hot targets (matrices).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of softmax cross entropy for one-hot targets (matrices)."""</span>
     <span class="k">return</span> <span class="n">softmax</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="o">-</span> <span class="n">T</span></div>
 
 
@@ -217,7 +218,7 @@
 <div class="viewcode-block" id="stable_softmax_cross_entropy_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.stable_softmax_cross_entropy_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">stable_softmax_cross_entropy_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stable softmax cross entropy loss for vectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Stable softmax cross entropy loss for vectors."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">dot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">stable_log_softmax</span><span class="p">(</span><span class="n">y</span><span class="p">))</span></div>
 
 
@@ -225,7 +226,7 @@
 <div class="viewcode-block" id="stable_softmax_cross_entropy_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.stable_softmax_cross_entropy_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">stable_softmax_cross_entropy_loss_gradient</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of stable softmax cross entropy loss for vectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of stable softmax cross entropy loss for vectors."""</span>
     <span class="k">return</span> <span class="n">stable_softmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">elements_sum</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="n">t</span></div>
 
 
@@ -233,7 +234,7 @@
 <div class="viewcode-block" id="stable_softmax_cross_entropy_loss_gradient_one_hot">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.stable_softmax_cross_entropy_loss_gradient_one_hot">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">stable_softmax_cross_entropy_loss_gradient_one_hot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of stable softmax cross entropy for one-hot targets.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of stable softmax cross entropy for one-hot targets."""</span>
     <span class="k">return</span> <span class="n">stable_softmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">t</span></div>
 
 
@@ -241,7 +242,7 @@
 <div class="viewcode-block" id="Stable_softmax_cross_entropy_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Stable_softmax_cross_entropy_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Stable_softmax_cross_entropy_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stable softmax cross entropy loss for matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Stable softmax cross entropy loss for matrices."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">elements_sum</span><span class="p">(</span><span class="n">hadamard</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">stable_log_softmax</span><span class="p">(</span><span class="n">Y</span><span class="p">)))</span></div>
 
 
@@ -249,7 +250,7 @@
 <div class="viewcode-block" id="Stable_softmax_cross_entropy_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Stable_softmax_cross_entropy_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Stable_softmax_cross_entropy_loss_gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of stable softmax cross entropy loss for matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of stable softmax cross entropy loss for matrices."""</span>
     <span class="n">N</span><span class="p">,</span> <span class="n">K</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">return</span> <span class="n">hadamard</span><span class="p">(</span><span class="n">stable_softmax</span><span class="p">(</span><span class="n">Y</span><span class="p">),</span> <span class="n">column_repeat</span><span class="p">(</span><span class="n">rows_sum</span><span class="p">(</span><span class="n">T</span><span class="p">),</span> <span class="n">K</span><span class="p">))</span> <span class="o">-</span> <span class="n">T</span></div>
 
@@ -258,7 +259,7 @@
 <div class="viewcode-block" id="Stable_softmax_cross_entropy_loss_gradient_one_hot">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Stable_softmax_cross_entropy_loss_gradient_one_hot">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Stable_softmax_cross_entropy_loss_gradient_one_hot</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of stable softmax cross entropy for one-hot targets (matrices).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of stable softmax cross entropy for one-hot targets (matrices)."""</span>
     <span class="k">return</span> <span class="n">stable_softmax</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="o">-</span> <span class="n">T</span></div>
 
 
@@ -266,7 +267,7 @@
 <div class="viewcode-block" id="logistic_cross_entropy_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.logistic_cross_entropy_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">logistic_cross_entropy_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logistic cross entropy loss for vectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Logistic cross entropy loss for vectors."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">dot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">log_sigmoid</span><span class="p">(</span><span class="n">y</span><span class="p">))</span></div>
 
 
@@ -274,7 +275,7 @@
 <div class="viewcode-block" id="logistic_cross_entropy_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.logistic_cross_entropy_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">logistic_cross_entropy_loss_gradient</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of logistic cross entropy loss for vectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of logistic cross entropy loss for vectors."""</span>
     <span class="k">return</span> <span class="n">hadamard</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="o">-</span> <span class="n">t</span></div>
 
 
@@ -282,7 +283,7 @@
 <div class="viewcode-block" id="Logistic_cross_entropy_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Logistic_cross_entropy_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Logistic_cross_entropy_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logistic cross entropy loss for matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Logistic cross entropy loss for matrices."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">elements_sum</span><span class="p">(</span><span class="n">hadamard</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">log_sigmoid</span><span class="p">(</span><span class="n">Y</span><span class="p">)))</span></div>
 
 
@@ -290,7 +291,7 @@
 <div class="viewcode-block" id="Logistic_cross_entropy_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Logistic_cross_entropy_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Logistic_cross_entropy_loss_gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of logistic cross entropy loss for matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of logistic cross entropy loss for matrices."""</span>
     <span class="k">return</span> <span class="n">hadamard</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Sigmoid</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span> <span class="o">-</span> <span class="n">T</span></div>
 
 
@@ -298,7 +299,7 @@
 <div class="viewcode-block" id="negative_log_likelihood_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.negative_log_likelihood_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">negative_log_likelihood_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Negative log likelihood loss for vectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Negative log likelihood loss for vectors."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">log</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span></div>
 
 
@@ -306,7 +307,7 @@
 <div class="viewcode-block" id="negative_log_likelihood_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.negative_log_likelihood_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">negative_log_likelihood_loss_gradient</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of negative log likelihood loss for vectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of negative log likelihood loss for vectors."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">reciprocal</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span> <span class="o">*</span> <span class="n">t</span></div>
 
 
@@ -314,7 +315,7 @@
 <div class="viewcode-block" id="Negative_log_likelihood_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Negative_log_likelihood_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Negative_log_likelihood_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Negative log likelihood loss for matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Negative log likelihood loss for matrices."""</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">elements_sum</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">rows_sum</span><span class="p">(</span><span class="n">hadamard</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">))))</span></div>
 
 
@@ -322,7 +323,7 @@
 <div class="viewcode-block" id="Negative_log_likelihood_loss_gradient">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.Negative_log_likelihood_loss_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">Negative_log_likelihood_loss_gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of negative log likelihood loss for matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of negative log likelihood loss for matrices."""</span>
     <span class="n">N</span><span class="p">,</span> <span class="n">K</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">return</span> <span class="o">-</span><span class="n">hadamard</span><span class="p">(</span><span class="n">column_repeat</span><span class="p">(</span><span class="n">reciprocal</span><span class="p">(</span><span class="n">rows_sum</span><span class="p">(</span><span class="n">hadamard</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">))),</span> <span class="n">K</span><span class="p">),</span> <span class="n">T</span><span class="p">)</span></div>
 
@@ -331,7 +332,7 @@
 <div class="viewcode-block" id="LossFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.LossFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LossFunction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface for loss functions with value and gradient on batch matrices.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Interface for loss functions with value and gradient on batch matrices."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
@@ -346,7 +347,7 @@
 <div class="viewcode-block" id="SquaredErrorLossFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.SquaredErrorLossFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SquaredErrorLossFunction</span><span class="p">(</span><span class="n">LossFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Squared error loss function for regression tasks.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Squared error loss function for regression tasks."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Squared_error_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
 
@@ -361,7 +362,7 @@
 <div class="viewcode-block" id="CrossEntropyLossFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.CrossEntropyLossFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CrossEntropyLossFunction</span><span class="p">(</span><span class="n">LossFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cross entropy loss function for classification with probabilities.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Cross entropy loss function for classification with probabilities."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Cross_entropy_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
 
@@ -376,7 +377,7 @@
 <div class="viewcode-block" id="SoftmaxCrossEntropyLossFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.SoftmaxCrossEntropyLossFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SoftmaxCrossEntropyLossFunction</span><span class="p">(</span><span class="n">LossFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Softmax cross entropy loss for classification with logits.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Softmax cross entropy loss for classification with logits."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Softmax_cross_entropy_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
 
@@ -391,7 +392,7 @@
 <div class="viewcode-block" id="StableSoftmaxCrossEntropyLossFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.StableSoftmaxCrossEntropyLossFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">StableSoftmaxCrossEntropyLossFunction</span><span class="p">(</span><span class="n">LossFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Numerically stable softmax cross entropy loss for classification.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Numerically stable softmax cross entropy loss for classification."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Stable_softmax_cross_entropy_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
 
@@ -406,7 +407,7 @@
 <div class="viewcode-block" id="LogisticCrossEntropyLossFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.LogisticCrossEntropyLossFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LogisticCrossEntropyLossFunction</span><span class="p">(</span><span class="n">LossFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logistic cross entropy loss for binary classification.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Logistic cross entropy loss for binary classification."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Logistic_cross_entropy_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
 
@@ -421,7 +422,7 @@
 <div class="viewcode-block" id="NegativeLogLikelihoodLossFunction">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.NegativeLogLikelihoodLossFunction">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NegativeLogLikelihoodLossFunction</span><span class="p">(</span><span class="n">LossFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Negative log likelihood loss for probabilistic outputs.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Negative log likelihood loss for probabilistic outputs."""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Negative_log_likelihood_loss</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
 
@@ -436,23 +437,23 @@
 <div class="viewcode-block" id="parse_loss_function">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.loss_functions.html#nerva_torch.loss_functions.parse_loss_function">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_loss_function</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LossFunction</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a loss function name into a LossFunction instance.</span>
+<span class="w">    </span><span class="sd">"""Parse a loss function name into a LossFunction instance.</span>
 
 <span class="sd">    Supported names: SquaredError, CrossEntropy, SoftmaxCrossEntropy,</span>
 <span class="sd">    LogisticCrossEntropy, NegativeLogLikelihood.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;SquaredError&quot;</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">"SquaredError"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SquaredErrorLossFunction</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;CrossEntropy&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">"CrossEntropy"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">CrossEntropyLossFunction</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;SoftmaxCrossEntropy&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">"SoftmaxCrossEntropy"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">StableSoftmaxCrossEntropyLossFunction</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;LogisticCrossEntropy&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">"LogisticCrossEntropy"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">LogisticCrossEntropyLossFunction</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;NegativeLogLikelihood&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">text</span> <span class="o">==</span> <span class="s2">"NegativeLogLikelihood"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">NegativeLogLikelihoodLossFunction</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unknown loss function &#39;</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown loss function '</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span></div>
 
 </pre></div>
 
@@ -463,7 +464,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Wieger Wesselink and contributors.</p>
+    <p>&#169; Copyright 2026, Wieger Wesselink and contributors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

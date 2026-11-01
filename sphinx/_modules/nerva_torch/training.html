@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>nerva_torch.training &mdash; nerva_torch  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -43,6 +43,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.html">nerva_torch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.activation_functions.html">nerva_torch.activation_functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.datasets.html">nerva_torch.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.shapes_dataset.html">nerva_torch.shapes_dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.layers.html">nerva_torch.layers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.learning_rate.html">nerva_torch.learning_rate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.loss_functions.html">nerva_torch.loss_functions</a></li>
@@ -85,10 +86,10 @@
 <span class="c1"># Distributed under the Boost Software License, Version 1.0.</span>
 <span class="c1"># (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)</span>
 
-<span class="sd">&quot;&quot;&quot;Training helpers for the MLP, including a basic SGD loop and CLI glue.&quot;&quot;&quot;</span>
+<span class="sd">"""Training helpers for the MLP, including a basic SGD loop and CLI glue."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">create_npz_dataloaders</span><span class="p">,</span> <span class="n">to_one_hot</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.learning_rate</span><span class="w"> </span><span class="kn">import</span> <span class="n">LearningRateScheduler</span><span class="p">,</span> <span class="n">parse_learning_rate</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nerva_torch.loss_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_loss_function</span><span class="p">,</span> <span class="n">LossFunction</span>
@@ -107,17 +108,17 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_columns</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return column specifications as (name, width, format).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return column specifications as (name, width, format)."""</span>
     <span class="n">digits</span> <span class="o">=</span> <span class="n">TrainOptions</span><span class="o">.</span><span class="n">print_digits</span>
     <span class="n">float_width</span> <span class="o">=</span> <span class="n">digits</span> <span class="o">+</span> <span class="mi">6</span>  <span class="c1"># space for integer part + dot + decimals</span>
 
     <span class="k">return</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;epoch&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">),</span>                <span class="c1"># integer, right-aligned</span>
-        <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">float_width</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="n">float_width</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;train_acc&quot;</span><span class="p">,</span> <span class="n">float_width</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;test_acc&quot;</span><span class="p">,</span> <span class="n">float_width</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;time (s)&quot;</span><span class="p">,</span> <span class="n">float_width</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"epoch"</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">),</span>                <span class="c1"># integer, right-aligned</span>
+        <span class="p">(</span><span class="s2">"lr"</span><span class="p">,</span> <span class="n">float_width</span><span class="p">,</span> <span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"loss"</span><span class="p">,</span> <span class="n">float_width</span><span class="p">,</span> <span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"train_acc"</span><span class="p">,</span> <span class="n">float_width</span><span class="p">,</span> <span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"test_acc"</span><span class="p">,</span> <span class="n">float_width</span><span class="p">,</span> <span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"time (s)"</span><span class="p">,</span> <span class="n">float_width</span><span class="p">,</span> <span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f"</span><span class="p">),</span>
     <span class="p">]</span>
 
 
@@ -127,12 +128,12 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">TrainOptions</span><span class="o">.</span><span class="n">print_statistics</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="n">cols</span> <span class="o">=</span> <span class="n">_get_columns</span><span class="p">()</span>
-    <span class="n">header_fmt</span> <span class="o">=</span> <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="s2">:&gt;</span><span class="si">{</span><span class="n">w</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">])</span>
+    <span class="n">header_fmt</span> <span class="o">=</span> <span class="s2">" | "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="s2">:&gt;</span><span class="si">{</span><span class="n">w</span><span class="si">}</span><span class="se">}}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">])</span>
     <span class="n">total_width</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">w</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="n">total_width</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="n">total_width</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">header_fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">]))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="n">total_width</span><span class="p">)</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="n">total_width</span><span class="p">)</span></div>
 
 
 
@@ -140,7 +141,7 @@
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.training.html#nerva_torch.training.print_epoch_line">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">print_epoch_line</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">train_accuracy</span><span class="p">,</span> <span class="n">test_accuracy</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">):</span>
     <span class="n">cols</span> <span class="o">=</span> <span class="n">_get_columns</span><span class="p">()</span>
-    <span class="n">row_fmt</span> <span class="o">=</span> <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="s2">:&gt;</span><span class="si">{</span><span class="n">w</span><span class="si">}{</span><span class="n">fmt</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">fmt</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">])</span>
+    <span class="n">row_fmt</span> <span class="o">=</span> <span class="s2">" | "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="se">{{</span><span class="s2">:&gt;</span><span class="si">{</span><span class="n">w</span><span class="si">}{</span><span class="n">fmt</span><span class="si">}</span><span class="se">}}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">fmt</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">])</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">row_fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">train_accuracy</span><span class="p">,</span> <span class="n">test_accuracy</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">))</span></div>
 
 
@@ -154,8 +155,8 @@
     <span class="n">total_width</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">w</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">digits</span> <span class="o">=</span> <span class="n">TrainOptions</span><span class="o">.</span><span class="n">print_digits</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="n">total_width</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total training time: </span><span class="si">{</span><span class="n">total_time</span><span class="si">:</span><span class="s2">.</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f</span><span class="si">}</span><span class="s2"> s&quot;</span><span class="p">)</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="n">total_width</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Total training time: </span><span class="si">{</span><span class="n">total_time</span><span class="si">:</span><span class="s2">.</span><span class="si">{</span><span class="n">digits</span><span class="si">}</span><span class="s2">f</span><span class="si">}</span><span class="s2"> s"</span><span class="p">)</span></div>
 
 
 
@@ -164,19 +165,19 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">print_batch_debug_info</span><span class="p">(</span><span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                            <span class="n">M</span><span class="p">:</span> <span class="n">MultilayerPerceptron</span><span class="p">,</span>
                            <span class="n">X</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">DY</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print detailed debug information for a training batch.&quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1"> batch: </span><span class="si">{</span><span class="n">batch_idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Print detailed debug information for a training batch."""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1"> batch: </span><span class="si">{</span><span class="n">batch_idx</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
     <span class="n">M</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-    <span class="n">pp</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
-    <span class="n">pp</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
-    <span class="n">pp</span><span class="p">(</span><span class="s2">&quot;DY&quot;</span><span class="p">,</span> <span class="n">DY</span><span class="p">)</span></div>
+    <span class="n">pp</span><span class="p">(</span><span class="s2">"X"</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+    <span class="n">pp</span><span class="p">(</span><span class="s2">"Y"</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="n">pp</span><span class="p">(</span><span class="s2">"DY"</span><span class="p">,</span> <span class="n">DY</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="compute_accuracy">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.training.html#nerva_torch.training.compute_accuracy">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_accuracy</span><span class="p">(</span><span class="n">M</span><span class="p">:</span> <span class="n">MultilayerPerceptron</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute mean classification accuracy for a model over a data loader.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Compute mean classification accuracy for a model over a data loader."""</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">data_loader</span><span class="o">.</span><span class="n">dataset_size</span>  <span class="c1"># N is the number of examples</span>
     <span class="n">total_correct</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">X</span><span class="p">,</span> <span class="n">T</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
@@ -191,7 +192,7 @@
 <div class="viewcode-block" id="compute_loss">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.training.html#nerva_torch.training.compute_loss">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_loss</span><span class="p">(</span><span class="n">M</span><span class="p">:</span> <span class="n">MultilayerPerceptron</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">loss</span><span class="p">:</span> <span class="n">LossFunction</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute mean loss for a model over a data loader using the given loss.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Compute mean loss for a model over a data loader using the given loss."""</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">data_loader</span><span class="o">.</span><span class="n">dataset_size</span>  <span class="c1"># N is the number of examples</span>
     <span class="n">total_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">X</span><span class="p">,</span> <span class="n">T</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
@@ -204,14 +205,14 @@
 <div class="viewcode-block" id="compute_statistics">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.training.html#nerva_torch.training.compute_statistics">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_statistics</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">elapsed_seconds</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute and optionally print loss and accuracy statistics.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Compute and optionally print loss and accuracy statistics."""</span>
     <span class="k">if</span> <span class="n">TrainOptions</span><span class="o">.</span><span class="n">print_statistics</span><span class="p">:</span>
         <span class="n">train_loss</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
         <span class="n">train_accuracy</span> <span class="o">=</span> <span class="n">compute_accuracy</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">)</span>
         <span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">compute_accuracy</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">)</span>
         <span class="n">print_epoch_line</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">train_loss</span><span class="p">,</span> <span class="n">train_accuracy</span><span class="p">,</span> <span class="n">test_accuracy</span><span class="p">,</span> <span class="n">elapsed_seconds</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">:</span><span class="s1">3</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'epoch </span><span class="si">{</span><span class="n">epoch</span><span class="si">:</span><span class="s1">3</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span></div>
 
 
 
@@ -226,7 +227,7 @@
                                 <span class="n">test_loader</span><span class="p">:</span> <span class="n">DataLoader</span>
                                 <span class="p">):</span>
 <span class="c1"># end::sgd[]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Run a simple stochastic gradient descent (SGD) training loop using PyTorch data loaders.</span>
 
 <span class="sd">    Args:</span>
@@ -250,7 +251,7 @@
 <span class="sd">    Side Effects:</span>
 <span class="sd">        - Updates model parameters in-place via `M.optimize(lr)`.</span>
 <span class="sd">        - Prints statistics and training time to standard output.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 <span class="c1"># tag::sgd[]</span>
     <span class="n">print_epoch_header</span><span class="p">()</span>
     <span class="n">lr</span> <span class="o">=</span> <span class="n">learning_rate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -293,7 +294,7 @@
                                       <span class="n">shuffle</span><span class="p">:</span> <span class="nb">bool</span>
                                      <span class="p">):</span>
 <span class="c1"># end::sgd_plain[]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Perform plain stochastic gradient descent training for a multilayer perceptron</span>
 <span class="sd">    using raw tensors in row layout (samples are rows).</span>
 
@@ -320,7 +321,7 @@
 <span class="sd">    Side Effects:</span>
 <span class="sd">        - Updates model parameters in-place via `M.optimize(lr)`.</span>
 <span class="sd">        - Prints statistics and training time to standard output.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 <span class="c1"># tag::sgd_plain[]</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">Xtrain</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># number of examples (row layout)</span>
     <span class="n">I</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
@@ -355,6 +356,18 @@
 <span class="c1"># end::sgd_plain[]</span>
 
 
+<div class="viewcode-block" id="set_seed">
+<a class="viewcode-back" href="../../_autosummary/nerva_torch.training.html#nerva_torch.training.set_seed">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Seed the random number generators used for weight initialization and shuffling."""</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="train">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.training.html#nerva_torch.training.train">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="n">layer_specifications</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -367,11 +380,14 @@
           <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
           <span class="n">weights_and_bias_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
           <span class="n">dataset_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-          <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span>
+          <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+          <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
          <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;High-level training convenience that wires parsing, data and SGD.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""High-level training convenience that wires parsing, data and SGD."""</span>
 
     <span class="n">TrainOptions</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
+    <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="n">set_numpy_options</span><span class="p">()</span>
     <span class="n">set_torch_options</span><span class="p">()</span>
     <span class="n">loss</span> <span class="o">=</span> <span class="n">parse_loss_function</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
@@ -391,7 +407,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Wieger Wesselink and contributors.</p>
+    <p>&#169; Copyright 2026, Wieger Wesselink and contributors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

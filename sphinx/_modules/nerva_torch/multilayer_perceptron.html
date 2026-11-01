@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>nerva_torch.multilayer_perceptron &mdash; nerva_torch  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -43,6 +43,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.html">nerva_torch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.activation_functions.html">nerva_torch.activation_functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.datasets.html">nerva_torch.datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.shapes_dataset.html">nerva_torch.shapes_dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.layers.html">nerva_torch.layers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.learning_rate.html">nerva_torch.learning_rate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../_autosummary/nerva_torch.loss_functions.html">nerva_torch.loss_functions</a></li>
@@ -85,7 +86,7 @@
 <span class="c1"># Distributed under the Boost Software License, Version 1.0.</span>
 <span class="c1"># (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)</span>
 
-<span class="sd">&quot;&quot;&quot;A simple multilayer perceptron (MLP) class.&quot;&quot;&quot;</span>
+<span class="sd">"""A simple multilayer perceptron (MLP) class."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
@@ -97,7 +98,7 @@
 <div class="viewcode-block" id="MultilayerPerceptron">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.multilayer_perceptron.html#nerva_torch.multilayer_perceptron.MultilayerPerceptron">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MultilayerPerceptron</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multilayer perceptron&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Multilayer perceptron"""</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">layers</span><span class="p">:</span>
             <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
@@ -132,42 +133,42 @@
         <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">LinearLayer</span><span class="p">):</span>
-                <span class="n">pp</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;W</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
-                <span class="n">pp</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;b</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+                <span class="n">pp</span><span class="p">(</span><span class="sa">f</span><span class="s1">'W</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+                <span class="n">pp</span><span class="p">(</span><span class="sa">f</span><span class="s1">'b</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
                 <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="MultilayerPerceptron.load_weights_and_bias">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.multilayer_perceptron.html#nerva_torch.multilayer_perceptron.MultilayerPerceptron.load_weights_and_bias">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_weights_and_bias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads the weights and biases from a file in .npz format</span>
+<span class="w">        </span><span class="sd">"""Loads the weights and biases from a file in .npz format</span>
 
 <span class="sd">        The weight matrices are stored using the keys W1, W2, ... and the bias vectors using the keys b1, b2, ...</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Loading weights and bias from </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Loading weights and bias from </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">load_dict_from_npz</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">LinearLayer</span><span class="p">):</span>
-                <span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;W</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
-                <span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;b</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+                <span class="n">layer</span><span class="o">.</span><span class="n">W</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s1">'W</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">'</span><span class="p">]</span>
+                <span class="n">layer</span><span class="o">.</span><span class="n">b</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s1">'b</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">'</span><span class="p">]</span>
                 <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 
 <div class="viewcode-block" id="MultilayerPerceptron.save_weights_and_bias">
 <a class="viewcode-back" href="../../_autosummary/nerva_torch.multilayer_perceptron.html#nerva_torch.multilayer_perceptron.MultilayerPerceptron.save_weights_and_bias">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">save_weights_and_bias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Saves the weights and biases to a file in compressed .npz format.</span>
+<span class="w">        </span><span class="sd">"""Saves the weights and biases to a file in compressed .npz format.</span>
 
 <span class="sd">        The weight matrices are stored using the keys W1, W2, ... and the bias vectors using the keys b1, b2, ...</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saving weights and bias to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Saving weights and bias to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">LinearLayer</span><span class="p">):</span>
-                <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;W</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">W</span>
-                <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;b</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">b</span>
+                <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">"W</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">W</span>
+                <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">"b</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">b</span>
                 <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">save_dict_to_npz</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
 </div>
@@ -182,13 +183,13 @@
                                 <span class="n">linear_layer_weight_initializers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
                                <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MultilayerPerceptron</span><span class="p">:</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct an MLP from textual layer specs and size/optimizer configs.</span>
+<span class="w">    </span><span class="sd">"""Construct an MLP from textual layer specs and size/optimizer configs.</span>
 
-<span class="sd">    layer_specifications: e.g. [&quot;ReLU&quot;, &quot;BatchNormalization&quot;, &quot;LogSoftmax&quot;]</span>
+<span class="sd">    layer_specifications: e.g. ["ReLU", "BatchNormalization", "LogSoftmax"]</span>
 <span class="sd">    linear_layer_sizes: e.g. [784, 128, 10] for two linear layers</span>
 <span class="sd">    optimizers: one per layer (including BatchNormalization)</span>
 <span class="sd">    linear_layer_weight_initializers: one per linear layer</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">linear_layer_weight_initializers</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">linear_layer_sizes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
     <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -197,7 +198,7 @@
     <span class="n">D</span> <span class="o">=</span> <span class="n">linear_layer_sizes</span><span class="p">[</span><span class="n">linear_layer_index</span><span class="p">]</span>  <span class="c1"># the input size of the current layer</span>
 
     <span class="k">for</span> <span class="n">specification</span> <span class="ow">in</span> <span class="n">layer_specifications</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">specification</span> <span class="o">==</span> <span class="s1">&#39;BatchNormalization&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">specification</span> <span class="o">==</span> <span class="s1">'BatchNormalization'</span><span class="p">:</span>
             <span class="n">layer</span> <span class="o">=</span> <span class="n">BatchNormalizationLayer</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
             <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizers</span><span class="p">[</span><span class="n">optimizer_index</span><span class="p">]</span>
             <span class="n">layer</span><span class="o">.</span><span class="n">set_optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
@@ -222,7 +223,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Wieger Wesselink and contributors.</p>
+    <p>&#169; Copyright 2026, Wieger Wesselink and contributors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
