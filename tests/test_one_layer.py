@@ -10,7 +10,9 @@ from typing import Dict, Any
 
 from nerva_torch.utilities import load_dict_from_npz
 
-import torch
+import numpy as np
+
+from utilities import to_numpy, from_numpy, set_parameter
 
 from nerva_torch.layers import (
     LinearLayer,
@@ -37,20 +39,22 @@ def _print_debug(msg: str):
         print(msg)
 
 
-def assert_close(name: str, a: torch.Tensor, b: torch.Tensor, atol=ESSENTIAL_ATOL, rtol=ESSENTIAL_RTOL):
+def assert_close(name: str, a, b, atol=ESSENTIAL_ATOL, rtol=ESSENTIAL_RTOL):
+    a = to_numpy(a)
+    b = to_numpy(b)
     if a.shape != b.shape:
         _print_debug(f"ASSERT {name}: shape mismatch: {a.shape} vs {b.shape}")
         raise AssertionError(f"Shape mismatch for {name}: {a.shape} vs {b.shape}")
-    close = torch.allclose(a, b, atol=atol, rtol=rtol)
+    close = np.allclose(a, b, atol=atol, rtol=rtol)
     if not close or DEBUG_LEVEL > 0:
-        max_diff = torch.max(torch.abs(a - b)).item()
+        max_diff = np.max(np.abs(a - b)).item()
         _print_debug(f"ASSERT {name}: shape={tuple(a.shape)}, atol={atol}, rtol={rtol}, max|diff|={max_diff}")
         if DEBUG_LEVEL >= 2:
             # Print tensors if they are reasonably small
-            def tensor_str(t: torch.Tensor):
-                if t.numel() <= 200:
-                    return str(t.cpu().numpy())
-                return f"tensor(shape={tuple(t.shape)}, numel={t.numel()})"
+            def tensor_str(t: np.ndarray):
+                if t.size <= 200:
+                    return str(t)
+                return f"tensor(shape={tuple(t.shape)}, numel={t.size})"
             _print_debug(f"  A: {tensor_str(a)}")
             _print_debug(f"  B: {tensor_str(b)}")
     if not close:
@@ -60,6 +64,7 @@ def assert_close(name: str, a: torch.Tensor, b: torch.Tensor, atol=ESSENTIAL_ATO
 
 def run_case(manifest_dir: Path, meta: Dict[str, Any]):
     tensors = load_dict_from_npz(str(manifest_dir / meta["file"]))
+    tensors = {k: from_numpy(v) for k, v in tensors.items()}
     X = tensors["X"]
 
     _print_debug(f"CASE: type={meta.get('type')} file={meta.get('file')} D={meta.get('D')} K={meta.get('K')} activation={meta.get('activation')}")
@@ -67,8 +72,8 @@ def run_case(manifest_dir: Path, meta: Dict[str, Any]):
     if meta["type"] == "Linear":
         D = meta["D"]; K = meta["K"]
         layer = LinearLayer(D, K)
-        layer.W[:] = tensors["W"]
-        layer.b[:] = tensors["b"]
+        set_parameter(layer, "W", tensors["W"])
+        set_parameter(layer, "b", tensors["b"])
         Y = layer.feedforward(X)
         assert_close("Y", Y, tensors["Y"])
         DY = tensors["DY"]
@@ -88,8 +93,8 @@ def run_case(manifest_dir: Path, meta: Dict[str, Any]):
         D = meta["D"]; K = meta["K"]
         act = parse_activation(meta["activation_spec"])
         layer = ActivationLayer(D, K, act)
-        layer.W[:] = tensors["W"]
-        layer.b[:] = tensors["b"]
+        set_parameter(layer, "W", tensors["W"])
+        set_parameter(layer, "b", tensors["b"])
         Y = layer.feedforward(X)
         assert_close("Y", Y, tensors["Y"])
         DY = tensors["DY"]
@@ -109,9 +114,9 @@ def run_case(manifest_dir: Path, meta: Dict[str, Any]):
         D = meta["D"]; K = meta["K"]
         act = parse_activation(meta["activation_spec"])
         layer = SReLULayer(D, K, act)
-        layer.W[:] = tensors["W"]
-        layer.b[:] = tensors["b"]
-        act.x[:] = tensors["act_x"]
+        set_parameter(layer, "W", tensors["W"])
+        set_parameter(layer, "b", tensors["b"])
+        set_parameter(act, "x", tensors["act_x"])
         Y = layer.feedforward(X)
         assert_close("Y", Y, tensors["Y"])
         DY = tensors["DY"]
@@ -132,8 +137,8 @@ def run_case(manifest_dir: Path, meta: Dict[str, Any]):
     if meta["type"] == "Softmax":
         D = meta["D"]; K = meta["K"]
         layer = SoftmaxLayer(D, K)
-        layer.W[:] = tensors["W"]
-        layer.b[:] = tensors["b"]
+        set_parameter(layer, "W", tensors["W"])
+        set_parameter(layer, "b", tensors["b"])
         Y = layer.feedforward(X)
         assert_close("Y", Y, tensors["Y"])
         DY = tensors["DY"]
@@ -151,8 +156,8 @@ def run_case(manifest_dir: Path, meta: Dict[str, Any]):
     if meta["type"] == "LogSoftmax":
         D = meta["D"]; K = meta["K"]
         layer = LogSoftmaxLayer(D, K)
-        layer.W[:] = tensors["W"]
-        layer.b[:] = tensors["b"]
+        set_parameter(layer, "W", tensors["W"])
+        set_parameter(layer, "b", tensors["b"])
         Y = layer.feedforward(X)
         assert_close("Y", Y, tensors["Y"])
         DY = tensors["DY"]
@@ -170,8 +175,8 @@ def run_case(manifest_dir: Path, meta: Dict[str, Any]):
     if meta["type"] == "BatchNormalization":
         D = meta["D"]
         layer = BatchNormalizationLayer(D)
-        layer.gamma[:] = tensors["gamma"]
-        layer.beta[:] = tensors["beta"]
+        set_parameter(layer, "gamma", tensors["gamma"])
+        set_parameter(layer, "beta", tensors["beta"])
         Y = layer.feedforward(X)
         assert_close("Y", Y, tensors["Y"])  # BN determinism within our math
         DY = tensors["DY"]

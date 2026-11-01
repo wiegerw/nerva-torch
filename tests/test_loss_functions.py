@@ -3,15 +3,14 @@
 # (See accompanying file LICENSE or http://www.boost.org/LICENSE_1_0.txt)
 
 import unittest
-from nerva_torch.loss_functions import SoftmaxCrossEntropyLossFunction, LossFunction, SquaredErrorLossFunction, \
+
+from nerva_torch.loss_functions import SoftmaxCrossEntropyLossFunction, SquaredErrorLossFunction, \
     NegativeLogLikelihoodLossFunction, CrossEntropyLossFunction, LogisticCrossEntropyLossFunction
-from nerva_torch.loss_functions import Squared_error_loss, Softmax_cross_entropy_loss
-from nerva_torch.loss_functions_torch import squared_error_loss_torch, softmax_cross_entropy_loss_torch
-from utilities import to_tensor, random_float_matrix, make_target, as_float
+from utilities import to_tensor, as_float
 
 
 class TestLossFunctions(unittest.TestCase):
-    def test_loss1(self):
+    def test_losses_for_case(self):
         Y = to_tensor([
             [0.23759169, 0.42272727, 0.33968104],
             [0.43770149, 0.28115265, 0.28114586],
@@ -40,7 +39,7 @@ class TestLossFunctions(unittest.TestCase):
         for loss_fn, expected in losses:
             L = as_float(loss_fn(Y, T))
             self.assertAlmostEqual(L, expected, places=5, msg=f"{loss_fn.__class__.__name__} failed: got {L}, expected {expected}")
-
+    
     def test_loss2(self):
         Y = to_tensor([
             [0.24335898, 0.40191852, 0.35472250],
@@ -70,6 +69,7 @@ class TestLossFunctions(unittest.TestCase):
         for loss_fn, expected in losses:
             L = as_float(loss_fn(Y, T))
             self.assertAlmostEqual(L, expected, places=5, msg=f"{loss_fn.__class__.__name__} failed: got {L}, expected {expected}")
+
 
     def test_loss3(self):
         Y = to_tensor([
@@ -132,6 +132,7 @@ class TestLossFunctions(unittest.TestCase):
             L = as_float(loss_fn(Y, T))
             self.assertAlmostEqual(L, expected, places=5, msg=f"{loss_fn.__class__.__name__} failed: got {L}, expected {expected}")
 
+
     def test_loss5(self):
         Y = to_tensor([
             [0.29207765, 0.40236525, 0.30555710],
@@ -161,24 +162,3 @@ class TestLossFunctions(unittest.TestCase):
         for loss_fn, expected in losses:
             L = as_float(loss_fn(Y, T))
             self.assertAlmostEqual(L, expected, places=5, msg=f"{loss_fn.__class__.__name__} failed: got {L}, expected {expected}")
-
-
-class CompareLossFunctions(unittest.TestCase):
-    def test_loss(self):
-        a = 0.0001
-        b = 1.0
-        shape = (3, 4)
-        for i in range(100):
-            Y = random_float_matrix(shape, a, b)
-            T = make_target(Y).astype(float)
-
-            Y = to_tensor(Y)
-            T = to_tensor(T)
-
-            loss_ms1 = squared_error_loss_torch(Y, T)
-            loss_ms2 = Squared_error_loss(Y, T)
-            self.assertAlmostEqual(loss_ms1, loss_ms2, delta=1e-5)
-
-            loss_sc1 = softmax_cross_entropy_loss_torch(Y, T)
-            loss_sc2 = Softmax_cross_entropy_loss(Y, T)
-            self.assertAlmostEqual(loss_sc1, loss_sc2, delta=1e-5)

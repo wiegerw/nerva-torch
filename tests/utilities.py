@@ -165,3 +165,32 @@ def make_target(Y: np.ndarray) -> np.ndarray:
         T[i, random_index] = True
 
     return T
+
+
+# Adapter functions used by the test files that are shared by all backends
+
+def to_numpy(x) -> np.ndarray:
+    """Convert a tensor to a NumPy array."""
+    return x.detach().cpu().numpy() if isinstance(x, torch.Tensor) else np.asarray(x)
+
+
+def from_numpy(x):
+    """Convert a NumPy array to a tensor of this backend."""
+    return torch.as_tensor(x) if isinstance(x, np.ndarray) else x
+
+
+def set_parameter(obj, name: str, value):
+    """Assign value to the parameter obj.<name> (in place)."""
+    getattr(obj, name)[:] = value
+
+
+class Parameter:
+    """A parameter x with its gradient Dx, as used by the optimizer tests."""
+    def __init__(self, x, Dx):
+        self.x = x
+        self.Dx = Dx
+
+
+def make_optimizer(optimizer_class, obj: Parameter, **kwargs):
+    """Create an optimizer that updates obj.x in place using obj.Dx."""
+    return optimizer_class(obj.x, obj.Dx, **kwargs)
